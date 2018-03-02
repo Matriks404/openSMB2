@@ -8,7 +8,7 @@ Game resources are not yet available, sorry!
 
 3. Download resources (not yet available) and put them in game directory.
 
-4. Download levels (not yet available) and put them in game save directory.
+4. Move levels (in `_move_to_saves_directory` and put them in game save directory.
     * On Windows: `%appdata%\LOVE\openSMB2`
     * On Mac: `/Users/<username>/Library/Application Support/LOVE/openSMB2`
     * On Linux: `$XDG_DATA_HOME/love/openSMB2`
@@ -38,7 +38,7 @@ Game resources are not yet available, sorry!
 * Press CTRL+D on title screen to enable debug mode and enter debug screen. Here you can:
     * Toggle FPS counter.
     * Toggle Frames counter.
-    * Enter level editor (just very basic prototype)
+    * Enter level editor (just very basic functions)
     * Start game in debug mode which allows above counters to work.
 
 * In level editor menu:
