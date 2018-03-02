@@ -6,7 +6,9 @@ Game resources are not yet available, sorry!
 
 2. Drag game folder onto LOVE program shortcut.
 
-3. Download resources (not yet available) and put them in game directory.
+3. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click Download button) and extract them in game directory.
+
+    * BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
 
 4. Move levels (in `_move_to_saves_directory` and put them in game save directory.
     * On Windows: `%appdata%\LOVE\openSMB2`
