@@ -176,6 +176,7 @@ function love.keyreleased(key)
 					state = 0
 					timer = 0
 					debugmode = false
+					debugmute = false
 				end
 			end
 		end
