@@ -1,3 +1,5 @@
+Game resources are not yet available, sorry!
+
 # Running
 
 1. Install LOVE Engine 64-bit in default directory, which is "C:\Program Files\LOVE".
