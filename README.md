@@ -9,9 +9,9 @@ Game resources are not yet available, sorry!
 3. Download resources (not yet available) and put them in game directory.
 
 4. Download levels (not yet available) and put them in game save directory.
-    1. On Windows: `%appdata%\LOVE\openSMB2`
-    2. On Mac: `/Users/<username>/Library/Application Support/LOVE/openSMB2`
-    3. On Linux: `$XDG_DATA_HOME/love/openSMB2`
+    * On Windows: `%appdata%\LOVE\openSMB2`
+    * On Mac: `/Users/<username>/Library/Application Support/LOVE/openSMB2`
+    * On Linux: `$XDG_DATA_HOME/love/openSMB2`
 
 
 # Gameplay:
