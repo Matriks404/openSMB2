@@ -21,6 +21,7 @@ function love.load()
 	debugmode = false
 	debugfps = true
 	debugframes = true
+	debugmute = false
 
 	-- Timers
 	timer = 0
@@ -53,9 +54,10 @@ function love.load()
 
 	allareas = 1
 	area = 0
-	areabg = {} -- Array of backgrounds (0 - Black, 1 - Blue)
 	areawidth = {}
 	areaheight = {}
+	areabg = {} -- Array of backgrounds (0 - Black, 1 - Blue)
+	areamusic = {} -- Array of music (0 - Overworld, 1 - Underworld)
 	
 	-- Start coordinates
 	startx = 0
@@ -146,7 +148,10 @@ function love.keyreleased(key)
 			timer = 0
 
 			mus_title:stop()
-			mus_charsel:play()
+			
+			if debugmode == true and debugmute == false then
+				mus_charsel:play()
+			end
 
 			-- Set up gameplay variables just after leaving title screen, as player will return to character select screen every completion of level.
 			world = 1
@@ -255,6 +260,18 @@ function love.keyreleased(key)
 
 					love.graphics.setBackgroundColor(0, 0, 0)
 				end
+				
+			-- Change music
+			elseif key == "m" then
+				if areamusic[area] == 0 then
+					areamusic[area] = 1
+					
+					playAreaMusic()
+				else
+					areamusic[area] = 0
+					
+					playAreaMusic()
+				end
 
 			-- Shrink or sratch width/height
 			elseif key == "kp4" then
@@ -314,7 +331,9 @@ function love.keyreleased(key)
 				area = 0
 				frames = 0
 				
-				mus_charsel:play()
+				if debugmute == false then
+					mus_charsel:play()
+				end
 				
 				love.graphics.setBackgroundColor(0, 0, 0)
 			
@@ -323,6 +342,8 @@ function love.keyreleased(key)
 				editoroption = 0
 
 				love.graphics.setBackgroundColor(0, 0, 0)
+				
+				stopAreaMusic()
 			end
 		end
 
@@ -342,6 +363,14 @@ function love.keyreleased(key)
 				debugframes = true
 			else
 				debugframes = false
+			end
+			
+		-- Mute music or not
+		elseif key == "m" then
+			if debugmute == false then
+				debugmute = true
+			else
+				debugmute = false
 			end
 
 		elseif key == "l" then
@@ -550,6 +579,7 @@ function love.draw()
 			drawFont("AREA-"..tostring(area), 2, 10)
 			drawFont("W-"..tostring(areawidth[area]), 64, 10)
 			drawFont("H-"..tostring(areaheight[area]), 120, 10)
+			drawFont("MUSIC-"..tostring(areamusic[area]), 184, 10)
 
 			--TODO: Add more!
 		end
@@ -559,8 +589,9 @@ function love.draw()
 		drawFont("OPENSMB2 DEBUG MODE", 48, 56)
 		drawFont("F-TOGGLE FPS COUNTER", 48, 80)
 		drawFont("R-TOGGLE FRAME COUNTER", 48, 96)
-		drawFont("L-ENTER LEVEL EDITOR", 48, 112)
-		drawFont("S-START GAME RIGHT NOW", 48, 128)
+		drawFont("M-TOGGLE MUSIC MUTE", 48, 112)
+		drawFont("L-ENTER LEVEL EDITOR", 48, 128)
+		drawFont("S-START GAME RIGHT NOW", 48, 144)
 
 		drawFont("ENABLED FLAGS", 64, 160)
 
@@ -570,6 +601,10 @@ function love.draw()
 
 		if debugframes == true then
 			drawFont("FRAMES", 104, 176)
+		end
+		
+		if debugmute == true then
+			drawFont("MUTED", 168, 176)
 		end
 	end
 
@@ -656,6 +691,8 @@ function loadMusic()
 
 	mus_title = love.audio.newSource(musdir.."title.ogg")
 	mus_charsel = love.audio.newSource(musdir.."charselect.ogg")
+	mus_overworld = love.audio.newSource(musdir.."overworld.ogg")
+	mus_underworld = love.audio.newSource(musdir.."underworld.ogg")
 end
 
 function loadSoundEffects()
@@ -699,11 +736,12 @@ function loadLevel()
 	-- Fill area width, height and background arrays
 		areafile, msg = love.filesystem.read(leveldir..tostring(area))
 		
-		diff = i * 30
+		diff = i * 38
 		
 		areawidth[i] = tonumber(string.sub(levelfile, 49 + diff, 52 + diff))
 		areaheight[i] = tonumber(string.sub(levelfile, 61 + diff, 64 + diff))
 		areabg[i] = tonumber(string.sub(levelfile, 69 + diff, 69 + diff))
+		areamusic[i] = tonumber(string.sub(levelfile, 77 + diff, 77 + diff))
 	end
 	
 	loadArea()
@@ -718,6 +756,8 @@ function loadArea()
 	else
 		love.graphics.setBackgroundColor(60, 180, 282)
 	end
+
+	playAreaMusic()
 	
 	--TODO: Add this!
 end
@@ -756,12 +796,31 @@ function saveLevel()
 		else                             areaheight_str[i] = tostring(areaheight[i])
 		end
 		
-		areadata = areadata..i.." width="..areawidth_str[i].." height="..areaheight_str[i].." bg="..tostring(areabg[i]).."\n"
+		areadata = areadata..i.." width="..areawidth_str[i].." height="..areaheight_str[i].." bg="..tostring(areabg[i]).." music="..tostring(areamusic[i]).."\n"
 	end
 	
 	-- Save file with all variables
 	data = "areas="..tostring(allareas).."\nstartx="..startx_str.."\nstarty="..starty_str.."\n\nareas:\n"..areadata
 	levelfile = love.filesystem.write(leveldir.."settings.cfg", data)
+end
+
+function playAreaMusic()
+	if debugmute == false then
+		if areamusic[area] == 0 then
+			mus_overworld:play()
+			
+			mus_underworld:stop()
+		else
+			mus_underworld:play()
+			
+			mus_overworld:stop()
+		end
+	end
+end
+
+function stopAreaMusic()
+	mus_overworld:stop()
+	mus_underworld:stop()
 end
 
 function drawFont(str, x, y, color)
