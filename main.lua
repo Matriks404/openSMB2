@@ -246,8 +246,8 @@ function love.keyreleased(key)
 		-- Edit map option
 			if key == "b" then
 			-- Change background color
-				if area[area] == 0 then
-					area[area] = 1
+				if areabg[area] == 0 then
+					areabg[area] = 1
 
 					love.graphics.setBackgroundColor(60, 180, 282)
 				else
