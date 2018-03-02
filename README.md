@@ -23,12 +23,9 @@ Game resources are not yet available, sorry!
     * levelbook (just right before starting a level).
     * Very basic gameplay screen prototype
 
-* Push START button on title screen to enter character select.
-  Default binding for START button is S key.
-  ...or wait to enter intro story screen (you can start from here as well).
+* Push START button on title screen to enter character select. START button is a S key. You can also wait to enter intro story screen (you can start from here as well).
 
-* On character select screen you can select your character by pressing left or right key.
-  You can choose character by pressing X.
+* On character select screen you can select your character by pressing left or right key. You can choose character by pressing X.
 
 * To quit you can close window by clicking on X on title bar, or by pressing ESC button.
 
