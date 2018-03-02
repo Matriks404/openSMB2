@@ -45,6 +45,7 @@ Game resources are not yet available, sorry!
 
 * In level editor:
     * Press B to change background color (Black/Blue)
+	* Press M to change music
     * Press 4 or 6 on keypad to shrink or stretch width
     * Press 2 or 8 on keypad to shrink or stretch height
     * Press [ or ] to switch between level areas.
