@@ -8,7 +8,7 @@
 
     * BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
 
-4. Move levels (in `_move_to_saves_directory` and put them in game save directory.
+4. Move levels (in `_move_to_saves_directory`) to game save directory.
     * On Windows: `%appdata%\LOVE\openSMB2`
     * On Mac: `/Users/<username>/Library/Application Support/LOVE/openSMB2`
     * On Linux: `$XDG_DATA_HOME/love/openSMB2`
