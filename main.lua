@@ -149,7 +149,7 @@ function love.keyreleased(key)
 
 			mus_title:stop()
 			
-			if debugmode == true and debugmute == false then
+			if debugmute == false then
 				mus_charsel:play()
 			end
 
