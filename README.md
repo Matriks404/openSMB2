@@ -35,6 +35,7 @@ Game resources are not yet available, sorry!
 * Press CTRL+D on title screen to enable debug mode and enter debug screen. Here you can:
     * Toggle FPS counter.
     * Toggle Frames counter.
+	* Toggle Mute option.
     * Enter level editor (just very basic functions)
     * Start game in debug mode which allows above counters to work.
 
