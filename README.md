@@ -4,13 +4,15 @@ Game resources are not yet available, sorry!
 
 1. Install LOVE Engine on your computer.
 
-2. Drag game folder onto LOVE program shortcut.
+2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer.
 
-3. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click Download button) and extract them in game directory.
+3. Drag game folder onto LOVE program shortcut.
+
+4. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click Download button) and extract them in game directory.
 
     * BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
 
-4. Move levels (in `_move_to_saves_directory` and put them in game save directory.
+5. Move levels (in `_move_to_saves_directory` and put them in game save directory.
     * On Windows: `%appdata%\LOVE\openSMB2`
     * On Mac: `/Users/<username>/Library/Application Support/LOVE/openSMB2`
     * On Linux: `$XDG_DATA_HOME/love/openSMB2`
