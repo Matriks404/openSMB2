@@ -333,6 +333,7 @@ function love.keyreleased(key)
 				frames = 0
 				
 				if debugmute == false then
+					stopAreaMusic()
 					mus_charsel:play()
 				end
 				
