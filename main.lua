@@ -229,18 +229,18 @@ function love.keyreleased(key)
 
 			-- Go to proper editor
 			if key >= "1" and key <= "9" then
-				loadLevel()
-				
 				editoroption = 1
 				level = ((key - 1) % 3) + 1
 				area = 0
 
-			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				loadLevel()
-
+				
+			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				editoroption = 1
 				level = ((string.byte(key) - 97) % 3) + 1
 				area = 0
+				
+				loadLevel()
 
 			elseif key == "q" then
 			-- Quit menu to debug screen
@@ -605,15 +605,15 @@ function love.draw()
 			
 			if areabg[area] == 0 then
 			-- Draw background value
-				drawFont("BG-BLACK", 96+8, 2)
+				drawFont("BG-BLACK", 104, 2)
 			else
-				drawFont("BG-BLUE", 96+8, 2)
+				drawFont("BG-BLUE", 104, 2)
 			end
 			
 			-- Draw coordinates for edit cursor
-			drawFont(tostring(editcurx), 168+16, 2)
-			drawFont(",", 200+16, 2)
-			drawFont(tostring(editcury), 208+16, 2)
+			drawFont(tostring(editcurx), 184, 2)
+			drawFont(",", 216, 2)
+			drawFont(tostring(editcury), 224, 2)
 
 			-- Draw area indicator and width and height values
 			drawFont("AREA-"..tostring(area), 2, 10)
@@ -641,6 +641,7 @@ function love.draw()
 				end
 			end
 			
+			-- Draw edit cursor
 			love.graphics.draw(img_le_16x16_cur, editcurx, editcury + 18)
 			
 			--TODO: Add more!
