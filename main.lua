@@ -38,6 +38,10 @@ function love.load()
 
 	-- Level editor variables
 	editoroption = 0 -- Editor option (0 - Level select, 1 - Editing screen)
+	editheight = 0
+	editwidth = 0
+	editcurx = 0
+	editcury = 0
 
 	-- Gameplay
 	character = 0 -- Character (0 - Mario, 2 - Luigi, 3 - Toad, 4 - Princess Peach)
@@ -225,18 +229,18 @@ function love.keyreleased(key)
 
 			-- Go to proper editor
 			if key >= "1" and key <= "9" then
+				loadLevel()
+				
 				editoroption = 1
 				level = ((key - 1) % 3) + 1
 				area = 0
 
+			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				loadLevel()
 
-			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				editoroption = 1
 				level = ((string.byte(key) - 97) % 3) + 1
 				area = 0
-
-				loadLevel()
 
 			elseif key == "q" then
 			-- Quit menu to debug screen
@@ -260,8 +264,8 @@ function love.keyreleased(key)
 					love.graphics.setBackgroundColor(0, 0, 0)
 				end
 				
-			-- Change music
 			elseif key == "m" then
+			-- Change music
 				if areamusic[area] == 0 then
 					areamusic[area] = 1
 					
@@ -272,60 +276,91 @@ function love.keyreleased(key)
 					playAreaMusic()
 				end
 
-			-- Shrink or scratch width/height
 			elseif key == "kp4" then
+			-- Shrink or scratch width/height
 				if areawidth[area] > 16 then
 					areawidth[area] = areawidth[area] - 16
+					
+					checkEditCursorBounds()
 				end
 
 			elseif key == "kp6" then
 				if areawidth[area] < 3744 then
 					areawidth[area] = areawidth[area] + 16
+					
+					checkEditCursorBounds()
 				end
 
 			elseif key == "kp8" then
 				if areaheight[area] > 16 then
 					areaheight[area] = areaheight[area] - 16
+					
+					checkEditCursorBounds()
 				end
 
 			elseif key == "kp2" then
 				if areaheight[area] < 1440 then
 					areaheight[area] = areaheight[area] + 16
+					
+					checkEditCursorBounds()
 				end
 			
-			-- Change current area
 			elseif key == "[" then
+			-- Change current area
 				if area > 0 then
 					area = area - 1
 					
-					loadArea()
 				else
 					area  = allareas - 1
 					
-					loadArea()
 				end
+				
+				loadArea()
+				checkEditCursorBounds()
 			
 			elseif key == "]" then
 				if area < allareas - 1 then
 					area = area + 1
 					
-					loadArea()
 				else
 					area = 0
 					
-					loadArea()
 				end
+				
+				loadArea()
+				checkEditCursorBounds()
+				
+			-- Move edit cursor	
+			elseif key == "left" and editcurx > 0 then
+				editcurx = editcurx - 16
+				
+			elseif key == "right" and editcurx < areawidth[area] - 16 then
+				editcurx = editcurx + 16
+				
+			elseif key == "up" and editcury > 0 then
+				editcury = editcury - 16
 			
-			-- Load this level from file
+			elseif key == "down" and editcury < areaheight[area] - 16 then
+				editcury = editcury + 16
+				
+			elseif key == "z" then
+			-- Remove tile --TODO: Add this!
+				checkEditCursorBounds()
+			
+			elseif key == "x" then
+			-- Place tile --TODO: Add this!
+				checkEditCursorBounds()
+			
 			elseif key == "l" then
+			-- Load this level from file
 				loadLevel()
 				
-			-- Save this level to file
 			elseif key == "s" then
+			-- Save this level to file
 				saveLevel()
 			
-			-- Play from this level (doesn't return to level editor)
 			elseif key == "p" then
+			-- Play from this level (doesn't return to level editor)
 				state = 2
 				area = 0
 				frames = 0
@@ -446,45 +481,45 @@ function love.draw()
 		if cursor == 0 then
 		-- Draw Mario
 			if transitiontimer < 3 or transitiontimer > 68 then
-				love.graphics.draw(img_mario_active, 72, 144)
+				love.graphics.draw(img_cs_mario_active, 72, 144)
 			else
-				love.graphics.draw(img_mario_select, 72, 144)
+				love.graphics.draw(img_cs_mario_select, 72, 144)
 			end
 		else
-			love.graphics.draw(img_mario, 72, 144)
+			love.graphics.draw(img_cs_mario, 72, 144)
 		end
 
 		if cursor == 1 then
 		-- Draw Luigi
 			if transitiontimer < 3 or transitiontimer > 68 then
-				love.graphics.draw(img_luigi_active, 104, 144)
+				love.graphics.draw(img_cs_luigi_active, 104, 144)
 			else
-				love.graphics.draw(img_luigi_select, 104, 144)
+				love.graphics.draw(img_cs_luigi_select, 104, 144)
 			end
 		else
-			love.graphics.draw(img_luigi, 104, 144)
+			love.graphics.draw(img_cs_luigi, 104, 144)
 		end
 
 		if cursor == 2 then
 		-- Draw Toad
 			if transitiontimer < 3 or transitiontimer > 68 then
-				love.graphics.draw(img_toad_active, 136, 144)
+				love.graphics.draw(img_cs_toad_active, 136, 144)
 			else
-				love.graphics.draw(img_toad_select, 136, 144)
+				love.graphics.draw(img_cs_toad_select, 136, 144)
 			end
 		else
-			love.graphics.draw(img_toad, 136, 144)
+			love.graphics.draw(img_cs_toad, 136, 144)
 		end
 
 		if cursor == 3 then
 		-- Draw Peach
 			if transitiontimer < 3 or transitiontimer > 68 then
-				love.graphics.draw(img_peach_active, 168, 144)
+				love.graphics.draw(img_cs_peach_active, 168, 144)
 			else
-				love.graphics.draw(img_peach_select, 168, 144)
+				love.graphics.draw(img_cs_peach_select, 168, 144)
 			end
 		else
-			love.graphics.draw(img_peach, 168, 144)
+			love.graphics.draw(img_cs_peach, 168, 144)
 		end
 
 		drawFont("EXTRA LIFE", 64, 208, true)
@@ -570,17 +605,44 @@ function love.draw()
 			
 			if areabg[area] == 0 then
 			-- Draw background value
-				drawFont("BG-BLACK", 104, 2)
+				drawFont("BG-BLACK", 96+8, 2)
 			else
-				drawFont("BG-BLUE", 104, 2)
+				drawFont("BG-BLUE", 96+8, 2)
 			end
+			
+			-- Draw coordinates for edit cursor
+			drawFont(tostring(editcurx), 168+16, 2)
+			drawFont(",", 200+16, 2)
+			drawFont(tostring(editcury), 208+16, 2)
 
 			-- Draw area indicator and width and height values
 			drawFont("AREA-"..tostring(area), 2, 10)
 			drawFont("W-"..tostring(areawidth[area]), 64, 10)
 			drawFont("H-"..tostring(areaheight[area]), 120, 10)
 			drawFont("MUSIC-"..tostring(areamusic[area]), 184, 10)
-
+			
+			-- Calculate height and width of edit view
+			if areaheight[area] > 224 then
+				editheight = 224
+			else
+				editheight = areaheight[area]
+			end
+			
+			if areawidth[area] > 256 then
+				editwidth = 256
+			else
+				editwidth = areawidth[area]
+			end
+			
+			-- Draw boxes for each square
+			for i=0, (editheight / 16) - 1 do
+				for j=0, (editwidth / 16) - 1 do
+					love.graphics.draw(img_le_16x16, j * 16, 18 + (i * 16))
+				end
+			end
+			
+			love.graphics.draw(img_le_16x16_cur, editcurx, editcury + 18)
+			
 			--TODO: Add more!
 		end
 
@@ -639,30 +701,30 @@ end
 
 function loadGraphics()
 	-- Title screen and intro graphics
-	imgtit = "images/title/"
+	imgti = "images/title/"
 
-	img_titleborder = love.graphics.newImage(imgtit.."border.png")
-	img_titlelogo = love.graphics.newImage(imgtit.."logo.png")
+	img_titleborder = love.graphics.newImage(imgti.."border.png")
+	img_titlelogo = love.graphics.newImage(imgti.."logo.png")
 
 	-- Character select screen graphics
 	imgcs = "images/charselect/"
 
 	img_charselborder = love.graphics.newImage(imgcs.."border.png")
 
-	img_mario = love.graphics.newImage(imgcs.."mario.png")
-	img_luigi = love.graphics.newImage(imgcs.."luigi.png")
-	img_toad = love.graphics.newImage(imgcs.."toad.png")
-	img_peach = love.graphics.newImage(imgcs.."peach.png")
+	img_cs_mario = love.graphics.newImage(imgcs.."mario.png")
+	img_cs_luigi = love.graphics.newImage(imgcs.."luigi.png")
+	img_cs_toad = love.graphics.newImage(imgcs.."toad.png")
+	img_cs_peach = love.graphics.newImage(imgcs.."peach.png")
 
-	img_mario_active = love.graphics.newImage(imgcs.."mario_active.png")
-	img_luigi_active = love.graphics.newImage(imgcs.."luigi_active.png")
-	img_toad_active = love.graphics.newImage(imgcs.."toad_active.png")
-	img_peach_active = love.graphics.newImage(imgcs.."peach_active.png")
+	img_cs_mario_active = love.graphics.newImage(imgcs.."mario_active.png")
+	img_cs_luigi_active = love.graphics.newImage(imgcs.."luigi_active.png")
+	img_cs_toad_active = love.graphics.newImage(imgcs.."toad_active.png")
+	img_cs_peach_active = love.graphics.newImage(imgcs.."peach_active.png")
 
-	img_mario_select = love.graphics.newImage(imgcs.."mario_select.png")
-	img_luigi_select = love.graphics.newImage(imgcs.."luigi_select.png")
-	img_toad_select = love.graphics.newImage(imgcs.."toad_select.png")
-	img_peach_select = love.graphics.newImage(imgcs.."peach_select.png")
+	img_cs_mario_select = love.graphics.newImage(imgcs.."mario_select.png")
+	img_cs_luigi_select = love.graphics.newImage(imgcs.."luigi_select.png")
+	img_cs_toad_select = love.graphics.newImage(imgcs.."toad_select.png")
+	img_cs_peach_select = love.graphics.newImage(imgcs.."peach_select.png")
 
 	img_arrow = love.graphics.newImage(imgcs.."arrow.png")
 
@@ -683,6 +745,12 @@ function loadGraphics()
 
 	img_g_filled = love.graphics.newImage(imgg.."lifebar_filled.png")
 	img_g_empty = love.graphics.newImage(imgg.."lifebar_empty.png")
+	
+	-- Level editor graphics
+	imgle = "images/leveleditor/"
+	
+	img_le_16x16 = love.graphics.newImage(imgle.."16x16.png")
+	img_le_16x16_cur = love.graphics.newImage(imgle.."16x16_cursor.png")
 
 end
 
@@ -821,6 +889,16 @@ end
 function stopAreaMusic()
 	mus_overworld:stop()
 	mus_underworld:stop()
+end
+
+function checkEditCursorBounds()
+	if editcurx > areawidth[area] - 16 then
+		editcurx = areawidth[area] - 16
+	end
+	
+	if editcury > areaheight[area] - 16 then
+		editcury = areaheight[area] - 16
+	end
 end
 
 function drawFont(str, x, y, color)
