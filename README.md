@@ -30,6 +30,17 @@
 
 * To quit you can close window by clicking on X on title bar, or by pressing ESC button.
 
+# Screenshots
+
+![Title screen](/screenshots/1.png)
+![Intro story](/screenshots/2.png)
+![Character select](/screenshots/3.png)
+![Levelbook](/screenshots/4.png)
+![Gameplay placeholder](/screenshots/5.png)
+![Debug screen](/screenshots/6.png)
+![Level editor menu](/screenshots/7.png)
+![Level editor](/screenshots/8.png)
+
 
 # Debugging:
 
