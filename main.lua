@@ -37,7 +37,7 @@ function love.load()
 	cursor = 0 -- Menu cursor variable
 
 	-- Level editor variables
-	editoroption = 0 -- Editor option (0 - Level select, 2 - Editing screen)
+	editoroption = 0 -- Editor option (0 - Level select, 1 - Editing screen)
 
 	-- Gameplay
 	character = 0 -- Character (0 - Mario, 2 - Luigi, 3 - Toad, 4 - Princess Peach)
@@ -54,8 +54,8 @@ function love.load()
 
 	allareas = 1
 	area = 0
-	areawidth = {}
-	areaheight = {}
+	areawidth = {} -- Array of area widths
+	areaheight = {} -- Array of area heights
 	areabg = {} -- Array of backgrounds (0 - Black, 1 - Blue)
 	areamusic = {} -- Array of music (0 - Overworld, 1 - Underworld)
 	
@@ -163,21 +163,19 @@ function love.keyreleased(key)
 
 			love.graphics.setBackgroundColor(0, 0, 0)
 
-		elseif love.keyboard.isDown("lctrl") then
+		elseif love.keyboard.isDown("lctrl") and key == "d" then
 		-- Go to debug screen or title screen (depending on origin screen)
-			if key == "d" then
-				if debugmode == false then
-					state = 99
-					timer = 0
-					debugmode = true
+			if debugmode == false then
+				state = 99
+				timer = 0
+				debugmode = true
 
-					mus_title:stop()
-				else
-					state = 0
-					timer = 0
-					debugmode = false
-					debugmute = false
-				end
+				mus_title:stop()
+			else
+				state = 0
+				timer = 0
+				debugmode = false
+				debugmute = false
 			end
 		end
 	end
@@ -274,7 +272,7 @@ function love.keyreleased(key)
 					playAreaMusic()
 				end
 
-			-- Shrink or sratch width/height
+			-- Shrink or scratch width/height
 			elseif key == "kp4" then
 				if areawidth[area] > 16 then
 					areawidth[area] = areawidth[area] - 16
@@ -736,7 +734,7 @@ function loadLevel()
 	
 	for i=0, allareas - 1 do
 	-- Fill area width, height and background arrays
-		areafile, msg = love.filesystem.read(leveldir..tostring(area))
+		areafile = love.filesystem.read(leveldir..tostring(area))
 		
 		diff = i * 38
 		
