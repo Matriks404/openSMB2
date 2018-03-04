@@ -40,8 +40,14 @@ function love.load()
 	editoroption = 0 -- Editor option (0 - Level select, 1 - Editing screen)
 	editheight = 0
 	editwidth = 0
+
+	-- Editor cursor coordinates
 	editcurx = 0
 	editcury = 0
+
+	-- Editor view coordinates
+	editviewx = 0
+	editviewy = 0
 
 	-- Gameplay
 	character = 0 -- Character (0 - Mario, 2 - Luigi, 3 - Toad, 4 - Princess Peach)
@@ -52,7 +58,7 @@ function love.load()
 	-- Keep in mind that these are repeated in certain point of code, as player will return to title screen after game completion,
 	-- but variables here are initialized only on game execution start, so the game shouldn't rely on this.
 	world = 1
-	
+
 	alllevels = 3
 	level = 1
 
@@ -62,7 +68,7 @@ function love.load()
 	areaheight = {} -- Array of area heights
 	areabg = {} -- Array of backgrounds (0 - Black, 1 - Blue)
 	areamusic = {} -- Array of music (0 - Overworld, 1 - Underworld)
-	
+
 	-- Start coordinates
 	startx = 0
 	starty = 0
@@ -131,7 +137,7 @@ function love.update()
 	elseif state == 4 then
 	-- Gameplay stuff
 		loadLevel()
-		
+
 		if timer > 146 then
 			--TODO: Physics start here!
 		end
@@ -152,7 +158,7 @@ function love.keyreleased(key)
 			timer = 0
 
 			mus_title:stop()
-			
+
 			if debugmute == false then
 				mus_charsel:play()
 			end
@@ -234,12 +240,12 @@ function love.keyreleased(key)
 				area = 0
 
 				loadLevel()
-				
+
 			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				editoroption = 1
 				level = ((string.byte(key) - 97) % 3) + 1
 				area = 0
-				
+
 				loadLevel()
 
 			elseif key == "q" then
@@ -263,121 +269,143 @@ function love.keyreleased(key)
 
 					love.graphics.setBackgroundColor(0, 0, 0)
 				end
-				
+
 			elseif key == "m" then
 			-- Change music
 				if areamusic[area] == 0 then
 					areamusic[area] = 1
-					
+
 					playAreaMusic()
 				else
 					areamusic[area] = 0
-					
+
 					playAreaMusic()
 				end
 
-			elseif key == "kp4" then
 			-- Shrink or scratch width/height
+			elseif key == "kp4" then
 				if areawidth[area] > 16 then
 					areawidth[area] = areawidth[area] - 16
-					
+
 					checkEditCursorBounds()
+					checkEditGridBounds()
 				end
 
 			elseif key == "kp6" then
 				if areawidth[area] < 3744 then
 					areawidth[area] = areawidth[area] + 16
-					
+
 					checkEditCursorBounds()
+					checkEditGridBounds()
 				end
 
 			elseif key == "kp8" then
 				if areaheight[area] > 16 then
 					areaheight[area] = areaheight[area] - 16
-					
+
 					checkEditCursorBounds()
+					checkEditGridBounds()
 				end
 
 			elseif key == "kp2" then
 				if areaheight[area] < 1440 then
 					areaheight[area] = areaheight[area] + 16
-					
+
 					checkEditCursorBounds()
+					checkEditGridBounds()
 				end
-			
+
+			-- Change current areas
 			elseif key == "[" then
-			-- Change current area
 				if area > 0 then
 					area = area - 1
-					
+
 				else
 					area  = allareas - 1
-					
+
 				end
-				
+
 				loadArea()
-				checkEditCursorBounds()
-			
+
+				editcurx = 0
+				editcury = 0
+				
+				editviewx = 0
+				editviewy = 0
+
 			elseif key == "]" then
 				if area < allareas - 1 then
 					area = area + 1
-					
+
 				else
 					area = 0
-					
+
 				end
-				
+
 				loadArea()
-				checkEditCursorBounds()
+
+				editcurx = 0
+				editcury = 0
 				
-			-- Move edit cursor	
+				editviewx = 0
+				editviewy = 0
+
+			-- Move edit cursor
 			elseif key == "left" and editcurx > 0 then
 				editcurx = editcurx - 16
-				
+
+				checkEditGridBounds()
+
 			elseif key == "right" and editcurx < areawidth[area] - 16 then
 				editcurx = editcurx + 16
-				
+
+				checkEditGridBounds()
+
 			elseif key == "up" and editcury > 0 then
 				editcury = editcury - 16
-			
+
+				checkEditGridBounds()
+
 			elseif key == "down" and editcury < areaheight[area] - 16 then
 				editcury = editcury + 16
-				
+
+				checkEditGridBounds()
+
 			elseif key == "z" then
 			-- Remove tile --TODO: Add this!
 				checkEditCursorBounds()
-			
+
 			elseif key == "x" then
 			-- Place tile --TODO: Add this!
 				checkEditCursorBounds()
-			
+
 			elseif key == "l" then
 			-- Load this level from file
 				loadLevel()
-				
+
 			elseif key == "s" then
 			-- Save this level to file
 				saveLevel()
-			
+
 			elseif key == "p" then
 			-- Play from this level (doesn't return to level editor)
 				state = 2
 				area = 0
 				frames = 0
-				
+
 				if debugmute == false then
 					stopAreaMusic()
 					mus_charsel:play()
 				end
-				
+
 				love.graphics.setBackgroundColor(0, 0, 0)
-			
+
 			elseif key == "q" then
 			-- Quit to editor menu
 				editoroption = 0
 
 				love.graphics.setBackgroundColor(0, 0, 0)
-				
+
 				stopAreaMusic()
 			end
 		end
@@ -399,7 +427,7 @@ function love.keyreleased(key)
 			else
 				debugframes = false
 			end
-			
+
 		-- Mute music or not
 		elseif key == "m" then
 			if debugmute == false then
@@ -601,49 +629,55 @@ function love.draw()
 
 		elseif editoroption == 1 then
 		-- Draw editor
-			drawFont(tostring(world).."-"..tostring(level), 64, 2) -- Draw world and level indicator
-			
+			-- Draw world, level and area indicators
+			drawFont(tostring(world).."-"..tostring(level), 64, 2)
+			drawFont("A-"..tostring(area), 104, 2)
+
 			if areabg[area] == 0 then
-			-- Draw background value
-				drawFont("BG-BLACK", 104, 2)
+			--Draw background value
+				drawFont("BG-BLK", 144, 2)
 			else
-				drawFont("BG-BLUE", 104, 2)
+				drawFont("BG-BLU", 144, 2)
 			end
+
+			if areamusic[area] == 0 then
+			-- Draw music indicator
+				drawFont("M-OVER", 208, 2)
+			else
+				drawFont("M-UNDR", 208, 2)
+			end
+			
+			-- Draw area indicator and width and height values
+			drawFont("W-"..tostring(areawidth[area]), 2, 10)
+			drawFont("H-"..tostring(areaheight[area]), 56, 10)
 			
 			-- Draw coordinates for edit cursor
-			drawFont(tostring(editcurx), 184, 2)
-			drawFont(",", 216, 2)
-			drawFont(tostring(editcury), 224, 2)
+			drawFont(tostring(editcurx), 184, 10)
+			drawFont(",", 216, 10)
+			drawFont(tostring(editcury), 224, 10)
 
-			-- Draw area indicator and width and height values
-			drawFont("AREA-"..tostring(area), 2, 10)
-			drawFont("W-"..tostring(areawidth[area]), 64, 10)
-			drawFont("H-"..tostring(areaheight[area]), 120, 10)
-			drawFont("MUSIC-"..tostring(areamusic[area]), 184, 10)
-			
 			-- Calculate height and width of edit view
-			if areaheight[area] > 224 then
-				editheight = 224
-			else
-				editheight = areaheight[area]
+			editheight = areaheight[area] - editviewy
+			editwidth = areawidth[area] - editviewx
+			
+			if editheight > 208 then
+				editheight = 208
 			end
 			
-			if areawidth[area] > 256 then
+			if editwidth > 256 then
 				editwidth = 256
-			else
-				editwidth = areawidth[area]
 			end
-			
+
 			-- Draw boxes for each square
 			for i=0, (editheight / 16) - 1 do
 				for j=0, (editwidth / 16) - 1 do
-					love.graphics.draw(img_le_16x16, j * 16, 18 + (i * 16))
+					love.graphics.draw(img_le_16x16, j * 16, 32 + (i * 16))
 				end
 			end
-			
+
 			-- Draw edit cursor
-			love.graphics.draw(img_le_16x16_cur, editcurx, editcury + 18)
-			
+			love.graphics.draw(img_le_16x16_cur, editcurx - editviewx, editcury - editviewy + 32)
+
 			--TODO: Add more!
 		end
 
@@ -665,7 +699,7 @@ function love.draw()
 		if debugframes == true then
 			drawFont("FRAMES", 104, 176)
 		end
-		
+
 		if debugmute == true then
 			drawFont("MUTED", 168, 176)
 		end
@@ -746,10 +780,10 @@ function loadGraphics()
 
 	img_g_filled = love.graphics.newImage(imgg.."lifebar_filled.png")
 	img_g_empty = love.graphics.newImage(imgg.."lifebar_empty.png")
-	
+
 	-- Level editor graphics
 	imgle = "images/leveleditor/"
-	
+
 	img_le_16x16 = love.graphics.newImage(imgle.."16x16.png")
 	img_le_16x16_cur = love.graphics.newImage(imgle.."16x16_cursor.png")
 
@@ -800,25 +834,25 @@ function loadLevel()
 	allareas = tonumber(string.sub(levelfile, 7, 7))
 	startx = tonumber(string.sub(levelfile, 16, 19))
 	starty = tonumber(string.sub(levelfile, 28, 31))
-	
+
 	for i=0, allareas - 1 do
 	-- Fill area width, height and background arrays
 		areafile = love.filesystem.read(leveldir..tostring(area))
-		
+
 		diff = i * 38
-		
+
 		areawidth[i] = tonumber(string.sub(levelfile, 49 + diff, 52 + diff))
 		areaheight[i] = tonumber(string.sub(levelfile, 61 + diff, 64 + diff))
 		areabg[i] = tonumber(string.sub(levelfile, 69 + diff, 69 + diff))
 		areamusic[i] = tonumber(string.sub(levelfile, 77 + diff, 77 + diff))
 	end
-	
+
 	loadArea()
 end
 
 function loadArea()
 	areafile, msg = love.filesystem.read(leveldir..tostring(area))
-	
+
 	-- Check level background and set it
 	if areabg[area] == 0 then
 		love.graphics.setBackgroundColor(0, 0, 0)
@@ -827,7 +861,7 @@ function loadArea()
 	end
 
 	playAreaMusic()
-	
+
 	--TODO: Add this!
 end
 
@@ -841,33 +875,33 @@ function saveLevel()
 	elseif startx < 1000 then startx_str = "0"..tostring(startx)
 	else                      startx_str = tostring(startx)
 	end
-	
+
 	if starty <= 0 then       starty_str = "0000"
 	elseif starty < 10 then   starty_str = "000"..tostring(starty)
 	elseif starty < 100 then  starty_str = "00"..tostring(starty)
 	elseif starty < 1000 then starty_str = "0"..tostring(starty)
 	else                      starty_str = tostring(starty)
 	end
-	
+
 	areadata = ""
 	areawidth_str = {}
 	areaheight_str = {}
-	
+
 	for i=0, allareas - 1 do
 		-- Convert areawidths and areaheights to string variables
 		if areawidth[i] < 100 then      areawidth_str[i] = "00"..tostring(areawidth[i])
 		elseif areawidth[i] < 1000 then areawidth_str[i] = "0"..tostring(areawidth[i])
 		else                            areawidth_str[i] = tostring(areawidth[i])
 		end
-		
+
 		if areaheight[i] < 100 then      areaheight_str[i] = "00"..tostring(areaheight[i])
 		elseif areaheight[i] < 1000 then areaheight_str[i] = "0"..tostring(areaheight[i])
 		else                             areaheight_str[i] = tostring(areaheight[i])
 		end
-		
+
 		areadata = areadata..i.." width="..areawidth_str[i].." height="..areaheight_str[i].." bg="..tostring(areabg[i]).." music="..tostring(areamusic[i]).."\n"
 	end
-	
+
 	-- Save file with all variables
 	data = "areas="..tostring(allareas).."\nstartx="..startx_str.."\nstarty="..starty_str.."\n\nareas:\n"..areadata
 	levelfile = love.filesystem.write(leveldir.."settings.cfg", data)
@@ -877,11 +911,11 @@ function playAreaMusic()
 	if debugmute == false then
 		if areamusic[area] == 0 then
 			mus_overworld:play()
-			
+
 			mus_underworld:stop()
 		else
 			mus_underworld:play()
-			
+
 			mus_overworld:stop()
 		end
 	end
@@ -896,9 +930,25 @@ function checkEditCursorBounds()
 	if editcurx > areawidth[area] - 16 then
 		editcurx = areawidth[area] - 16
 	end
-	
+
 	if editcury > areaheight[area] - 16 then
 		editcury = areaheight[area] - 16
+	end
+end
+
+function checkEditGridBounds()
+	if editcurx < editviewx then
+		editviewx = editviewx - 16
+
+	elseif editcurx == editviewx + 256 then
+		editviewx = editviewx + 16
+	end
+
+	if editcury < editviewy then
+		editviewy = editviewy - 16
+
+	elseif editcury == editviewy + 208 then
+		editviewy = editviewy + 16
 	end
 end
 
