@@ -329,7 +329,7 @@ function love.keyreleased(key)
 
 				editcurx = 0
 				editcury = 0
-				
+
 				editviewx = 0
 				editviewy = 0
 
@@ -346,7 +346,7 @@ function love.keyreleased(key)
 
 				editcurx = 0
 				editcury = 0
-				
+
 				editviewx = 0
 				editviewy = 0
 
@@ -633,24 +633,24 @@ function love.draw()
 			drawFont(tostring(world).."-"..tostring(level), 64, 2)
 			drawFont("A-"..tostring(area), 104, 2)
 
-			if areabg[area] == 0 then
 			-- Draw background value
+			if areabg[area] == 0 then
 				drawFont("BG-BLK", 144, 2)
 			else
 				drawFont("BG-BLU", 144, 2)
 			end
 
-			if areamusic[area] == 0 then
 			-- Draw music indicator
+			if areamusic[area] == 0 then
 				drawFont("M-OVER", 208, 2)
 			else
 				drawFont("M-UNDR", 208, 2)
 			end
-			
+
 			-- Draw width and height values
 			drawFont("W-"..tostring(areawidth[area]), 2, 10)
 			drawFont("H-"..tostring(areaheight[area]), 56, 10)
-			
+
 			-- Draw coordinates for edit cursor
 			drawFont(tostring(editcurx), 184, 10)
 			drawFont(",", 216, 10)
@@ -659,11 +659,11 @@ function love.draw()
 			-- Calculate height and width of edit view
 			editheight = areaheight[area] - editviewy
 			editwidth = areawidth[area] - editviewx
-			
+
 			if editheight > 208 then
 				editheight = 208
 			end
-			
+
 			if editwidth > 256 then
 				editwidth = 256
 			end
