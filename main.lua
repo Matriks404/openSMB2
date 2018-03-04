@@ -796,6 +796,7 @@ function loadMusic()
 	mus_charsel = love.audio.newSource(musdir.."charselect.ogg")
 	mus_overworld = love.audio.newSource(musdir.."overworld.ogg")
 	mus_underworld = love.audio.newSource(musdir.."underworld.ogg")
+	mus_boss = love.audio.newSource(musdir.."boss.ogg")
 end
 
 function loadSoundEffects()
@@ -913,10 +914,17 @@ function playAreaMusic()
 			mus_overworld:play()
 
 			mus_underworld:stop()
-		else
+			mus_boss:stop()
+		elseif areamusic[area] == 1 then
 			mus_underworld:play()
 
 			mus_overworld:stop()
+			mus_boss:stop()
+		else
+			mus_boss:play()
+			
+			mus_overworld:stop()
+			mus_underworld:stop()
 		end
 	end
 end
@@ -924,6 +932,7 @@ end
 function stopAreaMusic()
 	mus_overworld:stop()
 	mus_underworld:stop()
+	mus_boss:stop()
 end
 
 function checkEditCursorBounds()
