@@ -4,7 +4,7 @@
 
 2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer.
 
-3. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click Download button) and extract them in game directory.
+3. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click Download button) and extract them in `resources` directory.
 
     * BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
 

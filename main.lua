@@ -728,7 +728,7 @@ function love.draw()
 end
 
 function loadFonts()
-	fontdir = "images/font/" -- Fonts folder
+	fontdir = "resources/images/font/" -- Fonts folder
 
 	font_white = love.graphics.newImage(fontdir.."white.png")
 	font_brown = love.graphics.newImage(fontdir.."brown.png")
@@ -736,13 +736,13 @@ end
 
 function loadGraphics()
 	-- Title screen and intro graphics
-	imgti = "images/title/"
+	imgti = "resources/images/title/"
 
 	img_titleborder = love.graphics.newImage(imgti.."border.png")
 	img_titlelogo = love.graphics.newImage(imgti.."logo.png")
 
 	-- Character select screen graphics
-	imgcs = "images/charselect/"
+	imgcs = "resources/images/charselect/"
 
 	img_charselborder = love.graphics.newImage(imgcs.."border.png")
 
@@ -764,7 +764,7 @@ function loadGraphics()
 	img_arrow = love.graphics.newImage(imgcs.."arrow.png")
 
 	-- Levelbook screen graphics
-	imglb = "images/levelbook/"
+	imglb = "resources/images/levelbook/"
 
 	img_levelbook = love.graphics.newImage(imglb.."levelbook.png")
 	img_lb_current = love.graphics.newImage(imglb.."level_current.png")
@@ -776,13 +776,13 @@ function loadGraphics()
 	img_lb_7 = love.graphics.newImage(imglb.."world7.png")
 
 	-- Gameplay screen graphics
-	imgg = "images/gameplay/"
+	imgg = "resources/images/gameplay/"
 
 	img_g_filled = love.graphics.newImage(imgg.."lifebar_filled.png")
 	img_g_empty = love.graphics.newImage(imgg.."lifebar_empty.png")
 
 	-- Level editor graphics
-	imgle = "images/leveleditor/"
+	imgle = "resources/images/leveleditor/"
 
 	img_le_16x16 = love.graphics.newImage(imgle.."16x16.png")
 	img_le_16x16_cur = love.graphics.newImage(imgle.."16x16_cursor.png")
@@ -790,7 +790,7 @@ function loadGraphics()
 end
 
 function loadMusic()
-	musdir = "sound/music/" -- Music folder
+	musdir = "resources/sound/music/" -- Music folder
 
 	mus_title = love.audio.newSource(musdir.."title.ogg")
 	mus_charsel = love.audio.newSource(musdir.."charselect.ogg")
@@ -800,7 +800,7 @@ function loadMusic()
 end
 
 function loadSoundEffects()
-	sfxdir = "sound/effects/" -- Sound effects folder
+	sfxdir = "resources/sound/effects/" -- Sound effects folder
 
 	sfx_cherry = love.audio.newSource(sfxdir.."cherry.ogg")
 end
