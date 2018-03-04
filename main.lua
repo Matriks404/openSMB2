@@ -634,7 +634,7 @@ function love.draw()
 			drawFont("A-"..tostring(area), 104, 2)
 
 			if areabg[area] == 0 then
-			--Draw background value
+			-- Draw background value
 				drawFont("BG-BLK", 144, 2)
 			else
 				drawFont("BG-BLU", 144, 2)
@@ -647,7 +647,7 @@ function love.draw()
 				drawFont("M-UNDR", 208, 2)
 			end
 			
-			-- Draw area indicator and width and height values
+			-- Draw width and height values
 			drawFont("W-"..tostring(areawidth[area]), 2, 10)
 			drawFont("H-"..tostring(areaheight[area]), 56, 10)
 			
