@@ -643,8 +643,10 @@ function love.draw()
 			-- Draw music indicator
 			if areamusic[area] == 0 then
 				drawFont("M-OVER", 208, 2)
-			else
+			elseif areamusic[area] == 1 then
 				drawFont("M-UNDR", 208, 2)
+			else
+				drawFont("M-BOSS", 208. 2)
 			end
 
 			-- Draw width and height values
