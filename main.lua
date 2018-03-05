@@ -646,7 +646,7 @@ function love.draw()
 			elseif areamusic[area] == 1 then
 				drawFont("M-UNDR", 208, 2)
 			else
-				drawFont("M-BOSS", 208. 2)
+				drawFont("M-BOSS", 208, 2)
 			end
 
 			-- Draw width and height values
