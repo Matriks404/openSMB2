@@ -63,6 +63,6 @@
     * Press [ or ] to switch between level areas.
 	* Press arrow keys to move edit cursor.
     * Press L to load level again.
-    * Press S to save level.
+    * Press V to save level.
     * Press P to play this level (Game doesn't return to level editor after doing that)
     * Press Q to quit to menu.

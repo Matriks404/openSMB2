@@ -40,10 +40,15 @@ function love.load()
 	editoroption = 0 -- Editor option (0 - Level select, 1 - Editing screen)
 	editheight = 0
 	editwidth = 0
+	edittile = 1
 
 	-- Editor cursor coordinates
 	editcurx = 0
 	editcury = 0
+	
+	-- Editor selected tile coordinates
+	edittilex = 0
+	edittiley = 0
 
 	-- Editor view coordinates
 	editviewx = 0
@@ -68,6 +73,7 @@ function love.load()
 	areaheight = {} -- Array of area heights
 	areabg = {} -- Array of backgrounds (0 - Black, 1 - Blue)
 	areamusic = {} -- Array of music (0 - Overworld, 1 - Underworld)
+	areatiles = {} -- Array of area tiles
 
 	-- Start coordinates
 	startx = 0
@@ -317,6 +323,8 @@ function love.keyreleased(key)
 
 			-- Change current areas
 			elseif key == "[" then
+				saveArea()
+			
 				if area > 0 then
 					area = area - 1
 
@@ -334,6 +342,8 @@ function love.keyreleased(key)
 				editviewy = 0
 
 			elseif key == "]" then
+				saveArea()
+			
 				if area < allareas - 1 then
 					area = area + 1
 
@@ -370,20 +380,32 @@ function love.keyreleased(key)
 				editcury = editcury + 16
 
 				checkEditGridBounds()
+			
+			elseif key == "w" and edittile > 15 then
+				edittile = edittile - 16
+				
+			elseif key == "s" and edittile < 240 then
+				edittile = edittile + 16
+			
+			elseif key == "a" and edittile > 0 then
+				edittile = edittile - 1
+				
+			elseif key == "d" and edittile < 255 then
+				edittile = edittile + 1
 
 			elseif key == "z" then
-			-- Remove tile --TODO: Add this!
-				checkEditCursorBounds()
+			-- Remove tile
+				placeTile(0)
 
 			elseif key == "x" then
-			-- Place tile --TODO: Add this!
-				checkEditCursorBounds()
+			-- Place tile
+				placeTile(edittile)
 
 			elseif key == "l" then
 			-- Load this level from file
 				loadLevel()
 
-			elseif key == "s" then
+			elseif key == "v" then
 			-- Save this level to file
 				saveLevel()
 
@@ -652,6 +674,10 @@ function love.draw()
 			-- Draw width and height values
 			drawFont("W-"..tostring(areawidth[area]), 2, 10)
 			drawFont("H-"..tostring(areaheight[area]), 56, 10)
+			
+			-- Draw currently selected tile!
+			drawFont("T-"..tostring(edittile), 120, 10)
+			drawTile(edittile, 152, 10)
 
 			-- Draw coordinates for edit cursor
 			drawFont(tostring(editcurx), 184, 10)
@@ -679,6 +705,8 @@ function love.draw()
 
 			-- Draw edit cursor
 			love.graphics.draw(img_le_16x16_cur, editcurx - editviewx, editcury - editviewy + 32)
+			
+			-- Draw tiles --TODO This!
 
 			--TODO: Add more!
 		end
@@ -788,6 +816,9 @@ function loadGraphics()
 
 	img_le_16x16 = love.graphics.newImage(imgle.."16x16.png")
 	img_le_16x16_cur = love.graphics.newImage(imgle.."16x16_cursor.png")
+	
+	-- Tilemap graphics
+	img_tiles = love.graphics.newImage("resources/images/tilemap.png")
 
 end
 
@@ -864,6 +895,13 @@ function loadArea()
 	end
 
 	playAreaMusic()
+	
+	--TODO: Temporary!
+	for i=0, (areaheight[area] / 16) - 1 do
+		for j=0, (areawidth[area] / 16) - 1 do
+			areatiles[j + (i * (areawidth[area] / 16))] = 0
+		end
+	end
 
 	--TODO: Add this!
 end
@@ -908,6 +946,25 @@ function saveLevel()
 	-- Save file with all variables
 	data = "areas="..tostring(allareas).."\nstartx="..startx_str.."\nstarty="..starty_str.."\n\nareas:\n"..areadata
 	levelfile = love.filesystem.write(leveldir.."settings.cfg", data)
+	
+	saveArea()
+end
+
+function saveArea()
+	areadir = "levels/"..tostring(world).."-"..tostring(level).."/"..tostring(area)
+	
+	areadata = ""
+	
+	for i=0, (areaheight[area] / 16) - 1 do
+	-- Fill file!
+		for j=0, (areawidth[area] / 16) - 1 do
+			areadata = areadata..areatiles[j + (i * (areawidth[area] / 16))].."."
+		end
+		
+		areadata = areadata.."\n"
+	end
+	
+	areafile = love.filesystem.write(areadir, areadata)
 end
 
 function playAreaMusic()
@@ -963,6 +1020,12 @@ function checkEditGridBounds()
 	end
 end
 
+function placeTile(tileid)
+	edittilex = editcurx / 16
+	edittiley = (editcury / 16) * (areawidth[area] / 16)
+	areatiles[edittilex + edittiley] = tileid
+end
+
 function drawFont(str, x, y, color)
 	realx = 0
 
@@ -987,6 +1050,15 @@ function drawFont(str, x, y, color)
 
 		realx = realx + 8
 	end
+end
+
+function drawTile(tileid, tilex, tiley)
+	ax = (tileid % 16) * 16
+	ay = math.floor(tileid / 16) * 16
+	
+	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tiles:getWidth(), img_tiles:getHeight())
+	
+	love.graphics.draw(img_tiles, tile, tilex, tiley)
 end
 
 function transitionClear()
