@@ -903,7 +903,7 @@ function loadArea()
 		end
 	end
 
-	--TODO: Add this!
+	--TODO: Add more!
 end
 
 function saveLevel()
@@ -948,6 +948,8 @@ function saveLevel()
 	levelfile = love.filesystem.write(leveldir.."settings.cfg", data)
 	
 	saveArea()
+	
+	--TODO: Add more!
 end
 
 function saveArea()
