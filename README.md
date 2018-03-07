@@ -60,7 +60,7 @@
 	* Press M to change music
     * Press 4 or 6 on keypad to shrink or stretch width
     * Press 8 or 2 on keypad to shrink or stretch height
-    * Press [ or ] to switch between level areas.
+    * Press [ or ] to switch between level areas. Beware that it will automatically save current level and area!
 	* Press arrow keys to move edit cursor.
     * Press L to load level again.
     * Press V to save level.

@@ -323,7 +323,7 @@ function love.keyreleased(key)
 
 			-- Change current areas
 			elseif key == "[" then
-				saveArea()
+				saveLevel()
 			
 				if area > 0 then
 					area = area - 1
@@ -342,7 +342,7 @@ function love.keyreleased(key)
 				editviewy = 0
 
 			elseif key == "]" then
-				saveArea()
+				saveLevel()
 			
 				if area < allareas - 1 then
 					area = area + 1
