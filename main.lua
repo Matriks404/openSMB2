@@ -910,19 +910,8 @@ function saveLevel()
 	leveldir = "levels/"..tostring(world).."-"..tostring(level).."/"
 
 	-- Convert startx and starty to string variables
-	if startx <= 0 then       startx_str = "0000"
-	elseif startx < 10 then   startx_str = "000"..tostring(startx)
-	elseif startx < 100 then  startx_str = "00"..tostring(startx)
-	elseif startx < 1000 then startx_str = "0"..tostring(startx)
-	else                      startx_str = tostring(startx)
-	end
-
-	if starty <= 0 then       starty_str = "0000"
-	elseif starty < 10 then   starty_str = "000"..tostring(starty)
-	elseif starty < 100 then  starty_str = "00"..tostring(starty)
-	elseif starty < 1000 then starty_str = "0"..tostring(starty)
-	else                      starty_str = tostring(starty)
-	end
+	startx_str = toPaddedString(startx, 4)
+	starty_str = toPaddedString(starty, 4)
 
 	areadata = ""
 	areawidth_str = {}
@@ -930,15 +919,8 @@ function saveLevel()
 
 	for i=0, allareas - 1 do
 		-- Convert areawidths and areaheights to string variables
-		if areawidth[i] < 100 then      areawidth_str[i] = "00"..tostring(areawidth[i])
-		elseif areawidth[i] < 1000 then areawidth_str[i] = "0"..tostring(areawidth[i])
-		else                            areawidth_str[i] = tostring(areawidth[i])
-		end
-
-		if areaheight[i] < 100 then      areaheight_str[i] = "00"..tostring(areaheight[i])
-		elseif areaheight[i] < 1000 then areaheight_str[i] = "0"..tostring(areaheight[i])
-		else                             areaheight_str[i] = tostring(areaheight[i])
-		end
+		areawidth_str[i] = toPaddedString(areawidth[i], 4)
+		areaheight_str[i] = toPaddedString(areaheight[i], 4)
 
 		areadata = areadata..i.." width="..areawidth_str[i].." height="..areaheight_str[i].." bg="..tostring(areabg[i]).." music="..tostring(areamusic[i]).."\n"
 	end
@@ -960,11 +942,7 @@ function saveArea()
 	for i=0, (areaheight[area] / 16) - 1 do
 	-- Fill file!
 		for j=0, (areawidth[area] / 16) - 1 do
-			areatiles_int = areatiles[j + (i * (areawidth[area] / 16))]
-		
-			if areatiles_int < 10 then areatiles_str = "0"..tostring(areatiles_int)
-			else                       areatiles_str = tostring(areatiles_int)
-			end
+			areatiles_str = toPaddedString(areatiles[j + (i * (areawidth[area] / 16))], 2)
 		
 			areadata = areadata..areatiles_str.."."
 		end
@@ -1072,4 +1050,19 @@ end
 function transitionClear()
 	transitiontimer = 0
 	transition = false
+end
+
+function toPaddedString(number, digits)
+	str = tostring(number)
+	sum = number
+	
+	for i=1, digits - 1 do
+		if sum < 10 then
+			str = "0"..str
+		end
+		
+		sum = sum / 10
+	end
+
+	return str
 end
