@@ -960,7 +960,13 @@ function saveArea()
 	for i=0, (areaheight[area] / 16) - 1 do
 	-- Fill file!
 		for j=0, (areawidth[area] / 16) - 1 do
-			areadata = areadata..areatiles[j + (i * (areawidth[area] / 16))].."."
+			areatiles_int = areatiles[j + (i * (areawidth[area] / 16))]
+		
+			if areatiles_int < 10 then areatiles_str = "0"..tostring(areatiles_int)
+			else                       areatiles_str = tostring(areatiles_int)
+			end
+		
+			areadata = areadata..areatiles_str.."."
 		end
 		
 		areadata = areadata.."\n"
