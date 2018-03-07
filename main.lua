@@ -675,7 +675,7 @@ function love.draw()
 			drawFont("W-"..tostring(areawidth[area]), 2, 10)
 			drawFont("H-"..tostring(areaheight[area]), 56, 10)
 			
-			-- Draw currently selected tile!
+			-- Draw currently selected tile
 			drawFont("T-"..tostring(edittile), 120, 10)
 			drawTile(edittile, 152, 10)
 
@@ -706,7 +706,7 @@ function love.draw()
 			-- Draw edit cursor
 			love.graphics.draw(img_le_16x16_cur, editcurx - editviewx, editcury - editviewy + 32)
 			
-			-- Draw tiles --TODO This!
+			-- Draw tiles --TODO: This!
 
 			--TODO: Add more!
 		end
@@ -896,7 +896,7 @@ function loadArea()
 
 	playAreaMusic()
 	
-	--TODO: Temporary!
+	--TEMPORARY: Placeholder
 	for i=0, (areaheight[area] / 16) - 1 do
 		for j=0, (areawidth[area] / 16) - 1 do
 			areatiles[j + (i * (areawidth[area] / 16))] = 0
