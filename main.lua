@@ -278,8 +278,8 @@ function love.keyreleased(key)
 
 			elseif key == "m" then
 			-- Change music
-				if areamusic[area] == 0 then
-					areamusic[area] = 1
+				if areamusic[area] < 2 then
+					areamusic[area] = areamusic[area] + 1
 
 					playAreaMusic()
 				else
@@ -404,11 +404,16 @@ function love.keyreleased(key)
 			elseif key == "l" then
 			-- Load this level from file
 				loadLevel()
+				
 
 			elseif key == "v" then
 			-- Save this level to file
 				saveLevel()
 
+			elseif key == "c" then
+			-- Clear area tiles
+				clearArea()
+				
 			elseif key == "p" then
 			-- Play from this level (doesn't return to level editor)
 				state = 2
@@ -885,7 +890,7 @@ function loadLevel()
 end
 
 function loadArea()
-	areafile, msg = love.filesystem.read(leveldir..tostring(area))
+	areafile = love.filesystem.read(leveldir..tostring(area))
 
 	-- Check level background and set it
 	if areabg[area] == 0 then
@@ -896,14 +901,26 @@ function loadArea()
 
 	playAreaMusic()
 	
-	--TEMPORARY: Placeholder
+	for i=0, (areaheight[area] / 16) - 1 do
+	-- Fill tile data
+		for j=0, (areawidth[area] / 16) - 1 do
+			diff = i * (((areawidth[area] / 16) * 3) + 1)
+			
+			areatiles[j + (i * (areawidth[area] / 16))] = tonumber(string.sub(areafile, (j * 3) + 1 + diff, (j * 3) + 2 + diff))
+		end
+	end
+
+	--TODO: Add more!
+end
+
+function clearArea()
+	areafile = love.filesystem.read(leveldir..tostring(area))
+	
 	for i=0, (areaheight[area] / 16) - 1 do
 		for j=0, (areawidth[area] / 16) - 1 do
 			areatiles[j + (i * (areawidth[area] / 16))] = 0
 		end
 	end
-
-	--TODO: Add more!
 end
 
 function saveLevel()
@@ -940,7 +957,7 @@ function saveArea()
 	areadata = ""
 	
 	for i=0, (areaheight[area] / 16) - 1 do
-	-- Fill file!
+	-- Fill file
 		for j=0, (areawidth[area] / 16) - 1 do
 			areatiles_str = toPaddedString(areatiles[j + (i * (areawidth[area] / 16))], 2)
 		
