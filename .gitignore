@@ -1,4 +1,5 @@
 /resources/images/*
 !resources/images/leveleditor/
 /resources/sound/*
+Levels.lnk
 Run.lnk

@@ -430,7 +430,13 @@ function love.keyreleased(key)
 			elseif key == "q" then
 			-- Quit to editor menu
 				editoroption = 0
-
+				
+				editcurx = 0
+				editcury = 0
+				
+				editviewx = 0
+				editviewy = 0
+				
 				love.graphics.setBackgroundColor(0, 0, 0)
 
 				stopAreaMusic()
