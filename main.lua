@@ -708,10 +708,16 @@ function love.draw()
 				end
 			end
 
+			-- Draw tiles
+			for i=0, (editheight / 16) - 1 do
+				for j=0, (editwidth / 16) - 1 do
+					drawTile(areatiles[((editviewx / 16) + j) + ((editwidth / 16) * ((editviewy / 16) + i))], j * 16, 32 + (i * 16))
+				end
+			end
+			
 			-- Draw edit cursor
 			love.graphics.draw(img_le_16x16_cur, editcurx - editviewx, editcury - editviewy + 32)
 			
-			-- Draw tiles --TODO: This!
 
 			--TODO: Add more!
 		end
