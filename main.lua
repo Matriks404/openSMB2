@@ -380,7 +380,8 @@ function love.keyreleased(key)
 				editcury = editcury + 16
 
 				checkEditGridBounds()
-			
+				
+			-- Change selected tile
 			elseif key == "w" and edittile > 15 then
 				edittile = edittile - 16
 				
