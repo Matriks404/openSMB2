@@ -406,7 +406,6 @@ function love.keyreleased(key)
 			-- Load this level from file
 				loadLevel()
 				
-
 			elseif key == "v" then
 			-- Save this level to file
 				saveLevel()
