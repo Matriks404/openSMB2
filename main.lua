@@ -2,7 +2,7 @@ function love.load()
 	gametitle = "openSMB2"
 
 	-- Setting up window
-	love.window.setMode(256, 240, {vsync = true}) -- 256x240 is a NES resolution
+	love.window.setMode(512, 480, {vsync = true}) -- 256x240 is a NES resolution
 	love.window.setTitle(gametitle)
 	love.filesystem.setIdentity(gametitle)
 
@@ -709,7 +709,8 @@ function love.draw()
 			-- Draw tiles
 			for i=0, (editheight / 16) - 1 do
 				for j=0, (editwidth / 16) - 1 do
-					drawTile(areatiles[((editviewx / 16) + j) + ((editwidth / 16) * ((editviewy / 16) + i))], j * 16, 32 + (i * 16))
+					--drawTile(areatiles[((editviewx / 16) + j) + ((editwidth / 16) * ((editviewy / 16) + i))], j * 16, 32 + (i * 16))
+					drawTile(areatiles[(editviewy / 16) + i][(editviewx / 16) + j], j * 16, 32 + (i * 16))
 				end
 			end
 
@@ -907,10 +908,11 @@ function loadArea()
 
 	for i=0, (areaheight[area] / 16) - 1 do
 	-- Fill tile data
+	areatiles[i] = {}
 		for j=0, (areawidth[area] / 16) - 1 do
 			diff = i * (((areawidth[area] / 16) * 3) + 1)
-
-			areatiles[j + (i * (areawidth[area] / 16))] = tonumber(string.sub(areafile, (j * 3) + 1 + diff, (j * 3) + 2 + diff))
+			
+			areatiles[i][j] = tonumber(string.sub(areafile, (j * 3) + 1 + diff, (j * 3) + 2 + diff))
 		end
 	end
 
@@ -953,7 +955,7 @@ function saveArea()
 	for i=0, (areaheight[area] / 16) - 1 do
 	-- Fill file
 		for j=0, (areawidth[area] / 16) - 1 do
-			areatiles_str = toPaddedString(areatiles[j + (i * (areawidth[area] / 16))], 2)
+			areatiles_str = toPaddedString(areatiles[i][j], 2)
 
 			areadata = areadata..areatiles_str.."."
 		end
@@ -1019,8 +1021,8 @@ end
 
 function placeTile(tileid)
 	edittilex = editcurx / 16
-	edittiley = (editcury / 16) * (areawidth[area] / 16)
-	areatiles[edittilex + edittiley] = tileid
+	edittiley = editcury / 16
+	areatiles[edittiley][edittilex] = tileid
 end
 
 function quitEditor()
