@@ -15,7 +15,7 @@ function love.load()
 	loadSoundEffects()
 	loadStory()
 
-	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 98 - level editor 99 - debug screen)
+	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay 98 - level editor 99 - debug screen)
 
 	-- Debugging variables
 	debugmode = false
@@ -74,6 +74,10 @@ function love.load()
 	areabg = {} -- Array of backgrounds (0 - Black, 1 - Blue)
 	areamusic = {} -- Array of music (0 - Overworld, 1 - Underworld)
 	areatiles = {} -- Array of area tiles
+
+	-- Screen position
+	screenx = 0
+	screeny = 0
 
 	-- Start coordinates
 	startx = 0
@@ -138,11 +142,12 @@ function love.update()
 		if timer == 94 then
 			state = 4
 			timer = 0
+
+			loadLevel()
 		end
 
 	elseif state == 4 then
 	-- Gameplay stuff
-		loadLevel()
 
 		if timer > 146 then
 			--TODO: Physics start here!
@@ -223,6 +228,22 @@ function love.keyreleased(key)
 			transition = true
 
 			sfx_cherry:play()
+		end
+
+	elseif state == 4 and debugmode == true then
+	-- Gameplay screen stuff (if debug mode is enabled)
+		-- Move screen around using arrow keys
+		--if key == "left" and screenx > 0 then
+		--	screenx = screenx - 1
+
+		--elseif key == "right" and screeny < ((areawidth[area] / 16 / 16) - 1) then
+		--	screenx = screenx + 1
+
+		if key == "up" and screeny > 0 then
+			screeny = screeny - 1
+
+		elseif key == "down" and screeny < ((areaheight[area] / 16 / 15) - 1) then
+			screeny = screeny + 1
 		end
 
 	elseif state == 98 then
@@ -622,6 +643,12 @@ function love.draw()
 	-- Draw gameplay stuff
 		if timer > 144 then
 		--TODO: Draw objects/landscape
+			for i=0, 15 - 1 do
+				for j=0, 16 - 1 do
+					--drawTile(areatiles[(editviewy / 16) + i][(editviewx / 16) + j], j * 16, 32 + (i * 16))
+					drawTile(areatiles[(screeny * 15) + i][(screenx * 16) + j], j * 16, i * 16)
+				end
+			end
 		end
 
 		if timer > 146 then
@@ -636,20 +663,13 @@ function love.draw()
 			end
 
 			--TODO: Draw entities
-
-			--TEMPORARY: Placeholder
-			drawFont("OPENSMB2 ALPHA  0.1", 64, 64)
-			drawFont("GAMEPLAY PLACEHOLDER", 64, 80)
-
-			drawFont("#2018  MARCIN KRALKA ", 64, 112)
-			drawFont("MIT LICENSED", 64, 128)
 		end
 
 	elseif state == 98 then
 	-- Draw level editor stuff
 		if editoroption == 0 then
 		-- Draw level editor menu
-			drawFont("OPENSMB2 ALPHA  0.1", 32, 32)
+			drawFont("OPENSMB2 ALPHA  0.2", 32, 32)
 			drawFont("LEVEL EDITOR", 32, 48)
 
 			drawFont("LEVEL SELECT", 32, 80)
