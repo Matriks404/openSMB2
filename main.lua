@@ -2,7 +2,7 @@ function love.load()
 	gametitle = "openSMB2"
 
 	-- Setting up window
-	love.window.setMode(256, 240, {vsync = true}) -- 256x240 is a NES resolution
+	love.window.setMode(512, 480, {vsync = true}) -- 256x240 is a NES resolution
 	love.window.setTitle(gametitle)
 	love.filesystem.setIdentity(gametitle)
 
@@ -303,6 +303,11 @@ function love.keyreleased(key)
 
 					checkEditCursorBounds()
 					checkEditGridBounds()
+
+					for i=0, (areaheight[area] / 16) - 1 do
+					-- Clear newly added tile blocks
+						areatiles[i][(areawidth[area] / 16) - 1] = 0
+					end
 				end
 
 			elseif key == "kp8" then
@@ -319,6 +324,13 @@ function love.keyreleased(key)
 
 					checkEditCursorBounds()
 					checkEditGridBounds()
+
+					-- Clear newly added tile blocks
+					areatiles[(areaheight[area] / 16) - 1] = {}
+
+					for j=0, (areawidth[area] / 16) - 1 do
+						areatiles[(areaheight[area] / 16) - 1][j] = 0
+					end
 				end
 
 			-- Change current areas
