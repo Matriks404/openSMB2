@@ -45,7 +45,7 @@ function love.load()
 	-- Editor cursor coordinates
 	editcurx = 0
 	editcury = 0
-	
+
 	-- Editor selected tile coordinates
 	edittilex = 0
 	edittiley = 0
@@ -324,7 +324,7 @@ function love.keyreleased(key)
 			-- Change current areas
 			elseif key == "[" then
 				saveLevel()
-			
+
 				if area > 0 then
 					area = area - 1
 
@@ -343,7 +343,7 @@ function love.keyreleased(key)
 
 			elseif key == "]" then
 				saveLevel()
-			
+
 				if area < allareas - 1 then
 					area = area + 1
 
@@ -380,17 +380,17 @@ function love.keyreleased(key)
 				editcury = editcury + 16
 
 				checkEditGridBounds()
-				
+
 			-- Change selected tile
 			elseif key == "w" and edittile > 15 then
 				edittile = edittile - 16
-				
+
 			elseif key == "s" and edittile < 240 then
 				edittile = edittile + 16
-			
+
 			elseif key == "a" and edittile > 0 then
 				edittile = edittile - 1
-				
+
 			elseif key == "d" and edittile < 255 then
 				edittile = edittile + 1
 
@@ -405,15 +405,11 @@ function love.keyreleased(key)
 			elseif key == "l" then
 			-- Load this level from file
 				loadLevel()
-				
+
 			elseif key == "v" then
 			-- Save this level to file
 				saveLevel()
 
-			elseif key == "c" then
-			-- Clear area tiles
-				clearArea()
-				
 			elseif key == "p" then
 			-- Play from this level (doesn't return to level editor)
 				state = 2
@@ -426,20 +422,16 @@ function love.keyreleased(key)
 				end
 
 				love.graphics.setBackgroundColor(0, 0, 0)
+				
 
 			elseif key == "q" then
 			-- Quit to editor menu
-				editoroption = 0
-				
-				editcurx = 0
-				editcury = 0
-				
-				editviewx = 0
-				editviewy = 0
-				
-				love.graphics.setBackgroundColor(0, 0, 0)
+				quitEditor()
 
-				stopAreaMusic()
+			elseif key == "e" then
+			-- Quit to editor menu and save level
+				saveLevel()
+				quitEditor()
 			end
 		end
 
@@ -685,7 +677,7 @@ function love.draw()
 			-- Draw width and height values
 			drawFont("W-"..tostring(areawidth[area]), 2, 10)
 			drawFont("H-"..tostring(areaheight[area]), 56, 10)
-			
+
 			-- Draw currently selected tile
 			drawFont("T-"..tostring(edittile), 120, 10)
 			drawTile(edittile, 152, 10)
@@ -720,10 +712,10 @@ function love.draw()
 					drawTile(areatiles[((editviewx / 16) + j) + ((editwidth / 16) * ((editviewy / 16) + i))], j * 16, 32 + (i * 16))
 				end
 			end
-			
+
 			-- Draw edit cursor
 			love.graphics.draw(img_le_16x16_cur, editcurx - editviewx, editcury - editviewy + 32)
-			
+
 
 			--TODO: Add more!
 		end
@@ -833,7 +825,7 @@ function loadGraphics()
 
 	img_le_16x16 = love.graphics.newImage(imgle.."16x16.png")
 	img_le_16x16_cur = love.graphics.newImage(imgle.."16x16_cursor.png")
-	
+
 	-- Tilemap graphics
 	img_tiles = love.graphics.newImage("resources/images/tilemap.png")
 
@@ -912,27 +904,17 @@ function loadArea()
 	end
 
 	playAreaMusic()
-	
+
 	for i=0, (areaheight[area] / 16) - 1 do
 	-- Fill tile data
 		for j=0, (areawidth[area] / 16) - 1 do
 			diff = i * (((areawidth[area] / 16) * 3) + 1)
-			
+
 			areatiles[j + (i * (areawidth[area] / 16))] = tonumber(string.sub(areafile, (j * 3) + 1 + diff, (j * 3) + 2 + diff))
 		end
 	end
 
 	--TODO: Add more!
-end
-
-function clearArea()
-	areafile = love.filesystem.read(leveldir..tostring(area))
-	
-	for i=0, (areaheight[area] / 16) - 1 do
-		for j=0, (areawidth[area] / 16) - 1 do
-			areatiles[j + (i * (areawidth[area] / 16))] = 0
-		end
-	end
 end
 
 function saveLevel()
@@ -957,28 +939,28 @@ function saveLevel()
 	-- Save file with all variables
 	data = "areas="..tostring(allareas).."\nstartx="..startx_str.."\nstarty="..starty_str.."\n\nareas:\n"..areadata
 	levelfile = love.filesystem.write(leveldir.."settings.cfg", data)
-	
+
 	saveArea()
-	
+
 	--TODO: Add more!
 end
 
 function saveArea()
 	areadir = "levels/"..tostring(world).."-"..tostring(level).."/"..tostring(area)
-	
+
 	areadata = ""
-	
+
 	for i=0, (areaheight[area] / 16) - 1 do
 	-- Fill file
 		for j=0, (areawidth[area] / 16) - 1 do
 			areatiles_str = toPaddedString(areatiles[j + (i * (areawidth[area] / 16))], 2)
-		
+
 			areadata = areadata..areatiles_str.."."
 		end
-		
+
 		areadata = areadata.."\n"
 	end
-	
+
 	areafile = love.filesystem.write(areadir, areadata)
 end
 
@@ -996,7 +978,7 @@ function playAreaMusic()
 			mus_boss:stop()
 		else
 			mus_boss:play()
-			
+
 			mus_overworld:stop()
 			mus_underworld:stop()
 		end
@@ -1041,6 +1023,20 @@ function placeTile(tileid)
 	areatiles[edittilex + edittiley] = tileid
 end
 
+function quitEditor()
+	editoroption = 0
+
+	editcurx = 0
+	editcury = 0
+
+	editviewx = 0
+	editviewy = 0
+
+	love.graphics.setBackgroundColor(0, 0, 0)
+
+	stopAreaMusic()
+end
+
 function drawFont(str, x, y, color)
 	realx = 0
 
@@ -1070,9 +1066,9 @@ end
 function drawTile(tileid, tilex, tiley)
 	ax = (tileid % 16) * 16
 	ay = math.floor(tileid / 16) * 16
-	
+
 	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tiles:getWidth(), img_tiles:getHeight())
-	
+
 	love.graphics.draw(img_tiles, tile, tilex, tiley)
 end
 
@@ -1084,12 +1080,12 @@ end
 function toPaddedString(number, digits)
 	str = tostring(number)
 	sum = number
-	
+
 	for i=1, digits - 1 do
 		if sum < 10 then
 			str = "0"..str
 		end
-		
+
 		sum = sum / 10
 	end
 
