@@ -446,7 +446,7 @@ function love.keyreleased(key)
 			elseif key == "p" then
 			-- Play from this level (doesn't return to level editor)
 				saveLevel()
-			
+
 				state = 2
 				area = 0
 				frames = 0

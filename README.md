@@ -22,8 +22,8 @@
 	* Title screen
 	* Intro story
 	* Character select
-	* Levelbook (just right before starting a level).
-	* Very basic gameplay screen prototype
+	* Levelbook (just right before starting a level)
+	* Very basic gameplay screen
 
 * Push START button on title screen to enter character select. START button is a S key. You can also wait to enter intro story screen (you can start from here as well).
 
