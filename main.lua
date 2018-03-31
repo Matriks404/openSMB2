@@ -76,7 +76,7 @@ function love.load()
 	areatiles = {} -- Array of area tiles
 
 	-- Screen position
-	screenx = 0
+	--screenx = 0
 	screeny = 0
 
 	-- Start coordinates
@@ -642,10 +642,8 @@ function love.draw()
 	elseif state == 4 then
 	-- Draw gameplay stuff
 		if timer > 144 then
-		--TODO: Draw objects/landscape
 			for i=0, 15 - 1 do
 				for j=0, 16 - 1 do
-					--drawTile(areatiles[(editviewy / 16) + i][(editviewx / 16) + j], j * 16, 32 + (i * 16))
 					drawTile(areatiles[(screeny * 15) + i][(screenx * 16) + j], j * 16, i * 16)
 				end
 			end
@@ -662,7 +660,7 @@ function love.draw()
 				end
 			end
 
-			--TODO: Draw entities
+			--TODO: Draw hero and entities
 		end
 
 	elseif state == 98 then
