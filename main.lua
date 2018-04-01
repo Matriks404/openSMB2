@@ -677,7 +677,7 @@ function love.draw()
 			end
 			
 			-- Calculate offset for character sprite
-			if heroside == - 1 then
+			if heroside == -1 then
 				offset = 16
 				
 			elseif heroside == 1 then
