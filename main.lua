@@ -83,9 +83,11 @@ function love.load()
 	startx = 0
 	starty = 0
 
-	-- Coordinates for chosen characters --TODO: Use them!
+	-- Coordinates for chosen characters
 	herox = 0
 	heroy = 0
+	
+	heroside = 1 -- On which side character is looking at (0 - Left, 1 - Right)
 end
 
 function love.update()
@@ -144,6 +146,9 @@ function love.update()
 			timer = 0
 
 			loadLevel()
+			
+			herox = startx
+			heroy = starty
 		end
 
 	elseif state == 4 then
@@ -230,20 +235,29 @@ function love.keyreleased(key)
 			sfx_cherry:play()
 		end
 
-	elseif state == 4 and debugmode == true then
-	-- Gameplay screen stuff (if debug mode is enabled)
-		-- Move screen around using arrow keys
-		--if key == "left" and screenx > 0 then
-		--	screenx = screenx - 1
+	elseif state == 4 then
+		if key == "left" then
+			heroside = -1
+			
+		elseif key == "right" then
+			heroside = 1
+		end
+	
+		if debugmode == true then
+		-- Moving screen debug feature
+			-- Move screen around using arrow keys
+			--if key == "kp4" and screenx > 0 then
+			--	screenx = screenx - 1
 
-		--elseif key == "right" and screeny < ((areawidth[area] / 16 / 16) - 1) then
-		--	screenx = screenx + 1
+			--elseif key == "kp6" and screeny < ((areawidth[area] / 16 / 16) - 1) then
+			--	screenx = screenx + 1
 
-		if key == "up" and screeny > 0 then
-			screeny = screeny - 1
+			if key == "kp8" and screeny > 0 then
+				screeny = screeny - 1
 
-		elseif key == "down" and screeny < ((areaheight[area] / 16 / 15) - 1) then
-			screeny = screeny + 1
+			elseif key == "kp2" and screeny < ((areaheight[area] / 16 / 15) - 1) then
+				screeny = screeny + 1
+			end
 		end
 
 	elseif state == 98 then
@@ -661,8 +675,30 @@ function love.draw()
 					love.graphics.draw(img_g_empty, 12, 48 + (i * 16))
 				end
 			end
-
-			--TODO: Draw hero and entities
+			
+			-- Calculate offset for character sprite
+			if heroside == - 1 then
+				offset = 16
+				
+			elseif heroside == 1 then
+				offset = 0
+			end
+			
+			-- Draw character on screen --TODO: Improve
+			if character == 0 then
+				love.graphics.draw(img_char_mario, herox, heroy, 0, heroside, 1, offset)
+			
+			elseif character == 1 then
+				love.graphics.draw(img_char_luigi, herox, heroy, 0, heroside, 1, offset)
+				
+			elseif character == 2 then
+				love.graphics.draw(img_char_toad, herox, heroy, 0, heroside, 1, offset)
+			
+			elseif character == 3 then
+				love.graphics.draw(img_char_peach, herox, heroy, 0, heroside, 1, offset)
+			end
+			
+			--TODO: Draw entities
 		end
 
 	elseif state == 98 then
@@ -861,6 +897,12 @@ function loadGraphics()
 	-- Tilemap graphics
 	img_tiles = love.graphics.newImage("resources/images/tilemap.png")
 
+	-- Load character graphics
+	img_char_mario = love.graphics.newImage("resources/images/gameplay/characters/mario.png")
+	img_char_luigi = love.graphics.newImage("resources/images/gameplay/characters/luigi.png")
+	img_char_toad = love.graphics.newImage("resources/images/gameplay/characters/toad.png")
+	img_char_peach = love.graphics.newImage("resources/images/gameplay/characters/peach.png")
+	
 end
 
 function loadMusic()

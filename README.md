@@ -53,7 +53,7 @@
 	* Start game in debug mode which allows above counters to work.
 	
 * During gameplay:
-	* Press up/down keys to scroll level horizontally.
+	* Press 8 or 2 on keypad to scroll level horizontally.
 
 * In level editor menu:
 	* Press one of the keys that will enter editing of some level.
