@@ -98,7 +98,7 @@ function love.update()
 		mus_title:play()
 
 		-- After some time go to intro story
-		if(timer == 545) then
+		if(timer == 500) then
 			state = 1
 			timer = 0
 		end
@@ -109,7 +109,7 @@ function love.update()
 			transitiontimer = transitiontimer + 1
 
 			-- After some time after showing 2nd story page go to title screen again
-			if transitiontimer == 430 then
+			if transitiontimer == 442 then
 				state = 0
 				timer = 0
 				texttimer = 0
@@ -550,7 +550,7 @@ function love.draw()
 				-- Change to 2nd story page if all lines are displayed
 					textlines = 0
 					textpage = 1
-					texttimer = -63
+					texttimer = 50
 
 				elseif textpage == 1 and textlines > 8 then
 				-- Enable transition which will go to title screen after some time
