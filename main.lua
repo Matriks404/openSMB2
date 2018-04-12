@@ -163,11 +163,20 @@ function love.update()
 			-- Left/Right movement
 			if love.keyboard.isDown("left") then
 				heroside = -1
-				herospeed = 24
+				if love.keyboard.isDown("z") then
+					herospeed = 36
+				else
+					herospeed = 24
+				end
 
 			elseif love.keyboard.isDown("right") then
 				heroside = 1
-				herospeed = 24
+				if love.keyboard.isDown("z") then
+					herospeed = 36
+				else
+					herospeed = 24
+				end
+
 			else
 				herospeed = 0
 			end
@@ -175,7 +184,7 @@ function love.update()
 			-- Calculating character position
 			if herospeed > 0 then
 				herosubx = herosubx + herospeed * heroside
-			
+
 				while herosubx >= 16 or herosubx <= -16 do
 					herosubx = herosubx - 16 * heroside
 					herox = herox + heroside
