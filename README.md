@@ -32,6 +32,7 @@
 		* `X` key - Choose character
 	* During gameplay:
 		* `Left` or `Right` key - Move left or right
+		* `Z` key - Run
 	* `X` on title bar or `ESC` key - Quit the game
 
 # Screenshots
