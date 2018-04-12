@@ -174,9 +174,12 @@ function love.update()
 
 			-- Calculating character position
 			if herospeed > 0 then
-			--TODO: Fix this!
-				herosubx = herosubx + herospeed % 16
-				herox = herox + heroside * math.floor(herospeed / 16)
+				herosubx = herosubx + herospeed * heroside
+			
+				while herosubx >= 16 or herosubx <= -16 do
+					herosubx = herosubx - 16 * heroside
+					herox = herox + heroside
+				end
 			end
 
 			--TODO: More physics!
