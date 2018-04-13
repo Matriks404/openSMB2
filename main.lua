@@ -177,6 +177,9 @@ function love.update()
 					herospeed = 24
 				end
 
+			elseif herospeed > 0 then
+				herospeed = herospeed - 4
+
 			else
 				herospeed = 0
 			end
