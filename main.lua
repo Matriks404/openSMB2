@@ -178,10 +178,8 @@ function love.update()
 				end
 
 			elseif herospeed > 0 then
+			-- Reduce speed after time
 				herospeed = herospeed - 4
-
-			else
-				herospeed = 0
 			end
 
 			-- Calculating character position
