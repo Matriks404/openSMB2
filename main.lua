@@ -93,6 +93,8 @@ function love.load()
 
 	heroside = 1 -- On which side character is looking at (0 - Left, 1 - Right)
 	herospeed = 0 -- Character speed
+
+	heroanimtimer = 0 -- Character animation timer
 end
 
 function love.update()
@@ -1170,30 +1172,42 @@ function drawCharacter()
 
 	-- Calculate desired character sprite
 	if herospeed > 0 then
-		ax = 1 * 16
+		if heroanimtimer >= 10 then
+			heroanimtimer = 0
+		end
+
+		if heroanimtimer >= 5 then
+			ax = 1 * 16
+		else
+			ax = 0 * 16
+		end
+
+		heroanimtimer = heroanimtimer + 1
 	else
 		ax = 0 * 16
+
+		heroanimtimer = 0
 	end
 
 	-- Draw character sprite
 	if character == 0 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_mario:getWidth(), img_char_mario:getHeight())
-		
+
 		love.graphics.draw(img_char_mario, sprite, herox, heroy, 0, heroside, 1, offset)
 
 	elseif character == 1 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
-		
+
 		love.graphics.draw(img_char_luigi, sprite, herox, heroy, 0, heroside, 1, offset)
 
 	elseif character == 2 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
-		
+
 		love.graphics.draw(img_char_toad, sprite, herox, heroy, 0, heroside, 1, offset)
 
 	elseif character == 3 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_peach:getWidth(), img_char_peach:getHeight())
-		
+
 		love.graphics.draw(img_char_peach, sprite, herox, heroy, 0, heroside, 1, offset)
 	end
 end
