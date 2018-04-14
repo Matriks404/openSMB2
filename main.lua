@@ -707,27 +707,8 @@ function love.draw()
 				end
 			end
 
-			-- Calculate offset for character sprite
-			if heroside == -1 then
-				offset = 16
-
-			elseif heroside == 1 then
-				offset = 0
-			end
-
-			-- Draw character on screen --TODO: Improve
-			if character == 0 then
-				love.graphics.draw(img_char_mario, herox, heroy, 0, heroside, 1, offset)
-
-			elseif character == 1 then
-				love.graphics.draw(img_char_luigi, herox, heroy, 0, heroside, 1, offset)
-
-			elseif character == 2 then
-				love.graphics.draw(img_char_toad, herox, heroy, 0, heroside, 1, offset)
-
-			elseif character == 3 then
-				love.graphics.draw(img_char_peach, herox, heroy, 0, heroside, 1, offset)
-			end
+			-- Draw character on screen
+			drawCharacter()
 
 			--TODO: Draw entities
 		end
@@ -1176,6 +1157,45 @@ function drawTile(tileid, tilex, tiley)
 	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tiles:getWidth(), img_tiles:getHeight())
 
 	love.graphics.draw(img_tiles, tile, tilex, tiley)
+end
+
+function drawCharacter()
+	-- Calculate offset for character sprite
+	if heroside == -1 then
+		offset = 16
+
+	elseif heroside == 1 then
+		offset = 0
+	end
+
+	-- Calculate desired character sprite
+	if herospeed > 0 then
+		ax = 1 * 16
+	else
+		ax = 0 * 16
+	end
+
+	-- Draw character sprite
+	if character == 0 then
+		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_mario:getWidth(), img_char_mario:getHeight())
+		
+		love.graphics.draw(img_char_mario, sprite, herox, heroy, 0, heroside, 1, offset)
+
+	elseif character == 1 then
+		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
+		
+		love.graphics.draw(img_char_luigi, sprite, herox, heroy, 0, heroside, 1, offset)
+
+	elseif character == 2 then
+		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
+		
+		love.graphics.draw(img_char_toad, sprite, herox, heroy, 0, heroside, 1, offset)
+
+	elseif character == 3 then
+		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_peach:getWidth(), img_char_peach:getHeight())
+		
+		love.graphics.draw(img_char_peach, sprite, herox, heroy, 0, heroside, 1, offset)
+	end
 end
 
 function transitionClear()
