@@ -93,6 +93,7 @@ function love.load()
 
 	heroside = 1 -- On which side character is looking at (0 - Left, 1 - Right)
 	herospeed = 0 -- Character speed
+	heroaccel = 0 -- Character acceleration
 
 	heroanimtimer = 0 -- Character animation timer
 end
@@ -165,23 +166,34 @@ function love.update()
 			-- Left/Right movement
 			if love.keyboard.isDown("left") then
 				heroside = -1
+
+				if heroaccel < 6 then
+					heroaccel = heroaccel + 1
+				end
+
 				if love.keyboard.isDown("z") then
-					herospeed = 36
+					herospeed = 6 * heroaccel
 				else
-					herospeed = 24
+					herospeed = 4 * heroaccel
 				end
 
 			elseif love.keyboard.isDown("right") then
 				heroside = 1
+
+				if heroaccel < 6 then
+					heroaccel = heroaccel + 1
+				end
+
 				if love.keyboard.isDown("z") then
-					herospeed = 36
+					herospeed = 6 * heroaccel
 				else
-					herospeed = 24
+					herospeed = 4 * heroaccel
 				end
 
 			elseif herospeed > 0 then
 			-- Reduce speed after time
 				herospeed = herospeed - 4
+				heroaccel = heroaccel - 1
 			end
 
 			-- Calculating character position
@@ -1177,9 +1189,9 @@ function drawCharacter()
 		end
 
 		if heroanimtimer >= 5 then
-			ax = 1 * 16
-		else
 			ax = 0 * 16
+		else
+			ax = 1 * 16
 		end
 
 		heroanimtimer = heroanimtimer + 1
