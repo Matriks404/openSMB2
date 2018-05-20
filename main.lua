@@ -27,6 +27,7 @@ function love.load()
 	timer = 0
 	texttimer = 0
 	transitiontimer = 0
+	backuptimer = 0
 
 	transition = false
 
@@ -157,7 +158,7 @@ function love.update()
 			loadLevel()
 
 			herox = startx
-			heroy = 232
+			heroy = starty
 		end
 
 	elseif state == 4 then
@@ -317,6 +318,9 @@ function love.keyreleased(key)
 		-- Go to pause screen
 		if key == "s" and timer > 146 then
 			state = 5
+
+			backuptimer = timer
+			timer = 0
 		end
 
 		if debugmode == true then
@@ -340,6 +344,9 @@ function love.keyreleased(key)
 		-- Go back to gameplay
 		if key == "s" then
 			state = 4
+
+			-- Timer stuff
+			timer = backuptimer
 		end
 
 	elseif state == 98 then
@@ -1259,41 +1266,43 @@ function drawCharacter()
 		heroanimtimer = 0
 	end
 
+	posy = heroy - screeny * 240
+
 	-- Draw character sprite
 	if character == 0 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_mario:getWidth(), img_char_mario:getHeight())
 
-		love.graphics.draw(img_char_mario, sprite, herox, heroy - screeny * 240, 0, heroside, 1, offset)
+		love.graphics.draw(img_char_mario, sprite, herox, posy, 0, heroside, 1, offset)
 
 	elseif character == 1 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
 
-		love.graphics.draw(img_char_luigi, sprite, herox, heroy - screeny * 240, 0, heroside, 1, offset)
+		love.graphics.draw(img_char_luigi, sprite, herox, posy, 0, heroside, 1, offset)
 
 	elseif character == 2 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
 
-		love.graphics.draw(img_char_toad, sprite, herox, heroy - screeny * 240, 0, heroside, 1, offset)
+		love.graphics.draw(img_char_toad, sprite, herox, posy, 0, heroside, 1, offset)
 
 	elseif character == 3 then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_peach:getWidth(), img_char_peach:getHeight())
 
-		love.graphics.draw(img_char_peach, sprite, herox, heroy - screeny * 240, 0, heroside, 1, offset)
+		love.graphics.draw(img_char_peach, sprite, herox, posy, 0, heroside, 1, offset)
 	end
 
 	-- Draw character sprite when it's horizontally wraping
 	if herox > areawidth[area] - 16 then
 		if character == 0 then
-			love.graphics.draw(img_char_mario, sprite, herox - areawidth[area], heroy - screeny * 240, 0, heroside, 1, offset)
+			love.graphics.draw(img_char_mario, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 
 		elseif character == 1 then
-			love.graphics.draw(img_char_luigi, sprite, herox - areawidth[area], heroy - screeny * 240, 0, heroside, 1, offset)
+			love.graphics.draw(img_char_luigi, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 
 		elseif character == 2 then
-			love.graphics.draw(img_char_toad, sprite, herox - areawidth[area], heroy - screeny * 240, 0, heroside, 1, offset)
+			love.graphics.draw(img_char_toad, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 
 		elseif character == 3 then
-			love.graphics.draw(img_char_peach, sprite, herox - areawidth[area], heroy - screeny * 240, 0, heroside, 1, offset)
+			love.graphics.draw(img_char_peach, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 		end
 	end
 end
