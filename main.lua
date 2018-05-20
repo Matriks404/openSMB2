@@ -215,13 +215,21 @@ function love.update()
 				heroaccel = heroaccel - 1
 			end
 
-			-- Calculating character position
 			if herospeed > 0 then
+				-- Calculating character position
 				herosubx = herosubx + herospeed * heromovdir
 
 				while herosubx >= 16 or herosubx <= -16 do
 					herosubx = herosubx - 16 * heromovdir
 					herox = herox + heromovdir
+				end
+
+				-- Horizontal character position wraping
+				if herox > areawidth[area] then
+					herox = 0 + herox % areawidth[area]
+
+				elseif herox < 0 then
+					herox = areawidth[area] + herox
 				end
 			end
 
@@ -1241,6 +1249,22 @@ function drawCharacter()
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_peach:getWidth(), img_char_peach:getHeight())
 
 		love.graphics.draw(img_char_peach, sprite, herox, heroy, 0, heroside, 1, offset)
+	end
+
+	-- Draw character sprite when it's horizontally wraping
+	if herox > areawidth[area] - 16 then
+		if character == 0 then
+			love.graphics.draw(img_char_mario, sprite, herox - areawidth[area], heroy, 0, heroside, 1, offset)
+
+		elseif character == 1 then
+			love.graphics.draw(img_char_luigi, sprite, herox - areawidth[area], heroy, 0, heroside, 1, offset)
+
+		elseif character == 2 then
+			love.graphics.draw(img_char_toad, sprite, herox - areawidth[area], heroy, 0, heroside, 1, offset)
+
+		elseif character == 3 then
+			love.graphics.draw(img_char_peach, sprite, herox - areawidth[area], heroy, 0, heroside, 1, offset)
+		end
 	end
 end
 
