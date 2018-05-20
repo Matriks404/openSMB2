@@ -216,6 +216,11 @@ function love.update()
 				heroaccel = heroaccel - 1
 			end
 
+			-- Reseting hero acceleration to 0
+			if heroaccel < 0 then
+				heroaccel = 0
+			end
+
 			if herospeed > 0 then
 				-- Calculating character position
 				herosubx = herosubx + herospeed * heromovdir
@@ -232,6 +237,9 @@ function love.update()
 				elseif herox < 0 then
 					herox = areawidth[area] + herox
 				end
+
+			elseif herospeed < 0 then
+				herospeed = 0
 			end
 
 			--TODO: More physics!
@@ -893,7 +901,7 @@ function love.draw()
 			timerx = 0
 			n = timer
 
-			while n>0 do
+			while n > 0 do
 				timerx = timerx + 1
 				n = math.floor(n / 10)
 			end
