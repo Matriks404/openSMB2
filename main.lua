@@ -91,7 +91,8 @@ function love.load()
 	herosubx = 0
 	herosuby = 0
 
-	heroside = 1 -- On which side character is looking at (0 - Left, 1 - Right)
+	heroside = 1 -- On which side character is looking at (-1 - Left, 1 - Right)
+	heromovdir = 1 -- In which direction character is moving (-1 - Left, 1 - Right)
 	herospeed = 0 -- Character speed
 	heroaccel = 0 -- Character acceleration
 
@@ -167,27 +168,45 @@ function love.update()
 			if love.keyboard.isDown("left") then
 				heroside = -1
 
-				if heroaccel < 6 then
-					heroaccel = heroaccel + 1
+				if herospeed == 0 then
+					heromovdir = -1
 				end
 
-				if love.keyboard.isDown("z") then
-					herospeed = 6 * heroaccel
+				if heromovdir == 1 then
+					herospeed = herospeed - 4
+					heroaccel = heroaccel - 1
 				else
-					herospeed = 4 * heroaccel
+					if heroaccel < 6 then
+						heroaccel = heroaccel + 1
+					end
+
+					if love.keyboard.isDown("z") then
+						herospeed = 6 * heroaccel
+					else
+						herospeed = 4 * heroaccel
+					end
 				end
 
 			elseif love.keyboard.isDown("right") then
 				heroside = 1
 
-				if heroaccel < 6 then
-					heroaccel = heroaccel + 1
+				if herospeed == 0 then
+					heromovdir = 1
 				end
 
-				if love.keyboard.isDown("z") then
-					herospeed = 6 * heroaccel
+				if heromovdir == -1 then
+					herospeed = herospeed - 4
+					heroaccel = heroaccel - 1
 				else
-					herospeed = 4 * heroaccel
+					if heroaccel < 6 then
+						heroaccel = heroaccel + 1
+					end
+
+					if love.keyboard.isDown("z") then
+						herospeed = 6 * heroaccel
+					else
+						herospeed = 4 * heroaccel
+					end
 				end
 
 			elseif herospeed > 0 then
@@ -198,11 +217,11 @@ function love.update()
 
 			-- Calculating character position
 			if herospeed > 0 then
-				herosubx = herosubx + herospeed * heroside
+				herosubx = herosubx + herospeed * heromovdir
 
 				while herosubx >= 16 or herosubx <= -16 do
-					herosubx = herosubx - 16 * heroside
-					herox = herox + heroside
+					herosubx = herosubx - 16 * heromovdir
+					herox = herox + heromovdir
 				end
 			end
 
@@ -863,6 +882,7 @@ end
 function loadFonts()
 	fontdir = "resources/images/font/" -- Fonts folder
 
+	-- White and brown font graphics
 	font_white = love.graphics.newImage(fontdir.."white.png")
 	font_brown = love.graphics.newImage(fontdir.."brown.png")
 end

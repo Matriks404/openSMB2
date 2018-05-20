@@ -1,6 +1,6 @@
 # Running
 
-1. Install LOVE Engine on your computer.
+1. Install LÖVE Engine on your computer.
 
 2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer.
 
@@ -23,7 +23,7 @@
 	* Intro story
 	* Character select
 	* Levelbook (just right before starting a level)
-	* Very basic gameplay screen
+	* Basic gameplay screen
 
 * Controls:
 	* `S` key on title screen - Enter character select screen.
@@ -41,7 +41,7 @@
 ![Intro story](/screenshots/2.png)
 ![Character select](/screenshots/3.png)
 ![Levelbook](/screenshots/4.png)
-![Gameplay placeholder](/screenshots/5.png)
+![Gameplay](/screenshots/5.png)
 ![Debug screen](/screenshots/6.png)
 ![Level editor menu](/screenshots/7.png)
 ![Level editor](/screenshots/8.png)
