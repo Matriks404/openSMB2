@@ -33,6 +33,8 @@
 	* During gameplay:
 		* `Left` or `Right` key - Move left or right
 		* `Z` key - Run
+		* `S` key - Pause
+	* `S` key on pause screen - Unpause
 	* `X` on title bar or `ESC` key - Quit the game
 
 # Screenshots

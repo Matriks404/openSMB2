@@ -15,7 +15,7 @@ function love.load()
 	loadSoundEffects()
 	loadStory()
 
-	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay 98 - level editor 99 - debug screen)
+	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 98 - level editor 99 - debug screen)
 
 	-- Debugging variables
 	debugmode = false
@@ -82,6 +82,8 @@ function love.load()
 	-- Start coordinates
 	startx = 0
 	starty = 0
+
+	paused = false -- If paused then true
 
 	-- Character coordinates
 	herox = 0
@@ -314,6 +316,10 @@ function love.keyreleased(key)
 		end
 
 	elseif state == 4 then
+		-- Go to pause screen
+		if key == "s" and timer > 146 then
+			state = 5
+		end
 
 		if debugmode == true then
 		-- Moving screen debug feature
@@ -330,6 +336,12 @@ function love.keyreleased(key)
 			elseif key == "kp2" and screeny < ((areaheight[area] / 16 / 15) - 1) then
 				screeny = screeny + 1
 			end
+		end
+
+	elseif state == 5 then
+		-- Go back to gameplay
+		if key == "s" then
+			state = 4
 		end
 
 	elseif state == 98 then
@@ -701,24 +713,7 @@ function love.draw()
 
 	elseif state == 3 then
 	-- Draw levelbook
-		love.graphics.draw(img_levelbook, 25, 32)
-
-		drawFont("WORLD  "..tostring(world).."-"..tostring(level), 89, 48, "brown")
-
-		if world < 7 then
-			alllevels = 3
-		else
-			alllevels = 2
-		end
-
-		for i=0, alllevels - 1 do
-		-- Draw level indicators
-			if level == i + 1 then
-				love.graphics.draw(img_lb_current, 113 + (i * 16), 64)
-			else
-				love.graphics.draw(img_lb_other, 113 + (i * 16), 64)
-			end
-		end
+		drawLevelbook()
 
 		-- Draw world image
 		if world == 1 or world == 3 or world == 5 then love.graphics.draw(img_lb_1, 65, 112)
@@ -753,6 +748,22 @@ function love.draw()
 
 			--TODO: Draw entities
 		end
+
+	elseif state == 5 then
+	-- Draw paused screen levelbook
+		drawLevelbook()
+
+		-- Draw flickering pause text
+		if transitiontimer == 30 then
+			transitiontimer = 0
+
+		elseif transitiontimer >= 15 then
+			drawFont("PAUSED", 105, 120, "brown")
+		end
+
+		drawFont("EXTRA LIFE***  "..tostring(lifes), 65, 176, "brown") -- Draw extra lifes text
+
+		transitiontimer = transitiontimer + 1
 
 	elseif state == 98 then
 	-- Draw level editor stuff
@@ -1199,6 +1210,27 @@ function drawTile(tileid, tilex, tiley)
 	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tiles:getWidth(), img_tiles:getHeight())
 
 	love.graphics.draw(img_tiles, tile, tilex, tiley)
+end
+
+function drawLevelbook()
+	love.graphics.draw(img_levelbook, 25, 32)
+
+	drawFont("WORLD  "..tostring(world).."-"..tostring(level), 89, 48, "brown")
+
+		if world < 7 then
+			alllevels = 3
+		else
+			alllevels = 2
+		end
+
+		for i=0, alllevels - 1 do
+		-- Draw level indicators
+			if level == i + 1 then
+				love.graphics.draw(img_lb_current, 113 + (i * 16), 64)
+			else
+				love.graphics.draw(img_lb_other, 113 + (i * 16), 64)
+			end
+		end
 end
 
 function drawCharacter()
