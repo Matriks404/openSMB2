@@ -57,9 +57,6 @@
 	* Toggle Mute option.
 	* Enter level editor (just very basic functions)
 	* Start game in debug mode which allows above counters to work.
-	
-* During gameplay:
-	* Press `8` or `2` on keypad to scroll level horizontally.
 
 * In level editor menu:
 	* Press one of the keys that will enter editing of some level.

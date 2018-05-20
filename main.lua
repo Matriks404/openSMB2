@@ -238,8 +238,17 @@ function love.update()
 					herox = areawidth[area] + herox
 				end
 
+			-- Reset hero speed to 0
 			elseif herospeed < 0 then
 				herospeed = 0
+			end
+
+			heroy = heroy + 2 -- Falling --TEMPORARY
+			screeny = math.floor(heroy / 240) -- Switching vertical screens --TODO: Wrong! --TEMPORARY
+
+			-- If character is below lowest screen, keep it
+			if screeny > (areaheight[area] / 16 / 15) - 1 then
+				screeny = (areaheight[area] / 16 / 15) - 1
 			end
 
 			--TODO: More physics!
@@ -329,23 +338,6 @@ function love.keyreleased(key)
 
 			backuptimer = timer
 			timer = 0
-		end
-
-		if debugmode == true then
-		-- Moving screen debug feature
-			-- Move screen around using arrow keys
-			--if key == "kp4" and screenx > 0 then
-			--	screenx = screenx - 1
-
-			--elseif key == "kp6" and screeny < ((areawidth[area] / 16 / 16) - 1) then
-			--	screenx = screenx + 1
-
-			if key == "kp8" and screeny > 0 then
-				screeny = screeny - 1
-
-			elseif key == "kp2" and screeny < ((areaheight[area] / 16 / 15) - 1) then
-				screeny = screeny + 1
-			end
 		end
 
 	elseif state == 5 then
@@ -1274,7 +1266,7 @@ function drawCharacter()
 		heroanimtimer = 0
 	end
 
-	posy = heroy - screeny * 240
+	posy = heroy - screeny * 256
 
 	-- Draw character sprite
 	if character == 0 then
@@ -1299,7 +1291,7 @@ function drawCharacter()
 	end
 
 	-- Draw character sprite when it's horizontally wraping
-	if herox > areawidth[area] - 16 then
+	if herox > 256 - 16 then
 		if character == 0 then
 			love.graphics.draw(img_char_mario, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 
