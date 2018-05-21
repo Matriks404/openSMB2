@@ -279,7 +279,7 @@ function love.keyreleased(key)
 			world = 1
 			level = 1
 
-			lifes = 2
+			lifes = 255
 			energy = 2
 			energybars = 2
 
@@ -713,8 +713,8 @@ function love.draw()
 			love.graphics.draw(img_cs_peach, 168, 144)
 		end
 
-		drawFont("EXTRA LIFE", 64, 208, true)
-		drawFont(tostring(lifes), 184, 208, true)
+		drawFont("EXTRA LIFE", 64, 208)
+		drawRemainingLifes(176, 208)
 
 	elseif state == 3 then
 	-- Draw levelbook
@@ -1215,6 +1215,37 @@ function drawTile(tileid, tilex, tiley)
 	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tiles:getWidth(), img_tiles:getHeight())
 
 	love.graphics.draw(img_tiles, tile, tilex, tiley)
+end
+
+function drawRemainingLifes(ax, ay)
+	if lifes < 10 + 1 then
+		drawFont(tostring(lifes - 1), ax + 8, ay)
+
+	elseif lifes < 100 + 1 then
+		drawFont(tostring(lifes - 1), ax, ay)
+
+	elseif lifes < 255 + 1 then
+	--TODO: This seems to be stupid! --TODO: Fix!
+		if lifes < 110 + 1 then     letter = "A"
+		elseif lifes < 120 + 1 then letter = "B"
+		elseif lifes < 130 + 1 then letter = "C"
+		elseif lifes < 140 + 1 then letter = "D"
+		elseif lifes < 150 + 1 then letter = "E"
+		elseif lifes < 160 + 1 then letter = "F"
+		elseif lifes < 170 + 1 then letter = "G"
+		elseif lifes < 180 + 1 then letter = "H"
+		elseif lifes < 190 + 1 then letter = "I"
+		elseif lifes < 200 + 1 then letter = "J"
+		elseif lifes < 210 + 1 then letter = "K"
+		elseif lifes < 220 + 1 then letter = "L"
+		elseif lifes < 230 + 1 then letter = "M"
+		elseif lifes < 240 + 1 then letter = "N"
+		elseif lifes < 250 + 1 then letter = "O"
+		else                        letter = "P"
+		end
+
+		drawFont(letter..tostring(math.floor((lifes - 1) / 100)), ax, ay)
+	end
 end
 
 function drawLevelbook()
