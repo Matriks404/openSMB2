@@ -1,5 +1,5 @@
 function love.load()
-	gametitle = "openSMB2 "..getVersion()
+	gametitle = "openSMB2 v"..getVersion()
 
 	-- Setting up window
 	love.window.setMode(256, 240, {vsync = true}) -- 256x240 is a NES resolution
