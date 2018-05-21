@@ -1,10 +1,10 @@
 function love.load()
-	gametitle = "openSMB2"
+	gametitle = "openSMB2 "..getVersion()
 
 	-- Setting up window
 	love.window.setMode(256, 240, {vsync = true}) -- 256x240 is a NES resolution
 	love.window.setTitle(gametitle)
-	love.filesystem.setIdentity(gametitle)
+	love.filesystem.setIdentity("openSMB2")
 
 	love.graphics.setBackgroundColor(92, 148, 252)
 
@@ -640,7 +640,7 @@ function love.draw()
 			--TODO: Draw entities
 
 			--TEMPORARY: Placeholder
-			drawFont("OPENSMB2 ALPHA  0.1", 64, 64)
+			drawFont("OPENSMB2 "..getVersion(), 64, 64)
 			drawFont("GAMEPLAY PLACEHOLDER", 64, 80)
 
 			drawFont("#2018  MARCIN KRALKA ", 64, 112)
@@ -651,7 +651,7 @@ function love.draw()
 	-- Draw level editor stuff
 		if editoroption == 0 then
 		-- Draw level editor menu
-			drawFont("OPENSMB2 ALPHA  0.1", 32, 32)
+			drawFont("OPENSMB2 "..getVersion(), 32, 32)
 			drawFont("LEVEL EDITOR", 32, 48)
 
 			drawFont("LEVEL SELECT", 32, 80)
@@ -1106,4 +1106,10 @@ function toPaddedString(number, digits)
 	end
 
 	return str
+end
+
+function getVersion()
+	verfile = love.filesystem.read("version")
+
+	return verfile
 end
