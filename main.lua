@@ -15,7 +15,7 @@ function love.load()
 	loadSoundEffects()
 	loadStory()
 
-	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 98 - level editor 99 - debug screen)
+	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 98 - level editor 99 - debug screen)
 
 	-- Debugging variables
 	debugmode = false
@@ -92,7 +92,7 @@ function love.update()
 		mus_title:play()
 
 		-- After some time go to intro story
-		if(timer == 545) then
+		if timer == 500 then
 			state = 1
 			timer = 0
 		end
@@ -103,7 +103,7 @@ function love.update()
 			transitiontimer = transitiontimer + 1
 
 			-- After some time after showing 2nd story page go to title screen again
-			if transitiontimer == 430 then
+			if transitiontimer == 442 then
 				state = 0
 				timer = 0
 				texttimer = 0
@@ -424,6 +424,8 @@ function love.keyreleased(key)
 
 			elseif key == "p" then
 			-- Play from this level (doesn't return to level editor)
+				saveLevel()
+
 				state = 2
 				area = 0
 				frames = 0
@@ -513,7 +515,7 @@ function love.draw()
 				-- Change to 2nd story page if all lines are displayed
 					textlines = 0
 					textpage = 1
-					texttimer = -63
+					texttimer = 50
 
 				elseif textpage == 1 and textlines > 8 then
 				-- Enable transition which will go to title screen after some time
@@ -768,7 +770,7 @@ function love.draw()
 			timerx = 0
 			n = timer
 
-			while n>0 do
+			while n > 0 do
 				timerx = timerx + 1
 				n = math.floor(n / 10)
 			end
@@ -781,6 +783,7 @@ end
 function loadFonts()
 	fontdir = "resources/images/font/" -- Fonts folder
 
+	-- White and brown font graphics
 	font_white = love.graphics.newImage(fontdir.."white.png")
 	font_brown = love.graphics.newImage(fontdir.."brown.png")
 end

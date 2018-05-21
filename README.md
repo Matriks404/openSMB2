@@ -1,6 +1,6 @@
 # Running
 
-1. Install LOVE Engine on your computer.
+1. Install LÖVE Engine on your computer.
 
 2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer.
 
@@ -22,7 +22,7 @@
 	* Title screen
 	* Intro story
 	* Character select
-	* Levelbook (just right before starting a level).
+	* Levelbook (just right before starting a level)
 	* Very basic gameplay screen prototype
 
 * Push START button on title screen to enter character select. START button is a S key. You can also wait to enter intro story screen (you can start from here as well).
@@ -45,7 +45,7 @@
 
 # Debugging:
 
-* Press CTRL+D on title screen to enable debug mode and enter debug screen. Here you can:
+* Press `CTRL+D` on title screen to enable debug mode and enter debug screen. Here you can:
 	* Toggle FPS counter.
 	* Toggle Frames counter.
 	* Toggle Mute option.
@@ -57,17 +57,17 @@
 	* Press Q to quit to debug screen.
 
 * In level editor:
-	* Press B to change background color (Black/Blue)
-	* Press M to change music
-	* Press 4 or 6 on keypad to shrink or stretch width
-	* Press 8 or 2 on keypad to shrink or stretch height
-	* Press [ or ] to switch between level areas. Beware that it will automatically save current level and area!
+	* Press `B` to change background color (Black/Blue)
+	* Press `M` to change music
+	* Press `4` or `6` on keypad to shrink or stretch width
+	* Press `8` or `2` on keypad to shrink or stretch height
+	* Press `[` or `]` to switch between level areas. Beware that it will automatically save current level and area!
 	* Press arrow keys to move edit cursor.
-	* Press W, S, A, D keys to change selected tile
-	* Press Z to remove tile
-	* Press X to place tile
-	* Press L to load level again.
-	* Press V to save level.
-	* Press P to play this level (Game doesn't return to level editor after doing that)
-	* Press Q to quit to menu.
-	* Press E to save and quit to menu.
+	* Press `W`, `S`, `A`, `D` keys to change selected tile
+	* Press `Z` to remove tile
+	* Press `X` to place tile
+	* Press `L` to load level again.
+	* Press `V` to save level.
+	* Press `P` to play this level (Game doesn't return to level editor after doing that)
+	* Press `Q` to quit to menu.
+	* Press `E` to save and quit to menu.
