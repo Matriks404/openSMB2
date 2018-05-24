@@ -15,7 +15,7 @@ function love.load()
 	loadSoundEffects()
 	loadStory()
 
-	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 98 - level editor 99 - debug screen)
+	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 6 - dying screen, 98 - level editor 99 - debug screen)
 
 	-- Debugging variables
 	debugmode = false
@@ -248,6 +248,9 @@ function love.update()
 
 			-- If character is below lowest screen, keep it
 			if screeny > (areaheight[area] / 16 / 15) - 1 then
+				--TODO: Dying
+				--state = 6
+				--timer = 0
 				screeny = (areaheight[area] / 16 / 15) - 1
 			end
 
