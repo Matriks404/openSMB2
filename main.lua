@@ -992,6 +992,7 @@ function loadSoundEffects()
 	sfxdir = "resources/sound/effects/" -- Sound effects folder
 
 	sfx_cherry = love.audio.newSource(sfxdir.."cherry.ogg")
+	sfx_death = love.audio.newSource(sfxdir.."death.ogg")
 end
 
 function loadStory()
