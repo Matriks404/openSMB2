@@ -1225,7 +1225,6 @@ function remainingLifes()
 		str = tostring(lifes - 1)
 
 	elseif lifes < 255 + 1 then
-	--TODO: This seems to be stupid!
 		if lifes < 110 + 1 then     letter = "A"
 		elseif lifes < 120 + 1 then letter = "B"
 		elseif lifes < 130 + 1 then letter = "C"
