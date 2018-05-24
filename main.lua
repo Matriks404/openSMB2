@@ -279,7 +279,7 @@ function love.keyreleased(key)
 			world = 1
 			level = 1
 
-			lifes = 255
+			lifes = 101
 			energy = 2
 			energybars = 2
 
@@ -622,13 +622,13 @@ function love.draw()
 	-- Draw title screen stuff
 		love.graphics.draw(img_titlelogo, 48, 48)
 
-		drawFont("!\"", 193, 72)
-		drawFont("#1988 NINTENDO", 72, 184)
+		drawText("!\"", 193, 72)
+		drawText("#1988 NINTENDO", 72, 184)
 
 	elseif state == 1 then
 	-- Draw intro story stuff
 		if timer > 34 then
-			drawFont("STORY", 112, 40)
+			drawText("STORY", 112, 40)
 
 			if texttimer > 65 then
 			-- Based on timer add new line of text
@@ -653,9 +653,9 @@ function love.draw()
 			for i=0, textlines do
 			-- Draw lines of text
 				if textpage == 0 then
-					drawFont(tostring(story1[i]), 48, 64 + ((i - 1) * 16))
+					drawText(tostring(story1[i]), 48, 64 + ((i - 1) * 16))
 				else
-					drawFont(tostring(story2[i]), 48, 64 + ((i - 1) * 16))
+					drawText(tostring(story2[i]), 48, 64 + ((i - 1) * 16))
 				end
 			end
 		end
@@ -664,8 +664,8 @@ function love.draw()
 	-- Draw character select screen stuff
 		love.graphics.draw(img_charselborder, 0, 0)
 
-		drawFont("PLEASE SELECT", 72, 80)
-		drawFont("PLAYER", 96, 96)
+		drawText("PLEASE SELECT", 72, 80)
+		drawText("PLAYER", 96, 96)
 
 		love.graphics.draw(img_arrow, 72 + (cursor * 32), 112)
 
@@ -713,8 +713,8 @@ function love.draw()
 			love.graphics.draw(img_cs_peach, 168, 144)
 		end
 
-		drawFont("EXTRA LIFE", 64, 208)
-		drawRemainingLifes(176, 208)
+		drawText("EXTRA LIFE", 64, 208)
+		drawText(remainingLifes(), 176, 208)
 
 	elseif state == 3 then
 	-- Draw levelbook
@@ -763,10 +763,10 @@ function love.draw()
 			transitiontimer = 0
 
 		elseif transitiontimer >= 15 then
-			drawFont("PAUSED", 105, 120, "brown")
+			drawText("PAUSED", 105, 120, "brown")
 		end
 
-		drawFont("EXTRA LIFE***  "..tostring(lifes), 65, 176, "brown") -- Draw extra lifes text
+		drawText("EXTRA LIFE*** "..remainingLifes(), 65, 176, "brown") -- Draw extra lifes text
 
 		transitiontimer = transitiontimer + 1
 
@@ -774,55 +774,55 @@ function love.draw()
 	-- Draw level editor stuff
 		if editoroption == 0 then
 		-- Draw level editor menu
-			drawFont("OPENSMB2 "..getVersion(), 32, 32)
-			drawFont("LEVEL EDITOR", 32, 48)
+			drawText("OPENSMB2 "..getVersion(), 32, 32)
+			drawText("LEVEL EDITOR", 32, 48)
 
-			drawFont("LEVEL SELECT", 32, 80)
+			drawText("LEVEL SELECT", 32, 80)
 
-			drawFont(" 1 - 1-1  4 - 2-1  7 - 3-1", 32, 96)
-			drawFont(" 2 - 1-2  5 - 2-2  8 - 3-2", 32, 112)
-			drawFont(" 3 - 1-3  6 - 2-3  9 - 3-3", 32, 128)
+			drawText(" 1 - 1-1  4 - 2-1  7 - 3-1", 32, 96)
+			drawText(" 2 - 1-2  5 - 2-2  8 - 3-2", 32, 112)
+			drawText(" 3 - 1-3  6 - 2-3  9 - 3-3", 32, 128)
 
-			drawFont(" A - 4-1  D - 5-1  G - 6-1", 32, 160)
-			drawFont(" B - 4-2  E - 5-2  H - 6-2", 32, 176)
-			drawFont(" C - 4-3  F - 5-3  I - 6-3", 32, 192)
+			drawText(" A - 4-1  D - 5-1  G - 6-1", 32, 160)
+			drawText(" B - 4-2  E - 5-2  H - 6-2", 32, 176)
+			drawText(" C - 4-3  F - 5-3  I - 6-3", 32, 192)
 
-			drawFont(" J - 7-1  K - 7-2  Q - QUIT", 32, 224)
+			drawText(" J - 7-1  K - 7-2  Q - QUIT", 32, 224)
 
 		elseif editoroption == 1 then
 		-- Draw editor
 			-- Draw world, level and area indicators
-			drawFont(tostring(world).."-"..tostring(level), 64, 2)
-			drawFont("A-"..tostring(area), 104, 2)
+			drawText(tostring(world).."-"..tostring(level), 64, 2)
+			drawText("A-"..tostring(area), 104, 2)
 
 			-- Draw background value
 			if areabg[area] == 0 then
-				drawFont("BG-BLK", 144, 2)
+				drawText("BG-BLK", 144, 2)
 			else
-				drawFont("BG-BLU", 144, 2)
+				drawText("BG-BLU", 144, 2)
 			end
 
 			-- Draw music indicator
 			if areamusic[area] == 0 then
-				drawFont("M-OVER", 208, 2)
+				drawText("M-OVER", 208, 2)
 			elseif areamusic[area] == 1 then
-				drawFont("M-UNDR", 208, 2)
+				drawText("M-UNDR", 208, 2)
 			else
-				drawFont("M-BOSS", 208, 2)
+				drawText("M-BOSS", 208, 2)
 			end
 
 			-- Draw width and height values
-			drawFont("W-"..tostring(areawidth[area]), 2, 10)
-			drawFont("H-"..tostring(areaheight[area]), 56, 10)
+			drawText("W-"..tostring(areawidth[area]), 2, 10)
+			drawText("H-"..tostring(areaheight[area]), 56, 10)
 
 			-- Draw currently selected tile
-			drawFont("T-"..tostring(edittile), 120, 10)
+			drawText("T-"..tostring(edittile), 120, 10)
 			drawTile(edittile, 152, 10)
 
 			-- Draw coordinates for edit cursor
-			drawFont(tostring(editcurx), 184, 10)
-			drawFont(",", 216, 10)
-			drawFont(tostring(editcury), 224, 10)
+			drawText(tostring(editcurx), 184, 10)
+			drawText(",", 216, 10)
+			drawText(tostring(editcury), 224, 10)
 
 			-- Calculate height and width of edit view
 			editheight = areaheight[area] - editviewy
@@ -859,25 +859,25 @@ function love.draw()
 
 	elseif state == 99 then
 	-- Draw debug screen stuff
-		drawFont("OPENSMB2 DEBUG MODE", 48, 56)
-		drawFont("F-TOGGLE FPS COUNTER", 48, 80)
-		drawFont("R-TOGGLE FRAME COUNTER", 48, 96)
-		drawFont("M-TOGGLE MUSIC MUTE", 48, 112)
-		drawFont("L-ENTER LEVEL EDITOR", 48, 128)
-		drawFont("S-START GAME RIGHT NOW", 48, 144)
+		drawText("OPENSMB2 DEBUG MODE", 48, 56)
+		drawText("F-TOGGLE FPS COUNTER", 48, 80)
+		drawText("R-TOGGLE FRAME COUNTER", 48, 96)
+		drawText("M-TOGGLE MUSIC MUTE", 48, 112)
+		drawText("L-ENTER LEVEL EDITOR", 48, 128)
+		drawText("S-START GAME RIGHT NOW", 48, 144)
 
-		drawFont("ENABLED FLAGS", 64, 160)
+		drawText("ENABLED FLAGS", 64, 160)
 
 		if debugfps == true then
-			drawFont("FPS", 64, 176)
+			drawText("FPS", 64, 176)
 		end
 
 		if debugframes == true then
-			drawFont("FRAMES", 104, 176)
+			drawText("FRAMES", 104, 176)
 		end
 
 		if debugmute == true then
-			drawFont("MUTED", 168, 176)
+			drawText("MUTED", 168, 176)
 		end
 	end
 
@@ -885,7 +885,7 @@ function love.draw()
 	if debugmode == true then
 		-- Draw FPS
 		if debugfps == true then
-			drawFont(tostring(love.timer.getFPS()).." FPS", 2, 2)
+			drawText(tostring(love.timer.getFPS()).." FPS", 2, 2)
 		end
 
 		-- Draw lasted frames
@@ -898,7 +898,7 @@ function love.draw()
 				n = math.floor(n / 10)
 			end
 
-			drawFont(tostring(timer), 256 - (timerx * 8), 2)
+			drawText(tostring(timer), 256 - (timerx * 8), 2)
 		end
 	end
 end
@@ -1182,7 +1182,7 @@ function quitEditor()
 	stopAreaMusic()
 end
 
-function drawFont(str, x, y, color)
+function drawText(str, x, y, color)
 	realx = 0
 
 	for i=0, string.len(str) - 1 do
@@ -1217,15 +1217,15 @@ function drawTile(tileid, tilex, tiley)
 	love.graphics.draw(img_tiles, tile, tilex, tiley)
 end
 
-function drawRemainingLifes(ax, ay)
+function remainingLifes()
 	if lifes < 10 + 1 then
-		drawFont(tostring(lifes - 1), ax + 8, ay)
+		str = " "..tostring(lifes - 1)
 
 	elseif lifes < 100 + 1 then
-		drawFont(tostring(lifes - 1), ax, ay)
+		str = tostring(lifes - 1)
 
 	elseif lifes < 255 + 1 then
-	--TODO: This seems to be stupid! --TODO: Fix!
+	--TODO: This seems to be stupid!
 		if lifes < 110 + 1 then     letter = "A"
 		elseif lifes < 120 + 1 then letter = "B"
 		elseif lifes < 130 + 1 then letter = "C"
@@ -1244,14 +1244,16 @@ function drawRemainingLifes(ax, ay)
 		else                        letter = "P"
 		end
 
-		drawFont(letter..tostring(math.floor((lifes - 1) % 10)), ax, ay)
+		str = letter..tostring(math.floor((lifes - 1) % 10))
 	end
+
+	return str
 end
 
 function drawLevelbook()
 	love.graphics.draw(img_levelbook, 25, 32)
 
-	drawFont("WORLD  "..tostring(world).."-"..tostring(level), 89, 48, "brown")
+	drawText("WORLD  "..tostring(world).."-"..tostring(level), 89, 48, "brown")
 
 		if world < 7 then
 			alllevels = 3
