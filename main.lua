@@ -279,7 +279,7 @@ function love.keyreleased(key)
 			world = 1
 			level = 1
 
-			lifes = 101
+			lifes = 3
 			energy = 2
 			energybars = 2
 
