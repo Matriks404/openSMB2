@@ -1244,7 +1244,7 @@ function drawRemainingLifes(ax, ay)
 		else                        letter = "P"
 		end
 
-		drawFont(letter..tostring(math.floor((lifes - 1) / 100)), ax, ay)
+		drawFont(letter..tostring(math.floor((lifes - 1) % 10)), ax, ay)
 	end
 end
 
