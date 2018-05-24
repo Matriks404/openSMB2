@@ -1174,6 +1174,8 @@ end
 function quitEditor()
 	editoroption = 0
 
+	edittile = 1
+
 	editcurx = 0
 	editcury = 0
 
