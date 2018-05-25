@@ -35,6 +35,9 @@
 		* `Z` key - Run
 		* `S` key - Pause
 	* `S` key on pause screen - Unpause
+	* In game over screen:
+		* `A` key - Select option
+		* `S` key - Choose option
 	* `X` on title bar or `ESC` key - Quit the game
 
 # Screenshots
@@ -75,3 +78,6 @@
 	* Press `P` to play this level (Game doesn't return to level editor after doing that)
 	* Press `Q` to quit to menu.
 	* Press `E` to save and quit to menu.
+	
+* During gameplay:
+	* Press `D` to die!
