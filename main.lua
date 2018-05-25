@@ -59,7 +59,7 @@ function love.load()
 	-- Gameplay
 	character = 0 -- Character (0 - Mario, 2 - Luigi, 3 - Toad, 4 - Princess Peach)
 	continues = 2 --TODO: Use it!
-	lifes = 2
+	lifes = 3
 	energy = 2
 	energybars = 2
 
@@ -171,7 +171,7 @@ function love.update()
 		-- Character is below lowest screen
 				screeny = (areaheight[area] / 16 / 15) - 1 -- Keep lowest screen shown
 				dyingtimer = dyingtimer + 1
-			end
+		end
 
 		if timer > 146 then
 			-- Left/Right movement
@@ -283,6 +283,7 @@ function love.update()
 				-- No more lifes, go to game over screen
 					sfx_gameover:play()
 
+					cursor = 0
 					state = 7
 				end
 			end
@@ -326,12 +327,14 @@ function love.keyreleased(key)
 			if debugmode == false then
 				state = 99
 				timer = 0
+				
 				debugmode = true
 
 				mus_title:stop()
 			else
 				state = 0
 				timer = 0
+				
 				debugmode = false
 				debugmute = false
 			end
@@ -368,21 +371,53 @@ function love.keyreleased(key)
 		end
 
 	elseif state == 4 then
-		-- Go to pause screen
+	-- Gameplay screen
 		if key == "s" and timer > 146 then
+		-- Go to pause screen
 			state = 5
 
 			backuptimer = timer
 			timer = 0
 		end
+		
+		if debugmode == true then
+			if key == "d" then
+			-- Die!
+				dyingtimer = 84
+				
+				stopAreaMusic()
+			end
+		end
 
 	elseif state == 5 then
-		-- Go back to gameplay
+	-- Pause screen
 		if key == "s" then
+		-- Go back to gameplay
 			state = 4
 
-			-- Timer stuff
-			timer = backuptimer
+			timer = backuptimer -- Backup gameplay timer
+		end
+		
+	elseif state == 7 then
+	-- Game over screen
+		if key == "a" then
+		-- Select option
+			if cursor == 0 then
+				cursor = 1
+			else
+				cursor = 0
+			end
+		end
+		
+		if key == "s" then
+			if cursor == 0 then
+			else
+				love.graphics.setBackgroundColor(92, 148, 252)
+				
+				cursor = 0
+				timer = 0
+				state = 0
+			end
 		end
 
 	elseif state == 98 then
@@ -822,7 +857,15 @@ function love.draw()
 
 	elseif state == 7 then
 	-- Draw game over screen stuff
-		drawText("GAME  OVER", 88, 112)
+		if timer < 192 then
+			drawText("GAME  OVER", 88, 112)
+		else
+			-- Draw text
+			drawText("CONTINUE "..tostring(continues), 96, 88)
+			drawText("RETRY", 96, 104)
+			
+			love.graphics.draw(img_indicator, 81, 89 + cursor * 16)
+		end
 
 	elseif state == 98 then
 	-- Draw level editor stuff
@@ -1021,12 +1064,15 @@ function loadGraphics()
 	-- Tilemap graphics
 	img_tiles = love.graphics.newImage("resources/images/tilemap.png")
 
-	-- Load character graphics
-	img_char_mario = love.graphics.newImage("resources/images/gameplay/characters/mario.png")
-	img_char_luigi = love.graphics.newImage("resources/images/gameplay/characters/luigi.png")
-	img_char_toad = love.graphics.newImage("resources/images/gameplay/characters/toad.png")
-	img_char_peach = love.graphics.newImage("resources/images/gameplay/characters/peach.png")
-
+	-- Character graphics
+	imgch = "resources/images/gameplay/characters/"
+	
+	img_char_mario = love.graphics.newImage(imgch.."mario.png")
+	img_char_luigi = love.graphics.newImage(imgch.."luigi.png")
+	img_char_toad = love.graphics.newImage(imgch.."toad.png")
+	img_char_peach = love.graphics.newImage(imgch.."peach.png")
+	
+	img_indicator = love.graphics.newImage("resources/images/indicator.png")
 end
 
 function loadMusic()
