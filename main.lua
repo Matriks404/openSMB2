@@ -165,6 +165,13 @@ function love.update()
 
 	elseif state == 4 then
 	-- Gameplay stuff
+		screeny = math.floor(heroy / 240) -- Switching vertical screens --TODO: Wrong! --TEMPORARY
+
+		if screeny > (areaheight[area] / 16 / 15) - 1 then
+		-- Character is below lowest screen
+				screeny = (areaheight[area] / 16 / 15) - 1 -- Keep lowest screen shown
+				dyingtimer = dyingtimer + 1
+			end
 
 		if timer > 146 then
 			-- Left/Right movement
@@ -246,13 +253,6 @@ function love.update()
 			end
 
 			heroy = heroy + 2 -- Falling --TEMPORARY
-			screeny = math.floor(heroy / 240) -- Switching vertical screens --TODO: Wrong! --TEMPORARY
-
-			if screeny > (areaheight[area] / 16 / 15) - 1 then
-			-- Character is below lowest screen
-				screeny = (areaheight[area] / 16 / 15) - 1 -- Keep lowest screen shown
-				dyingtimer = dyingtimer + 1
-			end
 
 			if dyingtimer == 6 then
 			-- Deplate energy and play death sound
@@ -271,17 +271,18 @@ function love.update()
 
 				if lifes > 0 then
 				-- Going to death screen and playing once more
-					state = 6
-
-					-- Reset energy
-					energy = 2
+					energy = 2 -- Reset energy
 
 					-- Reset character position and side
 					herox = startx
 					heroy = starty
 					heroside = 1
+					
+					state = 6
 				else
 				-- No more lifes, go to game over screen
+					sfx_gameover:play()
+
 					state = 7
 				end
 			end
