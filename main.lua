@@ -1043,6 +1043,7 @@ function loadSoundEffects()
 
 	sfx_cherry = love.audio.newSource(sfxdir.."cherry.ogg")
 	sfx_death = love.audio.newSource(sfxdir.."death.ogg")
+	sfx_gameover = love.audio.newSource(sfxdir.."gameover.ogg")
 end
 
 function loadStory()
