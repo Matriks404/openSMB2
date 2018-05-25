@@ -42,11 +42,9 @@
 ![Title screen](/screenshots/1.png)
 ![Intro story](/screenshots/2.png)
 ![Character select](/screenshots/3.png)
-![Levelbook](/screenshots/4.png)
-![Gameplay](/screenshots/5.png)
-![Debug screen](/screenshots/6.png)
-![Level editor menu](/screenshots/7.png)
-![Level editor](/screenshots/8.png)
+![Gameplay](/screenshots/4.png)
+![Debug screen](/screenshots/5.png)
+![Level editor](/screenshots/6.png)
 
 
 # Debugging:

@@ -249,9 +249,9 @@ function love.update()
 			screeny = math.floor(heroy / 240) -- Switching vertical screens --TODO: Wrong! --TEMPORARY
 
 			if screeny > (areaheight[area] / 16 / 15) - 1 then
-			-- If character is below lowest screen, keep it
+			-- Character is below lowest screen
+				screeny = (areaheight[area] / 16 / 15) - 1 -- Keep lowest screen shown
 				dyingtimer = dyingtimer + 1
-				screeny = (areaheight[area] / 16 / 15) - 1
 			end
 
 			if dyingtimer == 6 then
@@ -784,7 +784,7 @@ function love.draw()
 
 	elseif state == 5 then
 	-- Draw pause screen stuff
-		drawLevelbook() -- Draw paused screen levelbook
+		drawLevelbook() -- Draw levelbook
 
 		-- Draw flickering pause text
 		if transitiontimer == 30 then
@@ -801,7 +801,7 @@ function love.draw()
 	elseif state == 6 then
 	-- Draw dying screen stuff
 
-		drawLevelbook() -- Draw dying screen levelbook
+		drawLevelbook() -- Draw levelbook
 
 		drawText("EXTRA LIFE*** "..remainingLifes(), 65, 80, "brown") -- Draw remaining lifes
 
