@@ -22,8 +22,9 @@
 	* Title screen
 	* Intro story
 	* Character select
-	* Levelbook (just right before starting a level)
+	* Levelbook
 	* Basic gameplay screen
+	* Game over screen
 
 * Controls:
 	* `S` key on title screen - Enter character select screen.
