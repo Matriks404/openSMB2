@@ -15,7 +15,7 @@ function love.load()
 	loadSoundEffects()
 	loadStory()
 
-	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 6 - dying screen, 98 - level editor 99 - debug screen)
+	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 6 - dying screen, 7 - game over screen, 98 - level editor 99 - debug screen)
 
 	-- Debugging variables
 	debugmode = false
@@ -28,6 +28,7 @@ function love.load()
 	texttimer = 0
 	transitiontimer = 0
 	backuptimer = 0
+	dyingtimer = 0
 
 	transition = false
 
@@ -57,6 +58,7 @@ function love.load()
 
 	-- Gameplay
 	character = 0 -- Character (0 - Mario, 2 - Luigi, 3 - Toad, 4 - Princess Peach)
+	continues = 2 --TODO: Use it!
 	lifes = 2
 	energy = 2
 	energybars = 2
@@ -90,7 +92,7 @@ function love.load()
 
 	-- Character position subpixels
 	herosubx = 0
-	herosuby = 0
+	herosuby = 0 --TODO: Use it!
 
 	heroside = 1 -- On which side character is looking at (-1 - Left, 1 - Right)
 	heromovdir = 1 -- In which direction character is moving (-1 - Left, 1 - Right)
@@ -216,8 +218,8 @@ function love.update()
 				heroaccel = heroaccel - 1
 			end
 
-			-- Reseting hero acceleration to 0
 			if heroaccel < 0 then
+			-- Reseting hero acceleration to 0
 				heroaccel = 0
 			end
 
@@ -238,20 +240,50 @@ function love.update()
 					herox = areawidth[area] + herox
 				end
 
-			-- Reset hero speed to 0
 			elseif herospeed < 0 then
+			-- Reset hero speed to 0
 				herospeed = 0
 			end
 
 			heroy = heroy + 2 -- Falling --TEMPORARY
 			screeny = math.floor(heroy / 240) -- Switching vertical screens --TODO: Wrong! --TEMPORARY
 
-			-- If character is below lowest screen, keep it
 			if screeny > (areaheight[area] / 16 / 15) - 1 then
-				--TODO: Dying
-				--state = 6
-				--timer = 0
+			-- If character is below lowest screen, keep it
+				dyingtimer = dyingtimer + 1
 				screeny = (areaheight[area] / 16 / 15) - 1
+			end
+
+			if dyingtimer == 6 then
+			-- Deplate energy and play death sound
+				energy = 0
+
+				stopAreaMusic()
+				sfx_death:play()
+			end
+
+			if dyingtimer == 84 then
+			-- Die!
+				timer = 0
+				dyingtimer = 0
+
+				lifes = lifes - 1 -- Decrement a life
+
+				if lifes > 0 then
+				-- Going to death screen and playing once more
+					state = 6
+
+					-- Reset energy
+					energy = 2
+
+					-- Reset character position and side
+					herox = startx
+					heroy = starty
+					heroside = 1
+				else
+				-- No more lifes, go to game over screen
+					state = 7
+				end
 			end
 
 			--TODO: More physics!
@@ -720,15 +752,9 @@ function love.draw()
 		drawText(remainingLifes(), 176, 208)
 
 	elseif state == 3 then
-	-- Draw levelbook
-		drawLevelbook()
+		drawLevelbook() -- Draw levelbook
 
-		-- Draw world image
-		if world == 1 or world == 3 or world == 5 then love.graphics.draw(img_lb_1, 65, 112)
-		elseif world == 2 or world == 6 then           love.graphics.draw(img_lb_2, 65, 112)
-		elseif world == 4 then                         love.graphics.draw(img_lb_4, 65, 112)
-		elseif world == 7 then                         love.graphics.draw(img_lb_7, 65, 112)
-		end
+		drawWorldImage() -- Draw world image
 
 	elseif state == 4 then
 	-- Draw gameplay stuff
@@ -751,15 +777,14 @@ function love.draw()
 				end
 			end
 
-			-- Draw character on screen
-			drawCharacter()
+			drawCharacter() -- Draw character on screen
 
 			--TODO: Draw entities
 		end
 
 	elseif state == 5 then
-	-- Draw paused screen levelbook
-		drawLevelbook()
+	-- Draw pause screen stuff
+		drawLevelbook() -- Draw paused screen levelbook
 
 		-- Draw flickering pause text
 		if transitiontimer == 30 then
@@ -772,6 +797,31 @@ function love.draw()
 		drawText("EXTRA LIFE*** "..remainingLifes(), 65, 176, "brown") -- Draw extra lifes text
 
 		transitiontimer = transitiontimer + 1
+
+	elseif state == 6 then
+	-- Draw dying screen stuff
+
+		drawLevelbook() -- Draw dying screen levelbook
+
+		drawText("EXTRA LIFE*** "..remainingLifes(), 65, 80, "brown") -- Draw remaining lifes
+
+		drawWorldImage() -- Draw world image
+
+		if transitiontimer >= 120 then
+		-- Go to gameplay once again!
+			state = 4
+			timer = 0
+
+			transitiontimer = 0
+
+			playAreaMusic()
+		end
+
+		transitiontimer = transitiontimer + 1
+
+	elseif state == 7 then
+	-- Draw game over screen stuff
+		drawText("GAME  OVER", 88, 112)
 
 	elseif state == 98 then
 	-- Draw level editor stuff
@@ -1274,6 +1324,14 @@ function drawLevelbook()
 				love.graphics.draw(img_lb_other, 113 + (i * 16), 64)
 			end
 		end
+end
+
+function drawWorldImage()
+	if world == 1 or world == 3 or world == 5 then love.graphics.draw(img_lb_1, 65, 112)
+	elseif world == 2 or world == 6 then           love.graphics.draw(img_lb_2, 65, 112)
+	elseif world == 4 then                         love.graphics.draw(img_lb_4, 65, 112)
+	elseif world == 7 then                         love.graphics.draw(img_lb_7, 65, 112)
+	end
 end
 
 function drawCharacter()
