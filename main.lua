@@ -144,9 +144,8 @@ function love.update()
 				state = 3
 				timer = 0
 
-				transitionClear()
-
 				mus_charsel:stop()
+				transitionClear()
 
 				character = cursor -- Chosen character is one that was selected previously by cursor
 			end
@@ -313,6 +312,7 @@ function love.keyreleased(key)
 			timer = 0
 
 			mus_title:stop()
+			transitionClear()
 
 			if debugmute == false then
 				mus_charsel:play()
