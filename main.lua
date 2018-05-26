@@ -1406,6 +1406,7 @@ function drawCharacter()
 
 	-- Calculate desired character sprite
 	if charstate == 1 then
+	-- Calculate sprite if character is walking
 		if herospeed > 0 then
 			if heroanimtimer >= 10 then
 				heroanimtimer = 0
@@ -1424,7 +1425,7 @@ function drawCharacter()
 			heroanimtimer = 0
 		end
 	elseif character == 1 and charstate == 0 then
-	-- Calculate desired character sprite if character is Luigi and falling
+	-- Calculate prite if character is Luigi and falling
 		if heroanimtimer >= 6 then
 			heroanimtimer = 0
 		end
