@@ -57,11 +57,12 @@ function love.load()
 	editviewy = 0
 
 	-- Gameplay
-	character = 0 -- Character (0 - Mario, 2 - Luigi, 3 - Toad, 4 - Princess Peach)
+	character = 0 -- Character (0 - Mario, 1 - Luigi, 2 - Toad, 3 - Princess Peach)
 	continues = 2
 	lifes = 3
 	energy = 2
 	energybars = 2
+	charstate = 0 -- Character state (0 - Falling, 1 - Not falling)
 
 	-- Keep in mind that these are repeated in certain point of code, as player will return to title screen after game completion,
 	-- but variables here are initialized only on game execution start, so the game shouldn't rely on this.
@@ -325,6 +326,7 @@ function love.keyreleased(key)
 			lifes = 3
 			energy = 2
 			energybars = 2
+			charstate = 0
 
 			love.graphics.setBackgroundColor(0, 0, 0)
 
@@ -1403,12 +1405,31 @@ function drawCharacter()
 	end
 
 	-- Calculate desired character sprite
-	if herospeed > 0 then
-		if heroanimtimer >= 10 then
+	if charstate == 1 then
+		if herospeed > 0 then
+			if heroanimtimer >= 10 then
+				heroanimtimer = 0
+			end
+
+			if heroanimtimer >= 5 then
+				ax = 0 * 16
+			else
+				ax = 1 * 16
+			end
+
+			heroanimtimer = heroanimtimer + 1
+		else
+			ax = 0 * 16
+
+			heroanimtimer = 0
+		end
+	elseif character == 1 and charstate == 0 then
+	-- Calculate desired character sprite if character is Luigi and falling
+		if heroanimtimer >= 6 then
 			heroanimtimer = 0
 		end
 
-		if heroanimtimer >= 5 then
+		if heroanimtimer >= 3 then
 			ax = 0 * 16
 		else
 			ax = 1 * 16
@@ -1416,12 +1437,12 @@ function drawCharacter()
 
 		heroanimtimer = heroanimtimer + 1
 	else
-		ax = 0 * 16
+		ax = 1 * 16
 
 		heroanimtimer = 0
 	end
 
-	posy = heroy - screeny * 256
+	posy = heroy - screeny * 240
 
 	-- Draw character sprite
 	if character == 0 then
