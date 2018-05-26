@@ -421,6 +421,7 @@ function love.keyreleased(key)
 			if cursor == 0 then
 				continues = continues - 1
 				lifes = 3
+				energy = 2
 
 				mus_charsel:play()
 
