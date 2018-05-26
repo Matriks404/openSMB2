@@ -1425,7 +1425,7 @@ function drawCharacter()
 			heroanimtimer = 0
 		end
 	elseif character == 1 and charstate == 0 then
-	-- Calculate prite if character is Luigi and falling
+	-- Calculate sprite if character is Luigi and falling
 		if heroanimtimer >= 6 then
 			heroanimtimer = 0
 		end

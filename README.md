@@ -81,4 +81,4 @@
 	* Press `E` to save and quit to menu.
 	
 * During gameplay:
-	* Press `D` to die!
+	* Press `D` to die.
