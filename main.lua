@@ -165,9 +165,19 @@ function love.update()
 
 	elseif state == 4 then
 	-- Gameplay stuff
-		screeny = math.floor(heroy / 240) -- Switching vertical screens --TODO: Wrong! --TEMPORARY
+		if heroy < screeny * 240 then
+			screeny = screeny - 1
 
-		if screeny > (areaheight[area] / 16 / 15) - 1 then
+		elseif heroy > (screeny + 1 ) * 240 then
+		-- Switching vertical screen downwards
+			--TODO: Vertical screen scrolling
+			screeny = screeny + 1
+		end
+
+		if screeny < 0 then
+			screeny = 0
+
+		elseif screeny > (areaheight[area] / 16 / 15) - 1 then
 		-- Character is below lowest screen
 				screeny = (areaheight[area] / 16 / 15) - 1 -- Keep lowest screen shown
 				dyingtimer = dyingtimer + 1
