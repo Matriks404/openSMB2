@@ -6,7 +6,7 @@ function love.load()
 	love.window.setTitle(gametitle)
 	love.filesystem.setIdentity("openSMB2")
 
-	love.graphics.setBackgroundColor(92, 148, 252)
+	love.graphics.setBackgroundColor(0.36, 0.58, 0.99)
 
 	-- Loading resources
 	loadFonts()
@@ -437,7 +437,7 @@ function love.keyreleased(key)
 
 				state = 2
 			else
-				love.graphics.setBackgroundColor(92, 148, 252)
+				love.graphics.setBackgroundColor(0.36, 0.58, 0.99)
 
 				cursor = 0
 				timer = 0
@@ -479,7 +479,7 @@ function love.keyreleased(key)
 				state = 99
 				timer = 0
 
-				love.graphics.setBackgroundColor(92, 148, 252)
+				love.graphics.setBackgroundColor(0.36, 0.58, 0.99)
 			end
 
 		elseif editoroption == 1 then
@@ -489,7 +489,7 @@ function love.keyreleased(key)
 				if areabg[area] == 0 then
 					areabg[area] = 1
 
-					love.graphics.setBackgroundColor(60, 180, 282)
+					love.graphics.setBackgroundColor(0.24, 0.74, 0.99)
 				else
 					areabg[area] = 0
 
@@ -1102,19 +1102,19 @@ end
 function loadMusic()
 	musdir = "resources/sound/music/" -- Music folder
 
-	mus_title = love.audio.newSource(musdir.."title.ogg")
-	mus_charsel = love.audio.newSource(musdir.."charselect.ogg")
-	mus_overworld = love.audio.newSource(musdir.."overworld.ogg")
-	mus_underworld = love.audio.newSource(musdir.."underworld.ogg")
-	mus_boss = love.audio.newSource(musdir.."boss.ogg")
+	mus_title = love.audio.newSource(musdir.."title.ogg", "stream")
+	mus_charsel = love.audio.newSource(musdir.."charselect.ogg", "stream")
+	mus_overworld = love.audio.newSource(musdir.."overworld.ogg", "stream")
+	mus_underworld = love.audio.newSource(musdir.."underworld.ogg", "stream")
+	mus_boss = love.audio.newSource(musdir.."boss.ogg", "stream")
 end
 
 function loadSoundEffects()
 	sfxdir = "resources/sound/effects/" -- Sound effects folder
 
-	sfx_cherry = love.audio.newSource(sfxdir.."cherry.ogg")
-	sfx_death = love.audio.newSource(sfxdir.."death.ogg")
-	sfx_gameover = love.audio.newSource(sfxdir.."gameover.ogg")
+	sfx_cherry = love.audio.newSource(sfxdir.."cherry.ogg", "static")
+	sfx_death = love.audio.newSource(sfxdir.."death.ogg", "static")
+	sfx_gameover = love.audio.newSource(sfxdir.."gameover.ogg", "static")
 end
 
 function loadStory()
@@ -1170,7 +1170,7 @@ function loadArea()
 	if areabg[area] == 0 then
 		love.graphics.setBackgroundColor(0, 0, 0)
 	else
-		love.graphics.setBackgroundColor(60, 180, 282)
+		love.graphics.setBackgroundColor(0.24, 0.74, 0.99)
 	end
 
 	playAreaMusic()
