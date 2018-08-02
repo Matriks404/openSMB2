@@ -79,6 +79,7 @@
 	* Press `P` to play this level (Game doesn't return to level editor after doing that)
 	* Press `Q` to quit to menu.
 	* Press `E` to save and quit to menu.
-	
+
 * During gameplay:
+	* Press `A` to ascend.
 	* Press `D` to die.

@@ -165,28 +165,36 @@ function love.update()
 
 	elseif state == 4 then
 	-- Gameplay stuff
-		if heroy < screeny * 240 then
-		-- Switching vertical screen upwords
-			screeny = screeny - 1
+		--TODO: Vertical screen scrolling!
 
-		if heroy > (screeny + 1 ) * 240 then
-		-- Switching vertical screen downwards
-			--TODO: Vertical screen scrolling
+		if screeny == 0 and heroy > 192 then
+		-- When on first screen, switching vertical screen downwards
 			screeny = screeny + 1
-		end
 
-		if screeny < 0 then
-		-- Character is above highest screen
-			screeny = 0
+		elseif screeny > 0 then
+		-- When on subsequent screen
+			if heroy > 192 + screeny * 144 then
+			-- Switching vertical screen downwards
+				if heroy <= areaheight[area] - 48 then
+				-- If above lowest screen border don't switch screen
+					screeny = screeny + 1
+				elseif heroy >= areaheight[area] - 1 then
+				-- Die!
+					dyingtimer = dyingtimer + 1
+				end
 
-		elseif screeny > (areaheight[area] / 16 / 15) - 1 then
-		-- Character is below lowest screen
-				screeny = (areaheight[area] / 16 / 15) - 1 -- Keep lowest screen shown
-				dyingtimer = dyingtimer + 1
+			elseif heroy < 16 + screeny * 144 then
+			-- Switching vertical screen upwords
+				screeny = screeny - 1
+			end
 		end
 
 		if timer > 146 then
 			-- Left/Right movement
+			if debugmode == true and love.keyboard.isDown("a") then
+				heroy = heroy - 3.25
+			end
+
 			if love.keyboard.isDown("left") then
 				heroside = -1
 
@@ -824,7 +832,12 @@ function love.draw()
 		if timer > 144 then
 			for i=0, 15 - 1 do
 				for j=0, 16 - 1 do
-					drawTile(areatiles[(screeny * 15) + i][(screenx * 16) + j], j * 16, i * 16)
+					if screeny == 0 then
+						drawTile(areatiles[(screeny * 15) + i][(screenx * 16) + j], j * 16, i * 16)
+
+					elseif screeny > 0 and screeny <= ((areaheight[area] - 192) / 16 / 12) + 1 then
+						drawTile(areatiles[((screeny - 1 ) * 9) + 9 + i][(screenx * 16) + j], j * 16, i * 16)
+					end
 				end
 			end
 		end
@@ -1456,7 +1469,15 @@ function drawCharacter()
 		heroanimtimer = 0
 	end
 
-	posy = heroy - screeny * 240
+	if screeny == 0 then
+		posy = heroy - screeny * 240
+
+	else
+		posy = heroy - 144 * screeny
+		--drawText("POSY "..posy, 8, 8) --DEBUG
+		--drawText("HERY "..heroy, 8, 24) --DEBUG
+		--drawText("SCRE "..screeny, 8, 32) --DEBUG
+	end
 
 	-- Draw character sprite
 	if character == 0 then
