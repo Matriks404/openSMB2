@@ -190,7 +190,7 @@ function love.update()
 		end
 
 		if timer > 146 then
-			
+
 			if debugmode == true and love.keyboard.isDown("a") then
 			-- Ascending
 				heroy = heroy - 3.25
@@ -846,6 +846,10 @@ function love.draw()
 
 		if timer > 146 then
 		-- Draw everything else
+			if timer == 147 then
+				sfx_fall:play() -- Play falling sound
+			end
+
 			for i=0, energybars - 1 do
 			-- Draw energy bars
 				if i+1 <= energy then
@@ -1129,6 +1133,7 @@ end
 function loadSoundEffects()
 	sfxdir = "resources/sound/effects/" -- Sound effects folder
 
+	sfx_fall = love.audio.newSource(sfxdir.."fall.ogg", "static")
 	sfx_cherry = love.audio.newSource(sfxdir.."cherry.ogg", "static")
 	sfx_death = love.audio.newSource(sfxdir.."death.ogg", "static")
 	sfx_gameover = love.audio.newSource(sfxdir.."gameover.ogg", "static")
