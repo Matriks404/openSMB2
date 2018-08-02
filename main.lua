@@ -166,15 +166,17 @@ function love.update()
 	elseif state == 4 then
 	-- Gameplay stuff
 		if heroy < screeny * 240 then
+		-- Switching vertical screen upwords
 			screeny = screeny - 1
 
-		elseif heroy > (screeny + 1 ) * 240 then
+		if heroy > (screeny + 1 ) * 240 then
 		-- Switching vertical screen downwards
 			--TODO: Vertical screen scrolling
 			screeny = screeny + 1
 		end
 
 		if screeny < 0 then
+		-- Character is above highest screen
 			screeny = 0
 
 		elseif screeny > (areaheight[area] / 16 / 15) - 1 then
