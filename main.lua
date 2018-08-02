@@ -190,11 +190,13 @@ function love.update()
 		end
 
 		if timer > 146 then
-			-- Left/Right movement
+			
 			if debugmode == true and love.keyboard.isDown("a") then
+			-- Ascending
 				heroy = heroy - 3.25
 			end
 
+			-- Left/Right movement
 			if love.keyboard.isDown("left") then
 				heroside = -1
 
@@ -836,7 +838,7 @@ function love.draw()
 						drawTile(areatiles[(screeny * 15) + i][(screenx * 16) + j], j * 16, i * 16)
 
 					elseif screeny > 0 and screeny <= ((areaheight[area] - 192) / 16 / 12) + 1 then
-						drawTile(areatiles[((screeny - 1 ) * 9) + 9 + i][(screenx * 16) + j], j * 16, i * 16)
+						drawTile(areatiles[(screeny * 9) + i][(screenx * 16) + j], j * 16, i * 16)
 					end
 				end
 			end
@@ -1473,7 +1475,7 @@ function drawCharacter()
 		posy = heroy - screeny * 240
 
 	else
-		posy = heroy - 144 * screeny
+		posy = heroy - screeny * 144
 		--drawText("POSY "..posy, 8, 8) --DEBUG
 		--drawText("HERY "..heroy, 8, 24) --DEBUG
 		--drawText("SCRE "..screeny, 8, 32) --DEBUG
