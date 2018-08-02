@@ -169,15 +169,15 @@ function love.update()
 
 		if screeny == 0 and heroy > 192 then
 		-- When on first screen, switching vertical screen downwards
-			screeny = screeny + 1
+			screenTrans(1)
 
 		elseif screeny > 0 then
 		-- When on subsequent screen
 			if heroy > 192 + screeny * 144 then
 			-- Switching vertical screen downwards
 				if heroy <= areaheight[area] - 48 then
-				-- If above lowest screen border don't switch screen
-					screeny = screeny + 1
+				-- If not above lowest screen border switch screen
+					screenTrans(1)
 				elseif heroy >= areaheight[area] - 1 then
 				-- Die!
 					dyingtimer = dyingtimer + 1
@@ -185,11 +185,11 @@ function love.update()
 
 			elseif heroy < 16 + screeny * 144 then
 			-- Switching vertical screen upwords
-				screeny = screeny - 1
+				screenTrans(-1)
 			end
 		end
 
-		if timer > 146 then
+		if timer > 146 and transitiontimer == 0 then
 
 			if debugmode == true and love.keyboard.isDown("a") then
 			-- Ascending
@@ -426,6 +426,7 @@ function love.keyreleased(key)
 			state = 4
 
 			timer = backuptimer -- Backup gameplay timer
+			transitiontimer = 0
 		end
 
 	elseif state == 7 then
@@ -1469,7 +1470,9 @@ function drawCharacter()
 			ax = 1 * 16
 		end
 
-		heroanimtimer = heroanimtimer + 1
+		if transitiontimer == 0 then
+			heroanimtimer = heroanimtimer + 1
+		end
 	else
 		ax = 1 * 16
 
@@ -1522,6 +1525,16 @@ function drawCharacter()
 		elseif character == 3 then
 			love.graphics.draw(img_char_peach, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 		end
+	end
+end
+
+function screenTrans(dir)
+	if transitiontimer == 35 then
+		transitiontimer = 0
+
+		screeny = screeny + dir
+	else
+		transitiontimer = transitiontimer + 1
 	end
 end
 
