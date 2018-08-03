@@ -835,36 +835,7 @@ function love.draw()
 
 	elseif state == 4 then
 	-- Draw gameplay stuff
-		if timer > 144 then
-			for i=0, 15 - 1 do
-				for j=0, 16 - 1 do
-					if transitiontimer > 0 then
-					
-						if screeny == 0 then
-							transy = math.floor(transitiontimer / 35 * 9)
-							tiley = transy + i
-						else
-							if screendir == 1 then
-								transy = math.floor(transitiontimer / 35 * 9)
-								tiley = (screeny * 9) + transy + i
-							else
-								transy = 9 - math.floor(transitiontimer / 35 * 9)
-								tiley = ((screeny - 1) * 9) + transy + i
-							end
-						end
-					else
-						if screeny == 0 then
-							tiley = i
-						else
-							tiley = (screeny * 9) + i
-						end
-					end
-					
-					tilex = (screenx * 16) + j
-					
-					drawTile(areatiles[tiley][tilex], j * 16, i * 16)
-				end
-			end
+		if timer > 144 then drawLevelTiles() -- Draw level tiles
 		end
 
 		if timer > 146 then
@@ -1388,6 +1359,39 @@ function drawTile(tileid, tilex, tiley)
 	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tiles:getWidth(), img_tiles:getHeight())
 
 	love.graphics.draw(img_tiles, tile, tilex, tiley)
+end
+
+function drawLevelTiles()
+	for i=0, 15 - 1 do
+		for j=0, 16 - 1 do
+			if transitiontimer > 0 then
+			-- Draw tiles when transitioning between screens
+				if screeny == 0 then
+					transy = math.floor(transitiontimer / 35 * 9)
+					tiley = transy + i
+				else
+					if screendir == 1 then
+						transy = math.floor(transitiontimer / 35 * 9)
+						tiley = (screeny * 9) + transy + i
+					else
+						transy = 9 - math.floor(transitiontimer / 35 * 9)
+						tiley = ((screeny - 1) * 9) + transy + i
+					end
+				end
+			else
+			-- Draw tiles on stationary screen
+				if screeny == 0 then
+					tiley = i
+				else
+					tiley = (screeny * 9) + i
+				end
+			end
+			
+			tilex = (screenx * 16) + j
+			
+			drawTile(areatiles[tiley][tilex], j * 16, i * 16)
+		end
+	end
 end
 
 function remainingLifes()
