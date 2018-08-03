@@ -1,8 +1,8 @@
 function love.load()
-	gametitle = "openSMB2 v"..getVersion()
+	gametitle = "openSMB2 v"..getVersion() -- Game title in title bar
 
 	-- Setting up window
-	love.window.setMode(256, 240, {vsync = true}) -- 256x240 is a NES resolution
+	love.window.setMode(256, 240, {vsync = true, resizable = true}) -- 256x240 is a NES resolution
 	love.window.setTitle(gametitle)
 	love.filesystem.setIdentity("openSMB2")
 
@@ -169,7 +169,8 @@ function love.update()
 
 		if screeny == 0 and heroy > 192 then
 		-- When on first screen, switching vertical screen downwards
-			screenTrans(1)
+			screendir = 1
+			screenTrans()
 
 		elseif screeny > 0 then
 		-- When on subsequent screen
@@ -177,7 +178,8 @@ function love.update()
 			-- Switching vertical screen downwards
 				if heroy <= areaheight[area] - 48 then
 				-- If not above lowest screen border switch screen
-					screenTrans(1)
+					screendir = 1
+					screenTrans()
 				elseif heroy >= areaheight[area] - 1 then
 				-- Die!
 					dyingtimer = dyingtimer + 1
@@ -185,7 +187,8 @@ function love.update()
 
 			elseif heroy < 16 + screeny * 144 then
 			-- Switching vertical screen upwords
-				screenTrans(-1)
+				screendir = -1
+				screenTrans()
 			end
 		end
 
@@ -835,11 +838,26 @@ function love.draw()
 		if timer > 144 then
 			for i=0, 15 - 1 do
 				for j=0, 16 - 1 do
-					if screeny == 0 then
-						drawTile(areatiles[(screeny * 15) + i][(screenx * 16) + j], j * 16, i * 16)
-
-					elseif screeny > 0 and screeny <= ((areaheight[area] - 192) / 16 / 12) + 1 then
-						drawTile(areatiles[(screeny * 9) + i][(screenx * 16) + j], j * 16, i * 16)
+					if transitiontimer > 0 then
+						if screeny == 0 then
+							transy = math.floor(transitiontimer / 35 * 9)
+						
+							drawTile(areatiles[transy + i][(screenx * 16) + j], j * 16, i * 16)
+						else
+							if screendir == 1 then
+								transy = math.floor(transitiontimer / 35 * 9)
+								drawTile(areatiles[(screeny * 9) + transy + i][(screenx * 16) + j], j * 16, i * 16)
+							else
+								transy = 9 - math.floor(transitiontimer / 35 * 9)
+								drawTile(areatiles[((screeny - 1) * 9) + transy + i][(screenx * 16) + j], j * 16, i * 16)
+							end
+						end
+					else
+						if screeny == 0 then
+							drawTile(areatiles[i][(screenx * 16) + j], j * 16, i * 16)
+						else
+							drawTile(areatiles[(screeny * 9) + i][(screenx * 16) + j], j * 16, i * 16)
+						end
 					end
 				end
 			end
@@ -1484,9 +1502,12 @@ function drawCharacter()
 
 	else
 		posy = heroy - screeny * 144
-		--drawText("POSY "..posy, 8, 8) --DEBUG
-		--drawText("HERY "..heroy, 8, 24) --DEBUG
-		--drawText("SCRE "..screeny, 8, 32) --DEBUG
+	end
+	
+	if transitiontimer > 0 then
+		if screendir == 1 then posy = posy - (transitiontimer / 35) * 144
+		else                   posy = posy + (transitiontimer / 35) * 144
+		end
 	end
 
 	-- Draw character sprite
@@ -1528,11 +1549,11 @@ function drawCharacter()
 	end
 end
 
-function screenTrans(dir)
+function screenTrans()
 	if transitiontimer == 35 then
 		transitiontimer = 0
 
-		screeny = screeny + dir
+		screeny = screeny + screendir
 	else
 		transitiontimer = transitiontimer + 1
 	end
