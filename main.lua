@@ -2,7 +2,7 @@ function love.load()
 	gametitle = "openSMB2 v"..getVersion() -- Game title in title bar
 
 	-- Setting up window
-	love.window.setMode(256, 240, {vsync = true, resizable = true}) -- 256x240 is a NES resolution
+	love.window.setMode(256, 240, {vsync = true}) -- 256x240 is a NES resolution
 	love.window.setTitle(gametitle)
 	love.filesystem.setIdentity("openSMB2")
 
@@ -839,26 +839,30 @@ function love.draw()
 			for i=0, 15 - 1 do
 				for j=0, 16 - 1 do
 					if transitiontimer > 0 then
+					
 						if screeny == 0 then
 							transy = math.floor(transitiontimer / 35 * 9)
-						
-							drawTile(areatiles[transy + i][(screenx * 16) + j], j * 16, i * 16)
+							tiley = transy + i
 						else
 							if screendir == 1 then
 								transy = math.floor(transitiontimer / 35 * 9)
-								drawTile(areatiles[(screeny * 9) + transy + i][(screenx * 16) + j], j * 16, i * 16)
+								tiley = (screeny * 9) + transy + i
 							else
 								transy = 9 - math.floor(transitiontimer / 35 * 9)
-								drawTile(areatiles[((screeny - 1) * 9) + transy + i][(screenx * 16) + j], j * 16, i * 16)
+								tiley = ((screeny - 1) * 9) + transy + i
 							end
 						end
 					else
 						if screeny == 0 then
-							drawTile(areatiles[i][(screenx * 16) + j], j * 16, i * 16)
+							tiley = i
 						else
-							drawTile(areatiles[(screeny * 9) + i][(screenx * 16) + j], j * 16, i * 16)
+							tiley = (screeny * 9) + i
 						end
 					end
+					
+					tilex = (screenx * 16) + j
+					
+					drawTile(areatiles[tiley][tilex], j * 16, i * 16)
 				end
 			end
 		end
