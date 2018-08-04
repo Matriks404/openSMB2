@@ -18,7 +18,6 @@ function love.load()
 	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 6 - dying screen, 7 - game over screen, 98 - level editor 99 - debug screen)
 
 	-- Debugging variables
-	testvar = 144
 	debugmode = false
 	debugfps = true
 	debugframes = true
@@ -327,14 +326,6 @@ function love.update()
 end
 
 function love.keyreleased(key)
-	if key == "1" then
-		testvar = testvar + 1
-	end
-
-	if key == "2" then
-		testvar = testvar - 1
-	end
-
 	-- Quit if user pressed ESC key
 	if key == "escape" then
 		love.event.quit()
@@ -1049,8 +1040,6 @@ function love.draw()
 			drawText(tostring(timer), 256 - (timerx * 8), 2)
 		end
 	end
-
-	drawText(testvar, 2, 2)
 end
 
 function loadFonts()
