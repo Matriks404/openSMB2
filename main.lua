@@ -159,14 +159,15 @@ function love.update()
 
 			loadLevel()
 
+			screeny = 0 --TEMPORARY
 			herox = startx
 			heroy = starty
+
+			heroanimtimer = 0
 		end
 
 	elseif state == 4 then
 	-- Gameplay stuff
-		--TODO: Vertical screen scrolling!
-
 		if screeny == 0 and heroy > 192 then
 		-- When on first screen, switching vertical screen downwards
 			screendir = 1
@@ -299,6 +300,7 @@ function love.update()
 					energy = 2 -- Reset energy
 
 					-- Reset character position and side
+					screeny = 0 --TEMPORARY
 					herox = startx
 					heroy = starty
 					heroside = 1
@@ -835,6 +837,7 @@ function love.draw()
 
 	elseif state == 4 then
 	-- Draw gameplay stuff
+
 		if timer > 144 then drawLevelTiles() -- Draw level tiles
 		end
 
@@ -1386,9 +1389,9 @@ function drawLevelTiles()
 					tiley = (screeny * 9) + i
 				end
 			end
-			
+
 			tilex = (screenx * 16) + j
-			
+
 			drawTile(areatiles[tiley][tilex], j * 16, i * 16)
 		end
 	end
@@ -1511,7 +1514,7 @@ function drawCharacter()
 	else
 		posy = heroy - screeny * 144
 	end
-	
+
 	if transitiontimer > 0 then
 		if screendir == 1 then posy = posy - (transitiontimer / 35) * 144
 		else                   posy = posy + (transitiontimer / 35) * 144
