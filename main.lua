@@ -18,6 +18,7 @@ function love.load()
 	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 6 - dying screen, 7 - game over screen, 98 - level editor 99 - debug screen)
 
 	-- Debugging variables
+	testvar = 144
 	debugmode = false
 	debugfps = true
 	debugframes = true
@@ -326,6 +327,14 @@ function love.update()
 end
 
 function love.keyreleased(key)
+	if key == "1" then
+		testvar = testvar + 1
+	end
+
+	if key == "2" then
+		testvar = testvar - 1
+	end
+
 	-- Quit if user pressed ESC key
 	if key == "escape" then
 		love.event.quit()
@@ -1040,6 +1049,8 @@ function love.draw()
 			drawText(tostring(timer), 256 - (timerx * 8), 2)
 		end
 	end
+
+	drawText(testvar, 2, 2)
 end
 
 function loadFonts()
@@ -1372,13 +1383,18 @@ function drawLevelTiles()
 				if screeny == 0 then
 					transy = math.floor(transitiontimer / 35 * 9)
 					tiley = transy + i
+					posy = (i * 16) - (transitiontimer / 35 * 144) % 16
 				else
 					if screendir == 1 then
 						transy = math.floor(transitiontimer / 35 * 9)
 						tiley = (screeny * 9) + transy + i
+						posy = (i * 16) - (transitiontimer / 35 * 144) % 16
+
 					else
 						transy = 9 - math.floor(transitiontimer / 35 * 9)
 						tiley = ((screeny - 1) * 9) + transy + i
+
+						posy = (i * 16) + (transitiontimer / 35 * 144) % 16
 					end
 				end
 			else
@@ -1388,11 +1404,13 @@ function drawLevelTiles()
 				else
 					tiley = (screeny * 9) + i
 				end
+
+				posy = i * 16
 			end
 
 			tilex = (screenx * 16) + j
 
-			drawTile(areatiles[tiley][tilex], j * 16, i * 16)
+			drawTile(areatiles[tiley][tilex], j * 16, posy)
 		end
 	end
 end
