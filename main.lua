@@ -407,7 +407,7 @@ function love.keyreleased(key)
 
 	elseif state == 4 then
 	-- Gameplay screen
-		if key == "s" and timer > 146 then
+		if key == "s" and timer > 146 and transitiontimer == 0 then
 		-- Go to pause screen
 			state = 5
 
