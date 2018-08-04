@@ -1365,7 +1365,21 @@ function drawTile(tileid, tilex, tiley)
 end
 
 function drawLevelTiles()
-	for i=0, 15 - 1 do
+	if screeny <= ((areaheight[area] - 192) / 16 / 12) and transitiontimer < 35 then
+	-- If not on the bottom screen allow for additional row of tiles on the bottom
+		imax = 16
+	else
+		imax = 15
+	end
+	
+	if screeny > 0 and transitiontimer < 35 then
+	-- If not on the top screen allow for a dditional row of tiles on the top
+		imin = -1
+	else
+		imin = 0
+	end
+
+	for i=imin, imax - 1 do
 		for j=0, 16 - 1 do
 			if transitiontimer > 0 then
 			-- Draw tiles when transitioning between screens
