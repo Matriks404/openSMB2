@@ -1371,12 +1371,12 @@ function drawLevelTiles()
 	if transitiontimer > 0 and transitiontimer < 35 then
 	-- During transition draw additional row of tiles
 		if screeny > 0 and screendir == - 1 then
-		-- Draw row of tiles on the top
+		-- Draw additional row of tiles on the top
 			imin = -1
 		end
 
 		if screeny <= ((areaheight[area] - 192) / 16 / 12) and screendir == 1 then
-		-- Draw row of tiles on the bottom
+		-- Draw additional row of tiles on the bottom
 			imax = 16
 		end
 	end
