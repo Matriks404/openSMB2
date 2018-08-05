@@ -278,7 +278,12 @@ function love.update()
 				herospeed = 0
 			end
 
-			heroy = heroy + 2 -- Falling --TEMPORARY
+			-- Character falling (slower for Luigi) --TEMPORARY
+			if character == 1 then
+				heroy = heroy + 2.5
+			else
+				heroy = heroy + 3
+			end
 
 			if dyingtimer == 6 then
 			-- Deplate energy and play death sound
