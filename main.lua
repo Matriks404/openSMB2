@@ -15,7 +15,7 @@ function love.load()
 	loadSoundEffects()
 	loadStory()
 
-	state = 0 -- Game state (0 - title screen, 1 - intro, 2 - character select, 3 - level intro, 4 - gameplay, 5 - paused gameplay, 6 - dying screen, 7 - game over screen, 98 - level editor 99 - debug screen)
+	state = "title" -- Game state (title, intro, charsel, levelintro, gameplay, pause, dying, gameover, editor, debug)
 
 	-- Debugging variables
 	debugmode = false
@@ -39,7 +39,7 @@ function love.load()
 	cursor = 0 -- Menu cursor variable
 
 	-- Level editor variables
-	editoroption = 0 -- Editor option (0 - Level select, 1 - Editing screen)
+	editoroption = "select" -- Editor option (select, edit)
 	editheight = 0
 	editwidth = 0
 	edittile = 1
@@ -57,12 +57,12 @@ function love.load()
 	editviewy = 0
 
 	-- Gameplay
-	character = 0 -- Character (0 - Mario, 1 - Luigi, 2 - Toad, 3 - Princess Peach)
+	character = "mario" -- Character (mario, luigi, toad, peach)
 	continues = 2
 	lifes = 3
 	energy = 2
 	energybars = 2
-	charstate = 0 -- Character state (0 - Falling, 1 - Not falling)
+	charstate = "falling" -- Character state (falling, stationary)
 
 	-- Keep in mind that these are repeated in certain point of code, as player will return to title screen after game completion,
 	-- but variables here are initialized only on game execution start, so the game shouldn't rely on this.
@@ -106,24 +106,24 @@ end
 function love.update()
 	timer = timer + 1
 
-	if state == 0 then
+	if state == "title" then
 	-- Title screen stuff
 		mus_title:play()
 
 		-- After some time go to intro story
 		if timer == 500 then
-			state = 1
+			state = "intro"
 			timer = 0
 		end
 
-	elseif state == 1 then
+	elseif state == "intro" then
 	-- Intro story stuff
 		if transition == true then
 			transitiontimer = transitiontimer + 1
 
 			-- After some time after showing 2nd story page go to title screen again
 			if transitiontimer == 442 then
-				state = 0
+				state = "title"
 				timer = 0
 				texttimer = 0
 
@@ -134,27 +134,32 @@ function love.update()
 			end
 		end
 
-	elseif state == 2 then
+	elseif state == "charsel" then
 	-- Character select stuff
 		if transition == true then
 			transitiontimer = transitiontimer + 1
 
 			-- After some time after chosing character go to levelbook screen
 			if transitiontimer == 136 then
-				state = 3
+				state = "levelintro"
 				timer = 0
 
 				mus_charsel:stop()
 				transitionClear()
 
-				character = cursor -- Chosen character is one that was selected previously by cursor
+				-- Chosen character is one that was selected previously by cursor
+				if cursor == 0 then     character = "mario"
+				elseif cursor == 1 then character = "luigi"
+				elseif cursor == 2 then character = "toad"
+				elseif cursor == 3 then character = "peach"
+				end
 			end
 		end
 
-	elseif state == 3 then
+	elseif state == "levelintro" then
 	-- Levelbook stuff
 		if timer == 94 then
-			state = 4
+			state = "gameplay"
 			timer = 0
 
 			loadLevel()
@@ -166,7 +171,7 @@ function love.update()
 			heroanimtimer = 0
 		end
 
-	elseif state == 4 then
+	elseif state == "gameplay" then
 	-- Gameplay stuff
 		if screeny == 0 and heroy > 192 then
 		-- When on first screen, switching vertical screen downwards
@@ -279,7 +284,7 @@ function love.update()
 			end
 
 			-- Character falling (slower for Luigi) --TEMPORARY
-			if character == 1 then
+			if character == "luigi" then
 				heroy = heroy + 2.5
 			else
 				heroy = heroy + 3
@@ -310,7 +315,7 @@ function love.update()
 					heroy = starty
 					heroside = 1
 
-					state = 6
+					state = "dying"
 				else
 				-- No more lifes, go to game over screen
 					sfx_gameover:play()
@@ -321,7 +326,7 @@ function love.update()
 						cursor = 1
 					end
 
-					state = 7
+					state = "gameover"
 				end
 			end
 
@@ -337,10 +342,10 @@ function love.keyreleased(key)
 	end
 
 	-- Title screen, intro story or debug screen
-	if state == 0 or state == 1 or state == 99 then
+	if state == "title" or state == "intro" or state == "debug" then
 		if key == "s" then
 		-- Go to character screen
-			state = 2
+			state = "charsel"
 			timer = 0
 
 			mus_title:stop()
@@ -358,21 +363,21 @@ function love.keyreleased(key)
 			lifes = 3
 			energy = 2
 			energybars = 2
-			charstate = 0
+			charstate = "falling"
 
 			love.graphics.setBackgroundColor(0, 0, 0)
 
 		elseif love.keyboard.isDown("lctrl") and key == "d" then
 		-- Go to debug screen or title screen (depending on origin screen)
 			if debugmode == false then
-				state = 99
+				state = "debug"
 				timer = 0
 
 				debugmode = true
 
 				mus_title:stop()
 			else
-				state = 0
+				state = "title"
 				timer = 0
 
 				debugmode = false
@@ -381,7 +386,7 @@ function love.keyreleased(key)
 		end
 	end
 
-	if state == 2 then
+	if state == "charsel" then
 	-- Character select screen
 		if key == "left" and transitiontimer == 0 then
 		-- Select character on the left
@@ -410,11 +415,11 @@ function love.keyreleased(key)
 			sfx_cherry:play()
 		end
 
-	elseif state == 4 then
+	elseif state == "gameplay" then
 	-- Gameplay screen
 		if key == "s" and timer > 146 and transitiontimer == 0 then
 		-- Go to pause screen
-			state = 5
+			state = "pause"
 
 			backuptimer = timer
 			timer = 0
@@ -429,17 +434,17 @@ function love.keyreleased(key)
 			end
 		end
 
-	elseif state == 5 then
+	elseif state == "pause" then
 	-- Pause screen
 		if key == "s" then
 		-- Go back to gameplay
-			state = 4
+			state = "gameplay"
 
 			timer = backuptimer -- Backup gameplay timer
 			transitiontimer = 0
 		end
 
-	elseif state == 7 then
+	elseif state == "gameover" then
 	-- Game over screen
 		if key == "a" and continues > 0 then
 		-- Select option
@@ -458,19 +463,19 @@ function love.keyreleased(key)
 
 				mus_charsel:play()
 
-				state = 2
+				state = "charsel"
 			else
 				love.graphics.setBackgroundColor(0.36, 0.58, 0.99)
 
 				cursor = 0
 				timer = 0
-				state = 0
+				state = "title"
 			end
 		end
 
-	elseif state == 98 then
+	elseif state == "editor" then
 	-- Level editor screen
-		if editoroption == 0 then
+		if editoroption == "select" then
 		-- Level select
 			-- Set world according to world table
 			if key >= "1" and key <= "3" then                  world = 1
@@ -484,14 +489,14 @@ function love.keyreleased(key)
 
 			-- Go to proper editor
 			if key >= "1" and key <= "9" then
-				editoroption = 1
+				editoroption = "edit"
 				level = ((key - 1) % 3) + 1
 				area = 0
 
 				loadLevel()
 
 			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
-				editoroption = 1
+				editoroption = "edit"
 				level = ((string.byte(key) - 97) % 3) + 1
 				area = 0
 
@@ -499,13 +504,13 @@ function love.keyreleased(key)
 
 			elseif key == "q" then
 			-- Quit menu to debug screen
-				state = 99
+				state = "debug"
 				timer = 0
 
 				love.graphics.setBackgroundColor(0.36, 0.58, 0.99)
 			end
 
-		elseif editoroption == 1 then
+		elseif editoroption == "edit" then
 		-- Edit map option
 			if key == "b" then
 			-- Change background color
@@ -669,7 +674,7 @@ function love.keyreleased(key)
 			-- Play from this level (doesn't return to level editor)
 				saveLevel()
 
-				state = 2
+				state = "gameplay"
 				area = 0
 				frames = 0
 
@@ -692,7 +697,7 @@ function love.keyreleased(key)
 			end
 		end
 
-	elseif state == 99 then
+	elseif state == "debug" then
 	-- Debug screen
 		if key == "f" then
 		-- Show FPS counter or not
@@ -720,11 +725,11 @@ function love.keyreleased(key)
 
 		elseif key == "l" then
 		-- Go to level editor
-			state = 98
+			state = "editor"
 			timer = 0
 
 			debugframes = false
-			editoroption = 0
+			editoroption = "select"
 
 			love.graphics.setBackgroundColor(0, 0, 0)
 		end
@@ -732,19 +737,19 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-	if state == 0 or state == 1 or state == 99 then
+	if state == "title" or state == "intro" or state == "debug" then
 	-- Draw border on title screen and intro
 		love.graphics.draw(img_titleborder, 0, 0)
 	end
 
-	if state == 0 then
+	if state == "title" then
 	-- Draw title screen stuff
 		love.graphics.draw(img_titlelogo, 48, 48)
 
 		drawText("!\"", 193, 72)
 		drawText("#1988 NINTENDO", 72, 184)
 
-	elseif state == 1 then
+	elseif state == "intro" then
 	-- Draw intro story stuff
 		if timer > 34 then
 			drawText("STORY", 112, 40)
@@ -779,7 +784,7 @@ function love.draw()
 			end
 		end
 
-	elseif state == 2 then
+	elseif state == "charsel" then
 	-- Draw character select screen stuff
 		love.graphics.draw(img_charselborder, 0, 0)
 
@@ -835,12 +840,12 @@ function love.draw()
 		drawText("EXTRA LIFE", 64, 208)
 		drawText(remainingLifes(), 176, 208)
 
-	elseif state == 3 then
+	elseif state == "levelintro" then
 		drawLevelbook() -- Draw levelbook
 
 		drawWorldImage() -- Draw world image
 
-	elseif state == 4 then
+	elseif state == "gameplay" then
 	-- Draw gameplay stuff
 
 		if timer > 144 then drawLevelTiles() -- Draw level tiles
@@ -866,7 +871,7 @@ function love.draw()
 			--TODO: Draw entities
 		end
 
-	elseif state == 5 then
+	elseif state == "pause" then
 	-- Draw pause screen stuff
 		drawLevelbook() -- Draw levelbook
 
@@ -882,7 +887,7 @@ function love.draw()
 
 		transitiontimer = transitiontimer + 1
 
-	elseif state == 6 then
+	elseif state == "dying" then
 	-- Draw dying screen stuff
 
 		drawLevelbook() -- Draw levelbook
@@ -893,13 +898,13 @@ function love.draw()
 
 		if timer >= 120 then
 		-- Go to gameplay once again!
-			state = 4
+			state = "gameplay"
 			timer = 0
 
 			playAreaMusic()
 		end
 
-	elseif state == 7 then
+	elseif state == "gameover" then
 	-- Draw game over screen stuff
 		if timer < 192 then
 			drawText("GAME  OVER", 88, 112)
@@ -914,9 +919,9 @@ function love.draw()
 			love.graphics.draw(img_indicator, 81, 89 + cursor * 16)
 		end
 
-	elseif state == 98 then
+	elseif state == "editor" then
 	-- Draw level editor stuff
-		if editoroption == 0 then
+		if editoroption == "select" then
 		-- Draw level editor menu
 			drawText("OPENSMB2 "..getVersion(), 32, 32)
 			drawText("LEVEL EDITOR", 32, 48)
@@ -933,7 +938,7 @@ function love.draw()
 
 			drawText(" J - 7-1  K - 7-2  Q - QUIT", 32, 224)
 
-		elseif editoroption == 1 then
+		elseif editoroption == "edit" then
 		-- Draw editor
 			-- Draw world, level and area indicators
 			drawText(tostring(world).."-"..tostring(level), 64, 2)
@@ -1001,7 +1006,7 @@ function love.draw()
 			--TODO: Add more!
 		end
 
-	elseif state == 99 then
+	elseif state == "debug" then
 	-- Draw debug screen stuff
 		drawText("OPENSMB2 DEBUG MODE", 48, 56)
 		drawText("F-TOGGLE FPS COUNTER", 48, 80)
@@ -1319,7 +1324,7 @@ function placeTile(tileid)
 end
 
 function quitEditor()
-	editoroption = 0
+	editoroption = "select"
 
 	edittile = 1
 
@@ -1496,7 +1501,7 @@ function drawCharacter()
 	end
 
 	-- Calculate desired character sprite
-	if charstate == 1 then
+	if charstate == "stationary" then
 	-- Calculate sprite if character is walking
 		if herospeed > 0 then
 			if heroanimtimer >= 10 then
@@ -1515,7 +1520,7 @@ function drawCharacter()
 
 			heroanimtimer = 0
 		end
-	elseif character == 1 and charstate == 0 then
+	elseif character == "luigi" and charstate == "falling" then
 	-- Calculate sprite if character is Luigi and falling
 		if heroanimtimer >= 6 then
 			heroanimtimer = 0
@@ -1550,22 +1555,22 @@ function drawCharacter()
 	end
 
 	-- Draw character sprite
-	if character == 0 then
+	if character == "mario" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_mario:getWidth(), img_char_mario:getHeight())
 
 		love.graphics.draw(img_char_mario, sprite, herox, posy, 0, heroside, 1, offset)
 
-	elseif character == 1 then
+	elseif character == "luigi" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
 
 		love.graphics.draw(img_char_luigi, sprite, herox, posy, 0, heroside, 1, offset)
 
-	elseif character == 2 then
+	elseif character == "toad" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_luigi:getWidth(), img_char_luigi:getHeight())
 
 		love.graphics.draw(img_char_toad, sprite, herox, posy, 0, heroside, 1, offset)
 
-	elseif character == 3 then
+	elseif character == "peach" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_char_peach:getWidth(), img_char_peach:getHeight())
 
 		love.graphics.draw(img_char_peach, sprite, herox, posy, 0, heroside, 1, offset)
@@ -1573,16 +1578,16 @@ function drawCharacter()
 
 	-- Draw character sprite when it's horizontally wraping
 	if herox > 256 - 16 then
-		if character == 0 then
+		if character == "mario" then
 			love.graphics.draw(img_char_mario, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 
-		elseif character == 1 then
+		elseif character == "luigi" then
 			love.graphics.draw(img_char_luigi, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 
-		elseif character == 2 then
+		elseif character == "toad" then
 			love.graphics.draw(img_char_toad, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 
-		elseif character == 3 then
+		elseif character == "peach" then
 			love.graphics.draw(img_char_peach, sprite, herox - areawidth[area], posy, 0, heroside, 1, offset)
 		end
 	end
