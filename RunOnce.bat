@@ -1,0 +1,6 @@
+@echo off
+
+echo Copying levels into user data directory...
+xcopy _move_to_saves_directory %appdata%\LOVE\openSMB2\ /E /Q /Y
+echo Installation complete! Press any key to continue...
+pause>NUL
