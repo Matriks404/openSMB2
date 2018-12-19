@@ -2,7 +2,7 @@
 
 1. Install LÖVE Engine on your computer.
 
-2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer (Alternatively use `git clone git://github.com/Matriks404/openSMB2.git` command in the desired directory, if you have git installed).
+2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer (Alternatively execute `git clone git://github.com/Matriks404/openSMB2.git` command in the desired directory, if you have git installed).
 
 3. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click `Download` button) and extract them in `resources` directory.
 
@@ -11,12 +11,12 @@
 
 4. Copy levels (in `_move_to_saves_directory`) to game user data directory.
 	* On Windows: Run `RunOnce.bat`.
-	* On Mac: Copy manually to `/Users/<username>/Library/Application Support/LOVE/openSMB2`
+	* On macOS: Copy manually to `/Users/<username>/Library/Application Support/LOVE/openSMB2`
 	* On Linux: Execute `chmod +x RunOnce.Linux.sh && ./RunOnce.Linux.sh` in the console.
 
 5. Run the game!
 	* On Windows: Drag game folder onto LÖVE program shortcut.
-	* on Mac and Linux: Execute `love .` in the console (you might need to change directory to game path first).
+	* On macOS and Linux: Execute `love .` in the console (you might need to change directory to game path first).
 
 # Gameplay:
 
