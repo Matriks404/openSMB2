@@ -12,7 +12,7 @@
 4. Copy levels (in `_move_to_saves_directory`) to game user data directory.
 	* On Windows: Run `RunOnce.bat`.
 	* On Mac: Copy manually to `/Users/<username>/Library/Application Support/LOVE/openSMB2`
-	* On Linux: Execute `chmod +x RunOnce.Linux.sh && RunOnce.Linux.sh` in the console.
+	* On Linux: Execute `chmod +x RunOnce.Linux.sh && ./RunOnce.Linux.sh` in the console.
 
 5. Run the game!
 	* On Windows: Drag game folder onto LÖVE program shortcut.
