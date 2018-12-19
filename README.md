@@ -2,7 +2,7 @@
 
 1. Install LÖVE Engine on your computer.
 
-2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer.
+2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer (Alternatively use `git clone git://github.com/Matriks404/openSMB2.git` command in the desired directory, if you have git installed).
 
 3. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click `Download` button) and extract them in `resources` directory.
 
