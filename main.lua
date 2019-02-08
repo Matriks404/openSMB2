@@ -121,7 +121,7 @@ function love.update()
 
 		if timer > 146 and transition_timer == 0 then
 
-			if debug.debug_mode == true and love.keyboard.isDown("a") then
+			if debug.mode == true and love.keyboard.isDown("a") then
 			-- Ascending
 				hero_pos_y = hero_pos_y - 3.25
 			end
@@ -272,7 +272,7 @@ function love.keyreleased(key)
 			music_title:stop()
 			transitionClear()
 
-			if debug.debug_mute == false then
+			if debug.mute == false then
 				music_char_select:play()
 			end
 
@@ -290,19 +290,19 @@ function love.keyreleased(key)
 
 		elseif love.keyboard.isDown("lctrl") and key == "d" then
 		-- Go to debug screen or title screen (depending on origin screen)
-			if debug.debug_mode == false then
+			if debug.mode == false then
 				game_state = "debug"
 				timer = 0
 
-				debug.debug_mode = true
+				debug.mode = true
 
 				music_title:stop()
 			else
 				game_state = "title"
 				timer = 0
 
-				debug.debug_mode = false
-				debug.debug_mute = false
+				debug.mode = false
+				debug.mute = false
 			end
 		end
 	end
@@ -346,7 +346,7 @@ function love.keyreleased(key)
 			timer = 0
 		end
 
-		if debug.debug_mode == true then
+		if debug.mode == true then
 			if key == "d" then
 			-- Die!
 				dying_timer = 84
@@ -599,7 +599,7 @@ function love.keyreleased(key)
 				area = 0
 				frames = 0
 
-				if debug.debug_mute == false then
+				if debug.mute == false then
 					stopAreaMusic()
 					music_char_select:play()
 				end
@@ -622,26 +622,26 @@ function love.keyreleased(key)
 	-- Debug screen
 		if key == "f" then
 		-- Show FPS counter or not
-			if debug.debug_fps == false then
-				debug.debug_fps = true
+			if debug.fps == false then
+				debug.fps = true
 			else
-				debug.debug_fps = false
+				debug.fps = false
 			end
 
 		elseif key == "r" then
 		-- Show frames counter or not
-			if debug.debug_frames == false then
-				debug.debug_frames = true
+			if debug.frames == false then
+				debug.frames = true
 			else
-				debug.debug_frames = false
+				debug.frames = false
 			end
 
 		-- Mute music or not
 		elseif key == "m" then
-			if debug.debug_mute == false then
-				debug.debug_mute = true
+			if debug.mute == false then
+				debug.mute = true
 			else
-				debug.debug_mute = false
+				debug.mute = false
 			end
 
 		elseif key == "l" then
@@ -649,7 +649,7 @@ function love.keyreleased(key)
 			game_state = "editor"
 			timer = 0
 
-			debug.debug_frames = false
+			debug.frames = false
 			editor.option = "select"
 
 			utils.setBackgroundColor("black")
@@ -938,28 +938,28 @@ function love.draw()
 
 		drawText("ENABLED FLAGS", 64, 160)
 
-		if debug.debug_fps == true then
+		if debug.fps == true then
 			drawText("FPS", 64, 176)
 		end
 
-		if debug.debug_frames == true then
+		if debug.frames == true then
 			drawText("FRAMES", 104, 176)
 		end
 
-		if debug.debug_mute == true then
+		if debug.mute == true then
 			drawText("MUTED", 168, 176)
 		end
 	end
 
 	-- Draw debug stuff
-	if debug.debug_mode == true then
+	if debug.mode == true then
 		-- Draw FPS
-		if debug.debug_fps == true then
+		if debug.fps == true then
 			drawText(tostring(love.timer.getFPS()).." FPS", 2, 2)
 		end
 
 		-- Draw lasted frames
-		if debug.debug_frames == true then
+		if debug.frames == true then
 			timerx = 0
 			n = timer
 
@@ -1070,7 +1070,7 @@ function saveArea()
 end
 
 function playAreaMusic()
-	if debug.debug_mute == false then
+	if debug.mute == false then
 		if area_music[area] == 0 then
 			music_overworld:play()
 
