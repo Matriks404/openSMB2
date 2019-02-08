@@ -1,6 +1,6 @@
 debug = require "source/debug"
 editor = require "source/editor"
-init = require "source/init"
+resources = require "source/resources"
 state = require "source/state"
 story = require "source/story"
 utils = require "source/utils"
@@ -18,7 +18,7 @@ function love.load()
 	love.window.setTitle(GAME_FULL_TITLE)
 	love.filesystem.setIdentity(GAME_TITLE)
 
-	init.loadResources()
+	resources.init()
 
 	state.init()
 	debug.reset()
@@ -121,7 +121,7 @@ function love.update()
 
 		if timer > 146 and transition_timer == 0 then
 
-			if debug.mode == true and love.keyboard.isDown("a") then
+			if debug.enabled == true and love.keyboard.isDown("a") then
 			-- Ascending
 				hero_pos_y = hero_pos_y - 3.25
 			end
@@ -290,18 +290,18 @@ function love.keyreleased(key)
 
 		elseif love.keyboard.isDown("lctrl") and key == "d" then
 		-- Go to debug screen or title screen (depending on origin screen)
-			if debug.mode == false then
+			if debug.enabled == false then
 				game_state = "debug"
 				timer = 0
 
-				debug.mode = true
+				debug.enabled = true
 
 				music_title:stop()
 			else
 				game_state = "title"
 				timer = 0
 
-				debug.mode = false
+				debug.enabled = false
 				debug.mute = false
 			end
 		end
@@ -346,7 +346,7 @@ function love.keyreleased(key)
 			timer = 0
 		end
 
-		if debug.mode == true then
+		if debug.enabled == true then
 			if key == "d" then
 			-- Die!
 				dying_timer = 84
@@ -952,7 +952,7 @@ function love.draw()
 	end
 
 	-- Draw debug stuff
-	if debug.mode == true then
+	if debug.enabled == true then
 		-- Draw FPS
 		if debug.fps == true then
 			drawText(tostring(love.timer.getFPS()).." FPS", 2, 2)

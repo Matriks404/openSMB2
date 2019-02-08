@@ -1,6 +1,6 @@
-local init = {}
+local resources = {}
 
-function init.loadResources()
+function resources.init()
 	loadFonts()
 	loadGraphics()
 	loadMusic()
@@ -102,4 +102,4 @@ function loadSoundEffects()
 	sfx_game_over = love.audio.newSource(sfx_dir.."gameover.ogg", "static")
 end
 
-return init
+return resources
