@@ -34,6 +34,7 @@ function world.loadLevel()
 	user_level_dir = world.getLevelDirectory("userlevels")
 
 	if world.doLoadFromLevelDirectory(user_level_dir) then
+
 		world.level_directory = user_level_dir
 	elseif world.doLoadFromLevelDirectory(base_level_dir) then
 		world.level_directory = base_level_dir
@@ -52,11 +53,9 @@ function world.loadLevel()
 
 	for i=0, world.area_count - 1 do
 	-- TODO: ???
-	-- Fill area width, height and background arrays
-		--areafile = love.filesystem.read(world.level_dir..tostring(area))
-
 		area_settings = level_settings[4 + i]
 
+		-- Fill area width, height, background and music arrays
 		world.area_widths[i] = area_settings[1]
 		world.area_heights[i] = area_settings[2]
 		world.area_backgrounds[i] = area_settings[3]
@@ -68,8 +67,6 @@ end
 
 function world.loadArea()
 	area_data = love.filesystem.read(world.level_directory..tostring(world.area))
-	--area_file = assert(io.open(love.filesystem.getSaveDirectory().."/"..world.level_directory..tostring(world.area)), "rb")
-	--area_data = area_file:read("*all")
 
 	-- Check level background and set it
 	if world.area_backgrounds[world.area] == 0 then
@@ -78,7 +75,7 @@ function world.loadArea()
 		graphics.setBackgroundColor("light_blue")
 	end
 
-	world.playAreaMusic()
+	music.play()
 
 	-- Fill tile data
 	for i=0, (world.area_heights[world.area] / 16) - 1 do
@@ -97,7 +94,7 @@ function world.saveLevel()
 	level_directory = world.getLevelDirectory("userlevels")
 
 	if not love.filesystem.getInfo(level_directory) then
-		love.filesystem.createDirectory(world.level_dir)
+		love.filesystem.createDirectory(level_directory)
 	end
 
 	data = { world.area_count, world.start_x, world.start_y}
@@ -107,7 +104,8 @@ function world.saveLevel()
 	end
 
 	data = TSerial.pack(data, false, true)
-	love.filesystem.write(world.level_directory.."settings.lua", data)
+
+	love.filesystem.write(level_directory.."settings.lua", data)
 
 	world.saveArea()
 
@@ -119,26 +117,6 @@ function world.saveArea()
 
 	area_file = level_directory..tostring(world.area)
 
-	--TODO: Remove
-	--[[
-	areadata = ""
-
-	for i=0, (world.area_heights[world.area] / 16) - 1 do
-	-- Fill file
-		for j=0, (world.area_widths[world.area] / 16) - 1 do
-			areatiles_str = utils.toPaddedString(world.area_tiles[i][j], 2)
-
-			areadata = areadata..areatiles_str.."."
-		end
-
-		areadata = areadata.."\n"
-	end
-
-	love.filesystem.write(area_file, areadata)
-	--]]
-
-
-
 	area_data = ""
 
 	for i = 0, (world.area_heights[world.area] / 16) - 1 do
@@ -148,33 +126,6 @@ function world.saveArea()
 	end
 
 	love.filesystem.write(area_file, area_data)
-end
-
-function world.playAreaMusic()
-	if debug.mute == false then
-		if world.area_music[world.area] == 0 then
-			music_overworld:play()
-
-			music_underworld:stop()
-			music_boss:stop()
-		elseif world.area_music[world.area] == 1 then
-			music_underworld:play()
-
-			music_overworld:stop()
-			music_boss:stop()
-		else
-			music_boss:play()
-
-			music_overworld:stop()
-			music_underworld:stop()
-		end
-	end
-end
-
-function world.stopAreaMusic()
-	music_overworld:stop()
-	music_underworld:stop()
-	music_boss:stop()
 end
 
 function world.getLevelDirectory(directory)
@@ -188,7 +139,7 @@ function world.doLoadFromLevelDirectory(directory)
 		return false
 	end
 
-	if not love.filesystem.getInfo(directory.."settings.cfg") then
+	if not love.filesystem.getInfo(directory.."settings.lua") then
 		return false
 	end
 

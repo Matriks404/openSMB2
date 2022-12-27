@@ -65,7 +65,7 @@ function editor.quit()
 
 	graphics.setBackgroundColor("black")
 
-	world.stopAreaMusic()
+	music.stop()
 end
 
 return editor

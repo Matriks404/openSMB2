@@ -1,4 +1,4 @@
-local debug = {}
+debug = {}
 
 function debug.reset()
 	-- Debugging variables

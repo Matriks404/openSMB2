@@ -4,10 +4,9 @@ character = require "source/character"
 debug = require "source/debug"
 editor = require "source/editor"
 filesystem = require "source/filesystem"
-graphics = require "source/graphics"
-resources = require "source/resources"
+game = require "source/game"
+resources = require "source/resources/resources"
 state = require "source/state"
-story = require "source/story"
 world = require "source/world"
 utils = require "source/utils"
 
@@ -25,7 +24,7 @@ function love.load()
 
 	filesystem.setup()
 
-	resources.init()
+	resources.load()
 	state.init()
 
 	debug.reset()
@@ -222,7 +221,7 @@ function love.update()
 			-- Deplate energy and play death sound
 				character.energy = 0
 
-				world.stopAreaMusic()
+				music.stop()
 				sfx_death:play()
 			end
 
@@ -449,11 +448,11 @@ function love.keyreleased(key)
 				if world.area_music[world.area] < 2 then
 					world.area_music[world.area] = world.area_music[world.area] + 1
 
-					world.playAreaMusic()
+					music.play()
 				else
 					world.area_music[world.area] = 0
 
-					world.playAreaMusic()
+					music.play()
 				end
 
 			-- Shrink or scratch width/height
@@ -592,12 +591,12 @@ function love.keyreleased(key)
 			-- Play from this level (doesn't return to level editor)
 				world.saveLevel()
 
-				state.name = "gameplay"
+				state.name = "character_select"
 				world.area = 0
 				frames = 0
 
 				if debug.mute == false then
-					world.stopAreaMusic()
+					music.stop()
 					music_char_select:play()
 				end
 
@@ -755,12 +754,12 @@ function love.draw()
 		end
 
 		graphics.drawText("EXTRA LIFE", 64, 208)
-		graphics.drawText(utils.getRemainingLives(character.lives), 176, 208)
+		graphics.drawText(game.getRemainingLives(character.lives), 176, 208)
 
 	elseif state.name == "level_intro" then
-		drawLevelbook() -- Draw levelbook
+		graphics.drawLevelbook() -- Draw levelbook
 
-		drawWorldImage() -- Draw world image
+		graphics.drawWorldImage() -- Draw world image
 
 	elseif state.name == "gameplay" then
 	-- Draw gameplay stuff
@@ -790,7 +789,7 @@ function love.draw()
 
 	elseif state.name == "pause" then
 	-- Draw pause screen stuff
-		drawLevelbook() -- Draw levelbook
+		graphics.drawLevelbook() -- Draw levelbook
 
 		-- Draw flickering pause text
 		if state.transition_timer == 30 then
@@ -800,25 +799,25 @@ function love.draw()
 			graphics.drawText("PAUSED", 105, 120, "brown")
 		end
 
-		graphics.drawText("EXTRA LIFE*** "..utils.getRemainingLives(character.lives), 65, 176, "brown") -- Draw extra lifes text
+		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 176, "brown") -- Draw extra lifes text
 
 		state.transition_timer = state.transition_timer + 1
 
 	elseif state.name == "death" then
 	-- Draw dying screen stuff
 
-		drawLevelbook() -- Draw levelbook
+		graphics.drawLevelbook() -- Draw levelbook
 
-		graphics.drawText("EXTRA LIFE*** "..utils.getRemainingLives(character.lives), 65, 80, "brown") -- Draw remaining lifes
+		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 80, "brown") -- Draw remaining lifes
 
-		drawWorldImage() -- Draw world image
+		graphics.drawWorldImage() -- Draw world image
 
 		if state.timer >= 120 then
 		-- Go to gameplay once again!
 			state.name = "gameplay"
 			state.timer = 0
 
-			world.playAreaMusic()
+			music.play()
 		end
 
 	elseif state.name == "game_over" then
@@ -966,34 +965,5 @@ function love.draw()
 
 			graphics.drawText(tostring(state.timer), 256 - (timerx * 8), 2)
 		end
-	end
-end
-
-function drawLevelbook()
-	love.graphics.draw(img_levelbook, 25, 32)
-
-	graphics.drawText("WORLD  "..tostring(world.number).."-"..tostring(world.level), 89, 48, "brown")
-
-		if world.number < 7 then
-			world.level_count = 3
-		else
-			world.level_count = 2
-		end
-
-		for i=0, world.level_count - 1 do
-		-- Draw level indicators
-			if world.level == i + 1 then
-				love.graphics.draw(img_lb_current, 113 + (i * 16), 64)
-			else
-				love.graphics.draw(img_lb_other, 113 + (i * 16), 64)
-			end
-		end
-end
-
-function drawWorldImage()
-	if world.number == 1 or world.number == 3 or world.number == 5 then love.graphics.draw(img_lb_world1, 65, 112)
-	elseif world.number == 2 or world.number == 6 then           love.graphics.draw(img_lb_world2, 65, 112)
-	elseif world.number == 4 then                         love.graphics.draw(img_lb_world4, 65, 112)
-	elseif world.number == 7 then                         love.graphics.draw(img_lb_world7, 65, 112)
 	end
 end
