@@ -1,8 +1,14 @@
+TSerial = require "source/external/TSerial"
+
+character = require "source/character"
 debug = require "source/debug"
 editor = require "source/editor"
+filesystem = require "source/filesystem"
+graphics = require "source/graphics"
 resources = require "source/resources"
 state = require "source/state"
 story = require "source/story"
+world = require "source/world"
 utils = require "source/utils"
 
 function love.load()
@@ -14,39 +20,40 @@ function love.load()
 	GAME_HEIGHT = 240
 
 	-- Setting up window
-	love.window.setMode(GAME_WIDTH, GAME_HEIGHT, {vsync = true})
+	love.window.setMode(GAME_WIDTH, GAME_HEIGHT, {vsync = true, resizable = true})
 	love.window.setTitle(GAME_FULL_TITLE)
-	love.filesystem.setIdentity(GAME_TITLE)
+
+	filesystem.setup()
 
 	resources.init()
-
 	state.init()
+
 	debug.reset()
 end
 
 function love.update()
-	timer = timer + 1
+	state.timer = state.timer + 1
 
-	if game_state == "title" then
+	if state.name == "title" then
 	-- Title screen stuff
 		music_title:play()
 
 		-- After some time go to intro story
-		if timer == 500 then
-			game_state = "intro"
-			timer = 0
+		if state.timer == 500 then
+			state.name = "intro"
+			state.timer = 0
 		end
 
-	elseif game_state == "intro" then
+	elseif state.name == "intro" then
 	-- Intro story stuff
-		if transition == true then
-			transition_timer = transition_timer + 1
+		if state.transition == true then
+			state.transition_timer = state.transition_timer + 1
 
 			-- After some time after showing 2nd story page go to title screen again
-			if transition_timer == 442 then
-				game_state = "title"
-				timer = 0
-				text_timer = 0
+			if state.transition_timer == 442 then
+				state.name = "title"
+				state.timer = 0
+				state.text_timer = 0
 
 				story.lines = 0
 				story.page = 0
@@ -55,199 +62,199 @@ function love.update()
 			end
 		end
 
-	elseif game_state == "character_select" then
+	elseif state.name == "character_select" then
 	-- Character select stuff
-		if transition == true then
-			transition_timer = transition_timer + 1
+		if state.transition == true then
+			state.transition_timer = state.transition_timer + 1
 
 			-- After some time after chosing character go to levelbook screen
-			if transition_timer == 136 then
-				game_state = "level_intro"
-				timer = 0
+			if state.transition_timer == 136 then
+				state.name = "level_intro"
+				state.timer = 0
 
 				music_char_select:stop()
-				transitionClear()
+				state.transitionClear()
 
 				-- Chosen character is one that was selected previously by cursor
-				if cursor == 0 then     character = "mario"
-				elseif cursor == 1 then character = "luigi"
-				elseif cursor == 2 then character = "toad"
-				elseif cursor == 3 then character = "peach"
+				if state.cursor == 0 then     character.current = "mario"
+				elseif state.cursor == 1 then character.current = "luigi"
+				elseif state.cursor == 2 then character.current = "toad"
+				elseif state.cursor == 3 then character.current = "peach"
 				end
 			end
 		end
 
-	elseif game_state == "level_intro" then
+	elseif state.name == "level_intro" then
 	-- Levelbook stuff
-		if timer == 94 then
-			game_state = "gameplay"
-			timer = 0
+		if state.timer == 94 then
+			state.name = "gameplay"
+			state.timer = 0
 
-			loadLevel()
+			world.loadLevel()
 
-			screen_y = 0 --TEMPORARY
-			hero_pos_x = hero_start_x
-			hero_pos_y = hero_start_y
+			state.screen_y = 0 --TEMPORARY
+			character.pos_x = world.start_x
+			character.pos_y = world.start_y
 
-			hero_animation_timer = 0
+			state.char_anim_timer = 0
 		end
 
-	elseif game_state == "gameplay" then
+	elseif state.name == "gameplay" then
 	-- Gameplay stuff
-		if screen_y == 0 and hero_pos_y > 192 then
+		if state.screen_y == 0 and character.pos_y > 192 then
 		-- When on first screen, switching vertical screen downwards
 			screendir = 1
-			screenTrans()
+			state.verticalScreenTransition()
 
-		elseif screen_y > 0 then
+		elseif state.screen_y > 0 then
 		-- When on subsequent screen
-			if hero_pos_y > 192 + screen_y * 144 then
+			if character.pos_y > 192 + state.screen_y * 144 then
 			-- Switching vertical screen downwards
-				if hero_pos_y <= area_heights[area] - 48 then
+				if character.pos_y <= world.area_heights[world.area] - 48 then
 				-- If not above lowest screen border switch screen
 					screendir = 1
-					screenTrans()
-				elseif hero_pos_y >= area_heights[area] - 1 then
+					state.verticalScreenTransition()
+				elseif character.pos_y >= world.area_heights[world.area] - 1 then
 				-- Die!
-					dying_timer = dying_timer + 1
+					character.dying_timer = character.dying_timer + 1
 				end
 
-			elseif hero_pos_y < 16 + screen_y * 144 then
+			elseif character.pos_y < 16 + state.screen_y * 144 then
 			-- Switching vertical screen upwords
 				screendir = -1
-				screenTrans()
+				state.verticalScreenTransition()
 			end
 		end
 
-		if timer > 146 and transition_timer == 0 then
+		if state.timer > 146 and state.transition_timer == 0 then
 
 			if debug.enabled == true and love.keyboard.isDown("a") then
 			-- Ascending
-				hero_pos_y = hero_pos_y - 3.25
+				character.pos_y = character.pos_y - 3.25
 			end
 
 			-- Left/Right movement
 			if love.keyboard.isDown("left") then
-				hero_side = -1
+				character.side = -1
 
-				if hero_speed == 0 then
-					hero_mov_dir = -1
+				if character.speed == 0 then
+					character.movement_dir = -1
 				end
 
-				if hero_mov_dir == 1 then
-					hero_speed = hero_speed - 4
-					hero_accel = hero_accel - 1
+				if character.movement_dir == 1 then
+					character.speed = character.speed - 4
+					character.accel = character.accel - 1
 				else
-					if hero_accel < 6 then
-						hero_accel = hero_accel + 1
+					if character.accel < 6 then
+						character.accel = character.accel + 1
 					end
 
 					if love.keyboard.isDown("z") then
-						hero_speed = 6 * hero_accel
+						character.speed = 6 * character.accel
 					else
-						hero_speed = 4 * hero_accel
+						character.speed = 4 * character.accel
 					end
 				end
 
 			elseif love.keyboard.isDown("right") then
-				hero_side = 1
+				character.side = 1
 
-				if hero_speed == 0 then
-					hero_mov_dir = 1
+				if character.speed == 0 then
+					character.movement_dir = 1
 				end
 
-				if hero_mov_dir == -1 then
-					hero_speed = hero_speed - 4
-					hero_accel = hero_accel - 1
+				if character.movement_dir == -1 then
+					character.speed = character.speed - 4
+					character.accel = character.accel - 1
 				else
-					if hero_accel < 6 then
-						hero_accel = hero_accel + 1
+					if character.accel < 6 then
+						character.accel = character.accel + 1
 					end
 
 					if love.keyboard.isDown("z") then
-						hero_speed = 6 * hero_accel
+						character.speed = 6 * character.accel
 					else
-						hero_speed = 4 * hero_accel
+						character.speed = 4 * character.accel
 					end
 				end
 
-			elseif hero_speed > 0 then
+			elseif character.speed > 0 then
 			-- Reduce speed after time
-				hero_speed = hero_speed - 4
-				hero_accel = hero_accel - 1
+				character.speed = character.speed - 4
+				character.accel = character.accel - 1
 			end
 
-			if hero_accel < 0 then
+			if character.accel < 0 then
 			-- Reseting hero acceleration to 0
-				hero_accel = 0
+				character.accel = 0
 			end
 
-			if hero_speed > 0 then
+			if character.speed > 0 then
 				-- Calculating character position
-				hero_subpos_x = hero_subpos_x + hero_speed * hero_mov_dir
+				character.subpos_x = character.subpos_x + character.speed * character.movement_dir
 
-				while hero_subpos_x >= 16 or hero_subpos_x <= -16 do
-					hero_subpos_x = hero_subpos_x - 16 * hero_mov_dir
-					hero_pos_x = hero_pos_x + hero_mov_dir
+				while character.subpos_x >= 16 or character.subpos_x <= -16 do
+					character.subpos_x = character.subpos_x - 16 * character.movement_dir
+					character.pos_x = character.pos_x + character.movement_dir
 				end
 
 				-- Horizontal character position wraping
-				if hero_pos_x > area_widths[area] then
-					hero_pos_x = 0 + hero_pos_x % area_widths[area]
+				if character.pos_x > world.area_widths[world.area] then
+					character.pos_x = 0 + character.pos_x % world.area_widths[world.area]
 
-				elseif hero_pos_x < 0 then
-					hero_pos_x = area_widths[area] + hero_pos_x
+				elseif character.pos_x < 0 then
+					character.pos_x = world.area_widths[world.area] + character.pos_x
 				end
 
-			elseif hero_speed < 0 then
+			elseif character.speed < 0 then
 			-- Reset hero speed to 0
-				hero_speed = 0
+				character.speed = 0
 			end
 
 			-- Character falling (slower for Luigi) --TEMPORARY
-			if character == "luigi" then
-				hero_pos_y = hero_pos_y + 2.5
+			if character.current == "luigi" then
+				character.pos_y = character.pos_y + 2.5
 			else
-				hero_pos_y = hero_pos_y + 3
+				character.pos_y = character.pos_y + 3
 			end
 
-			if dying_timer == 6 then
+			if character.dying_timer == 6 then
 			-- Deplate energy and play death sound
-				energy = 0
+				character.energy = 0
 
-				stopAreaMusic()
+				world.stopAreaMusic()
 				sfx_death:play()
 			end
 
-			if dying_timer == 84 then
+			if character.dying_timer == 84 then
 			-- Die!
-				timer = 0
-				dying_timer = 0
+				state.timer = 0
+				character.dying_timer = 0
 
-				lifes = lifes - 1 -- Decrement a life
+				character.lives = character.lives - 1 -- Decrement a life
 
-				if lifes > 0 then
+				if character.lives > 0 then
 				-- Going to death screen and playing once more
-					energy = 2 -- Reset energy
+					character.energy = 2 -- Reset energy
 
 					-- Reset character position and side
-					screen_y = 0 --TEMPORARY
-					hero_pos_x = hero_start_x
-					hero_pos_y = hero_start_y
-					hero_side = 1
+					state.screen_y = 0 --TEMPORARY
+					character.pos_x = world.start_x
+					character.pos_y = world.start_y
+					character.side = 1
 
-					game_state = "death"
+					state.name = "death"
 				else
 				-- No more lifes, go to game over screen
 					sfx_game_over:play()
 
-					if continues > 0 then
-						cursor = 0
+					if character.continues > 0 then
+						state.cursor = 0
 					else
-						cursor = 1
+						state.cursor = 1
 					end
 
-					game_state = "game_over"
+					state.name = "game_over"
 				end
 			end
 
@@ -263,43 +270,35 @@ function love.keyreleased(key)
 	end
 
 	-- Title screen, intro story or debug screen
-	if game_state == "title" or game_state == "intro" or game_state == "debug" then
+	if state.name == "title" or state.name == "intro" or state.name == "debug" then
 		if key == "s" then
 		-- Go to character screen
-			game_state = "character_select"
-			timer = 0
+			state.name = "character_select"
+			state.timer = 0
 
 			music_title:stop()
-			transitionClear()
+			state.transitionClear()
 
 			if debug.mute == false then
 				music_char_select:play()
 			end
 
-			-- Set up gameplay variables just after leaving title screen, as player will return to character select screen every completion of level.
-			world = 1
-			level = 1
+			state.resetGame()
 
-			continues = 2
-			lifes = 3
-			energy = 2
-			energy_bars = 2
-			hero_state = "falling"
-
-			utils.setBackgroundColor("black")
+			graphics.setBackgroundColor("black")
 
 		elseif love.keyboard.isDown("lctrl") and key == "d" then
 		-- Go to debug screen or title screen (depending on origin screen)
 			if debug.enabled == false then
-				game_state = "debug"
-				timer = 0
+				state.name = "debug"
+				state.timer = 0
 
 				debug.enabled = true
 
 				music_title:stop()
 			else
-				game_state = "title"
-				timer = 0
+				state.name = "title"
+				state.timer = 0
 
 				debug.enabled = false
 				debug.mute = false
@@ -307,214 +306,214 @@ function love.keyreleased(key)
 		end
 	end
 
-	if game_state == "character_select" then
+	if state.name == "character_select" then
 	-- Character select screen
-		if key == "left" and transition_timer == 0 then
+		if key == "left" and state.transition_timer == 0 then
 		-- Select character on the left
-			if cursor > 0 then
-				cursor = cursor - 1
+			if state.cursor > 0 then
+				state.cursor = state.cursor - 1
 			else
-				cursor = 3
+				state.cursor = 3
 			end
 
 			sfx_cherry:play()
 
-		elseif key == "right" and transition_timer == 0 then
+		elseif key == "right" and state.transition_timer == 0 then
 		-- Select character on the right
-			if cursor < 3 then
-				cursor = cursor + 1
+			if state.cursor < 3 then
+				state.cursor = state.cursor + 1
 			else
-				cursor = 0
+				state.cursor = 0
 			end
 
 			sfx_cherry:play()
 
-		elseif key == "x" and transition_timer == 0 then
+		elseif key == "x" and state.transition_timer == 0 then
 		-- Choose character and enable transition which will go to levelbook after some time
-			transition = true
+			state.transition = true
 
 			sfx_cherry:play()
 		end
 
-	elseif game_state == "gameplay" then
+	elseif state.name == "gameplay" then
 	-- Gameplay screen
-		if key == "s" and timer > 146 and transition_timer == 0 then
+		if key == "s" and state.timer > 146 and state.transition_timer == 0 then
 		-- Go to pause screen
-			game_state = "pause"
+			state.name = "pause"
 
-			backup_timer = timer
-			timer = 0
+			state.backup_timer = state.timer
+			state.timer = 0
 		end
 
 		if debug.enabled == true then
 			if key == "d" then
 			-- Die!
-				dying_timer = 84
+				character.dying_timer = 84
 
 				stopAreaMusic()
 			end
 		end
 
-	elseif game_state == "pause" then
+	elseif state.name == "pause" then
 	-- Pause screen
 		if key == "s" then
 		-- Go back to gameplay
-			game_state = "gameplay"
+			state.name = "gameplay"
 
-			timer = backup_timer -- Backup gameplay timer
-			transition_timer = 0
+			state.timer = state.backup_timer -- Backup gameplay timer
+			state.transition_timer = 0
 		end
 
-	elseif game_state == "game_over" then
+	elseif state.name == "game_over" then
 	-- Game over screen
-		if key == "a" and continues > 0 then
+		if key == "a" and character.continues > 0 then
 		-- Select option
-			if cursor == 0 then
-				cursor = 1
+			if state.cursor == 0 then
+				state.cursor = 1
 			else
-				cursor = 0
+				state.cursor = 0
 			end
 		end
 
 		if key == "s" then
-			if cursor == 0 then
-				continues = continues - 1
-				lifes = 3
-				energy = 2
+			if state.cursor == 0 then
+				character.continues = character.continues - 1
+				character.lives = 3
+				character.energy = 2
 
 				music_char_select:play()
 
-				game_state = "character_select"
+				state.name = "character_select"
 			else
 				utils.setBackgroundColor("blue")
 
-				cursor = 0
-				timer = 0
-				game_state = "title"
+				state.cursor = 0
+				state.timer = 0
+				state.name = "title"
 			end
 		end
 
-	elseif game_state == "editor" then
+	elseif state.name == "editor" then
 	-- Level editor screen
 		if editor.option == "select" then
 		-- Level select
 			-- Set world according to world table
-			if key >= "1" and key <= "3" then                  world = 1
-			elseif key >= "4" and key <= "6" then              world = 2
-			elseif key >= "7" and key <= "9" then              world = 3
-			elseif key == "a" or key == "b" or key == "c" then world = 4
-			elseif key == "d" or key == "e" or key == "f" then world = 5
-			elseif key == "g" or key == "h" or key == "i" then world = 6
-			elseif key == "j" or key == "k" then               world = 7
+			if key >= "1" and key <= "3" then                  world.number = 1
+			elseif key >= "4" and key <= "6" then              world.number = 2
+			elseif key >= "7" and key <= "9" then              world.number = 3
+			elseif key == "a" or key == "b" or key == "c" then world.number = 4
+			elseif key == "d" or key == "e" or key == "f" then world.number = 5
+			elseif key == "g" or key == "h" or key == "i" then world.number = 6
+			elseif key == "j" or key == "k" then               world.number = 7
 			end
 
 			-- Go to proper editor
 			if key >= "1" and key <= "9" then
 				editor.option = "edit"
-				level = ((key - 1) % 3) + 1
-				area = 0
+				world.level = ((key - 1) % 3) + 1
+				world.area = 0
 
-				loadLevel()
+				world.loadLevel()
 
 			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				editor.option = "edit"
-				level = ((string.byte(key) - 97) % 3) + 1
-				area = 0
+				world.level = ((string.byte(key) - 97) % 3) + 1
+				world.area = 0
 
-				loadLevel()
+				world.loadLevel()
 
 			elseif key == "q" then
 			-- Quit menu to debug screen
-				game_state = "debug"
-				timer = 0
+				state.name = "debug"
+				state.timer = 0
 
-				utils.setBackgroundColor("blue")
+				graphics.setBackgroundColor("blue")
 			end
 
 		elseif editor.option == "edit" then
 		-- Edit map option
 			if key == "b" then
 			-- Change background color
-				if area_backgrounds[area] == 0 then
-					area_backgrounds[area] = 1
+				if world.area_backgrounds[world.area] == 0 then
+					world.area_backgrounds[world.area] = 1
 
-					utils.setBackgroundColor("light_blue")
+					graphics.setBackgroundColor("light_blue")
 				else
-					area_backgrounds[area] = 0
+					world.area_backgrounds[world.area] = 0
 
-					utils.setBackgroundColor("black")
+					graphics.setBackgroundColor("black")
 				end
 
 			elseif key == "m" then
 			-- Change music
-				if area_music[area] < 2 then
-					area_music[area] = area_music[area] + 1
+				if world.area_music[world.area] < 2 then
+					world.area_music[world.area] = world.area_music[world.area] + 1
 
-					playAreaMusic()
+					world.playAreaMusic()
 				else
-					area_music[area] = 0
+					world.area_music[world.area] = 0
 
-					playAreaMusic()
+					world.playAreaMusic()
 				end
 
 			-- Shrink or scratch width/height
 			elseif key == "kp4" then
-				if area_widths[area] > 16 then
-					area_widths[area] = area_widths[area] - 16
+				if world.area_widths[world.area] > 16 then
+					world.area_widths[world.area] = world.area_widths[world.area] - 16
 
-					checkEditCursorBounds()
-					checkEditGridBounds()
+					editor.checkCursorBounds()
+					editor.checkGridBounds()
 				end
 
 			elseif key == "kp6" then
-				if area_widths[area] < 3744 then
-					area_widths[area] = area_widths[area] + 16
+				if world.area_widths[world.area] < 3744 then
+					world.area_widths[world.area] = world.area_widths[world.area] + 16
 
-					checkEditCursorBounds()
-					checkEditGridBounds()
+					editor.checkCursorBounds()
+					editor.checkGridBounds()
 
-					for i=0, (area_heights[area] / 16) - 1 do
+					for i=0, (world.area_heights[world.area] / 16) - 1 do
 					-- Clear newly added tile blocks
-						area_tiles[i][(area_widths[area] / 16) - 1] = 0
+						world.area_tiles[i][(world.area_widths[world.area] / 16) - 1] = 0
 					end
 				end
 
 			elseif key == "kp8" then
-				if area_heights[area] > 16 then
-					area_heights[area] = area_heights[area] - 16
+				if world.area_heights[world.area] > 16 then
+					world.area_heights[world.area] = world.area_heights[world.area] - 16
 
-					checkEditCursorBounds()
-					checkEditGridBounds()
+					editor.checkCursorBounds()
+					editor.checkGridBounds()
 				end
 
 			elseif key == "kp2" then
-				if area_heights[area] < 1440 then
-					area_heights[area] = area_heights[area] + 16
+				if world.area_heights[world.area] < 1440 then
+					world.area_heights[world.area] = world.area_heights[world.area] + 16
 
-					checkEditCursorBounds()
-					checkEditGridBounds()
+					editor.checkCursorBounds()
+					editor.checkGridBounds()
 
 					-- Clear newly added tile blocks
-					area_tiles[(area_heights[area] / 16) - 1] = {}
+					world.area_tiles[(world.area_heights[world.area] / 16) - 1] = {}
 
-					for j=0, (area_widths[area] / 16) - 1 do
-						area_tiles[(area_heights[area] / 16) - 1][j] = 0
+					for j=0, (world.area_widths[world.area] / 16) - 1 do
+						world.area_tiles[(world.area_heights[world.area] / 16) - 1][j] = 0
 					end
 				end
 
 			-- Change current areas
 			elseif key == "[" then
-				saveLevel()
+				world.saveLevel()
 
-				if area > 0 then
-					area = area - 1
+				if world.area > 0 then
+					world.area = world.area - 1
 
 				else
-					area  = all_areas - 1
+					world.area  = world.area_count - 1
 
 				end
 
-				loadArea()
+				world.loadArea()
 
 				editor.cursor_x = 0
 				editor.cursor_y = 0
@@ -523,17 +522,15 @@ function love.keyreleased(key)
 				editor.view_y = 0
 
 			elseif key == "]" then
-				saveLevel()
+				world.saveLevel()
 
-				if area < all_areas - 1 then
-					area = area + 1
-
+				if world.area < world.area_count - 1 then
+					world.area = world.area + 1
 				else
-					area = 0
-
+					world.area = 0
 				end
 
-				loadArea()
+				world.loadArea()
 
 				editor.cursor_x = 0
 				editor.cursor_y = 0
@@ -545,22 +542,22 @@ function love.keyreleased(key)
 			elseif key == "left" and editor.cursor_x > 0 then
 				editor.cursor_x = editor.cursor_x - 16
 
-				checkEditGridBounds()
+				editor.checkGridBounds()
 
-			elseif key == "right" and editor.cursor_x < area_widths[area] - 16 then
+			elseif key == "right" and editor.cursor_x < world.area_widths[world.area] - 16 then
 				editor.cursor_x = editor.cursor_x + 16
 
-				checkEditGridBounds()
+				editor.checkGridBounds()
 
 			elseif key == "up" and editor.cursor_y > 0 then
 				editor.cursor_y = editor.cursor_y - 16
 
-				checkEditGridBounds()
+				editor.checkGridBounds()
 
-			elseif key == "down" and editor.cursor_y < area_heights[area] - 16 then
+			elseif key == "down" and editor.cursor_y < world.area_heights[world.area] - 16 then
 				editor.cursor_y = editor.cursor_y + 16
 
-				checkEditGridBounds()
+				editor.checkGridBounds()
 
 			-- Change selected tile
 			elseif key == "w" and editor.tile > 15 then
@@ -577,48 +574,47 @@ function love.keyreleased(key)
 
 			elseif key == "z" then
 			-- Remove tile
-				placeTile(0)
+				editor.placeTile(0)
 
 			elseif key == "x" then
 			-- Place tile
-				placeTile(editor.tile)
+				editor.placeTile(editor.tile)
 
 			elseif key == "l" then
 			-- Load this level from file
-				loadLevel()
+				world.loadLevel()
 
 			elseif key == "v" then
 			-- Save this level to file
-				saveLevel()
+				world.saveLevel()
 
 			elseif key == "p" then
 			-- Play from this level (doesn't return to level editor)
-				saveLevel()
+				world.saveLevel()
 
-				game_state = "gameplay"
-				area = 0
+				state.name = "gameplay"
+				world.area = 0
 				frames = 0
 
 				if debug.mute == false then
-					stopAreaMusic()
+					world.stopAreaMusic()
 					music_char_select:play()
 				end
 
-				utils.setBackgroundColor("black")
-
+				graphics.setBackgroundColor("black")
 
 			elseif key == "q" then
 			-- Quit to editor menu
-				quitEditor()
+				editor.quit()
 
 			elseif key == "e" then
 			-- Quit to editor menu and save level
-				saveLevel()
-				quitEditor()
+				world.saveLevel()
+				world.quit()
 			end
 		end
 
-	elseif game_state == "debug" then
+	elseif state.name == "debug" then
 	-- Debug screen
 		if key == "f" then
 		-- Show FPS counter or not
@@ -646,77 +642,77 @@ function love.keyreleased(key)
 
 		elseif key == "l" then
 		-- Go to level editor
-			game_state = "editor"
-			timer = 0
+			state.name = "editor"
+			state.timer = 0
 
 			debug.frames = false
 			editor.option = "select"
 
-			utils.setBackgroundColor("black")
+			graphics.setBackgroundColor("black")
 		end
 	end
 end
 
 function love.draw()
-	if game_state == "title" or game_state == "intro" or game_state == "debug" then
+	if state.name == "title" or state.name == "intro" or state.name == "debug" then
 	-- Draw border on title screen and intro
 		love.graphics.draw(img_title_border, 0, 0)
 	end
 
-	if game_state == "title" then
+	if state.name == "title" then
 	-- Draw title screen stuff
 		love.graphics.draw(img_title_logo, 48, 48)
 
-		drawText("!\"", 193, 72)
-		drawText("#1988 NINTENDO", 72, 184)
+		graphics.drawText("!\"", 193, 72)
+		graphics.drawText("#1988 NINTENDO", 72, 184)
 
-	elseif game_state == "intro" then
+	elseif state.name == "intro" then
 	-- Draw intro story stuff
-		if timer > 34 then
-			drawText("STORY", 112, 40)
+		if state.timer > 34 then
+			graphics.drawText("STORY", 112, 40)
 
-			if text_timer > 65 then
+			if state.text_timer > 65 then
 			-- Based on timer add new line of text
 				story.lines = story.lines + 1
-				text_timer = 0
+				state.text_timer = 0
 
 				if story.page == 0 and story.lines > 8 then
 				-- Change to 2nd story page if all lines are displayed
 					story.lines = 0
 					story.page = 1
-					text_timer = 50
+					state.text_timer = 50
 
 				elseif story.page == 1 and story.lines > 8 then
 				-- Enable transition which will go to title screen after some time
 					story.lines = 8
-					transition = true
+					state.transition = true
 				end
 			end
 
-			text_timer = text_timer + 1
+			state.text_timer = state.text_timer + 1
 
 			for i=0, story.lines do
 			-- Draw lines of text
 				if story.page == 0 then
-					drawText(tostring(story.page1[i]), 48, 64 + ((i - 1) * 16))
+					graphics.drawText(tostring(story.page1[i]), 48, 64 + ((i - 1) * 16))
 				else
-					drawText(tostring(story.page2[i]), 48, 64 + ((i - 1) * 16))
+					graphics.drawText(tostring(story.page2[i]), 48, 64 + ((i - 1) * 16))
 				end
 			end
 		end
 
-	elseif game_state == "character_select" then
+	elseif state.name == "character_select" then
 	-- Draw character select screen stuff
 		love.graphics.draw(img_cs_border, 0, 0)
 
-		drawText("PLEASE SELECT", 72, 80)
-		drawText("PLAYER", 96, 96)
+		graphics.drawText("PLEASE SELECT", 72, 80)
+		graphics.drawText("PLAYER", 96, 96)
 
-		love.graphics.draw(img_cs_arrow, 72 + (cursor * 32), 112)
+		love.graphics.draw(img_cs_arrow, 72 + (state.cursor * 32), 112)
 
-		if cursor == 0 then
+		if state.cursor == 0 then
 		-- Draw Mario
-			if transition_timer < 3 or transition_timer > 68 then
+			if state.transition_timer < 3 or state.transition_timer > 68 then
 				love.graphics.draw(img_cs_mario_active, 72, 144)
 			else
 				love.graphics.draw(img_cs_mario_select, 72, 144)
@@ -725,9 +721,9 @@ function love.draw()
 			love.graphics.draw(img_cs_mario, 72, 144)
 		end
 
-		if cursor == 1 then
+		if state.cursor == 1 then
 		-- Draw Luigi
-			if transition_timer < 3 or transition_timer > 68 then
+			if state.transition_timer < 3 or state.transition_timer > 68 then
 				love.graphics.draw(img_cs_luigi_active, 104, 144)
 			else
 				love.graphics.draw(img_cs_luigi_select, 104, 144)
@@ -736,9 +732,9 @@ function love.draw()
 			love.graphics.draw(img_cs_luigi, 104, 144)
 		end
 
-		if cursor == 2 then
+		if state.cursor == 2 then
 		-- Draw Toad
-			if transition_timer < 3 or transition_timer > 68 then
+			if state.transition_timer < 3 or state.transition_timer > 68 then
 				love.graphics.draw(img_cs_toad_active, 136, 144)
 			else
 				love.graphics.draw(img_cs_toad_select, 136, 144)
@@ -747,9 +743,9 @@ function love.draw()
 			love.graphics.draw(img_cs_toad, 136, 144)
 		end
 
-		if cursor == 3 then
+		if state.cursor == 3 then
 		-- Draw Peach
-			if transition_timer < 3 or transition_timer > 68 then
+			if state.transition_timer < 3 or state.transition_timer > 68 then
 				love.graphics.draw(img_cs_peach_active, 168, 144)
 			else
 				love.graphics.draw(img_cs_peach_select, 168, 144)
@@ -758,145 +754,145 @@ function love.draw()
 			love.graphics.draw(img_cs_peach, 168, 144)
 		end
 
-		drawText("EXTRA LIFE", 64, 208)
-		drawText(remainingLifes(), 176, 208)
+		graphics.drawText("EXTRA LIFE", 64, 208)
+		graphics.drawText(utils.getRemainingLives(character.lives), 176, 208)
 
-	elseif game_state == "level_intro" then
+	elseif state.name == "level_intro" then
 		drawLevelbook() -- Draw levelbook
 
 		drawWorldImage() -- Draw world image
 
-	elseif game_state == "gameplay" then
+	elseif state.name == "gameplay" then
 	-- Draw gameplay stuff
 
-		if timer > 144 then drawLevelTiles() -- Draw level tiles
+		if state.timer > 144 then graphics.drawLevelTiles() -- Draw level tiles
 		end
 
-		if timer > 146 then
+		if state.timer > 146 then
 		-- Draw everything else
-			if timer == 147 then
+			if state.timer == 147 then
 				sfx_fall:play() -- Play falling sound
 			end
 
-			for i=0, energy_bars - 1 do
+			for i=0, character.energy_bars - 1 do
 			-- Draw energy bars
-				if i+1 <= energy then
+				if i+1 <= character.energy then
 					love.graphics.draw(img_gp_filled, 12, 48 + (i * 16))
 				else
 					love.graphics.draw(img_gp_empty, 12, 48 + (i * 16))
 				end
 			end
 
-			drawCharacter() -- Draw character on screen
+			graphics.drawCharacter() -- Draw character on screen
 
 			--TODO: Draw entities
 		end
 
-	elseif game_state == "pause" then
+	elseif state.name == "pause" then
 	-- Draw pause screen stuff
 		drawLevelbook() -- Draw levelbook
 
 		-- Draw flickering pause text
-		if transition_timer == 30 then
-			transition_timer = 0
+		if state.transition_timer == 30 then
+			state.transition_timer = 0
 
-		elseif transition_timer >= 15 then
-			drawText("PAUSED", 105, 120, "brown")
+		elseif state.transition_timer >= 15 then
+			graphics.drawText("PAUSED", 105, 120, "brown")
 		end
 
-		drawText("EXTRA LIFE*** "..remainingLifes(), 65, 176, "brown") -- Draw extra lifes text
+		graphics.drawText("EXTRA LIFE*** "..utils.getRemainingLives(character.lives), 65, 176, "brown") -- Draw extra lifes text
 
-		transition_timer = transition_timer + 1
+		state.transition_timer = state.transition_timer + 1
 
-	elseif game_state == "death" then
+	elseif state.name == "death" then
 	-- Draw dying screen stuff
 
 		drawLevelbook() -- Draw levelbook
 
-		drawText("EXTRA LIFE*** "..remainingLifes(), 65, 80, "brown") -- Draw remaining lifes
+		graphics.drawText("EXTRA LIFE*** "..utils.getRemainingLives(character.lives), 65, 80, "brown") -- Draw remaining lifes
 
 		drawWorldImage() -- Draw world image
 
-		if timer >= 120 then
+		if state.timer >= 120 then
 		-- Go to gameplay once again!
-			game_state = "gameplay"
-			timer = 0
+			state.name = "gameplay"
+			state.timer = 0
 
-			playAreaMusic()
+			world.playAreaMusic()
 		end
 
-	elseif game_state == "game_over" then
+	elseif state.name == "game_over" then
 	-- Draw game over screen stuff
-		if timer < 192 then
-			drawText("GAME  OVER", 88, 112)
+		if state.timer < 192 then
+			graphics.drawText("GAME  OVER", 88, 112)
 		else
 			-- Draw text
-			if continues > 0 then
-				drawText("CONTINUE "..tostring(continues), 96, 88)
+			if character.continues > 0 then
+				graphics.drawText("CONTINUE "..tostring(character.continues), 96, 88)
 			end
 
-			drawText("RETRY", 96, 104)
+			graphics.drawText("RETRY", 96, 104)
 
-			love.graphics.draw(img_indicator, 81, 89 + cursor * 16)
+			love.graphics.draw(img_indicator, 81, 89 + state.cursor * 16)
 		end
 
-	elseif game_state == "editor" then
+	elseif state.name == "editor" then
 	-- Draw level editor stuff
 		if editor.option == "select" then
 		-- Draw level editor menu
-			drawText(string.upper(GAME_FULL_TITLE), 32, 32)
-			drawText("LEVEL EDITOR", 32, 48)
+			graphics.drawText(string.upper(GAME_FULL_TITLE), 32, 32)
+			graphics.drawText("LEVEL EDITOR", 32, 48)
 
-			drawText("LEVEL SELECT", 32, 80)
+			graphics.drawText("LEVEL SELECT", 32, 80)
 
-			drawText(" 1 - 1-1  4 - 2-1  7 - 3-1", 32, 96)
-			drawText(" 2 - 1-2  5 - 2-2  8 - 3-2", 32, 112)
-			drawText(" 3 - 1-3  6 - 2-3  9 - 3-3", 32, 128)
+			graphics.drawText(" 1 - 1-1  4 - 2-1  7 - 3-1", 32, 96)
+			graphics.drawText(" 2 - 1-2  5 - 2-2  8 - 3-2", 32, 112)
+			graphics.drawText(" 3 - 1-3  6 - 2-3  9 - 3-3", 32, 128)
 
-			drawText(" A - 4-1  D - 5-1  G - 6-1", 32, 160)
-			drawText(" B - 4-2  E - 5-2  H - 6-2", 32, 176)
-			drawText(" C - 4-3  F - 5-3  I - 6-3", 32, 192)
+			graphics.drawText(" A - 4-1  D - 5-1  G - 6-1", 32, 160)
+			graphics.drawText(" B - 4-2  E - 5-2  H - 6-2", 32, 176)
+			graphics.drawText(" C - 4-3  F - 5-3  I - 6-3", 32, 192)
 
-			drawText(" J - 7-1  K - 7-2  Q - QUIT", 32, 224)
+			graphics.drawText(" J - 7-1  K - 7-2  Q - QUIT", 32, 224)
 
 		elseif editor.option == "edit" then
 		-- Draw editor
 			-- Draw world, level and area indicators
-			drawText(tostring(world).."-"..tostring(level), 64, 2)
-			drawText("A-"..tostring(area), 104, 2)
+			graphics.drawText(tostring(world.number).."-"..tostring(world.level), 64, 2)
+			graphics.drawText("A-"..tostring(world.area), 104, 2)
 
 			-- Draw background value
-			if area_backgrounds[area] == 0 then
-				drawText("BG-BLK", 144, 2)
+			if world.area_backgrounds[world.area] == 0 then
+				graphics.drawText("BG-BLK", 144, 2)
 			else
-				drawText("BG-BLU", 144, 2)
+				graphics.drawText("BG-BLU", 144, 2)
 			end
 
 			-- Draw music indicator
-			if area_music[area] == 0 then
-				drawText("M-OVER", 208, 2)
-			elseif area_music[area] == 1 then
-				drawText("M-UNDR", 208, 2)
+			if world.area_music[world.area] == 0 then
+				graphics.drawText("M-OVER", 208, 2)
+			elseif world.area_music[world.area] == 1 then
+				graphics.drawText("M-UNDR", 208, 2)
 			else
-				drawText("M-BOSS", 208, 2)
+				graphics.drawText("M-BOSS", 208, 2)
 			end
 
 			-- Draw width and height values
-			drawText("W-"..tostring(area_widths[area]), 2, 10)
-			drawText("H-"..tostring(area_heights[area]), 56, 10)
+			graphics.drawText("W-"..tostring(world.area_widths[world.area]), 2, 10)
+			graphics.drawText("H-"..tostring(world.area_heights[world.area]), 56, 10)
 
 			-- Draw currently selected tile
-			drawText("T-"..tostring(editor.tile), 120, 10)
-			drawTile(editor.tile, 152, 10)
+			graphics.drawText("T-"..tostring(editor.tile), 120, 10)
+			graphics.drawTile(editor.tile, 152, 10)
 
 			-- Draw coordinates for edit cursor
-			drawText(tostring(editor.cursor_x), 184, 10)
-			drawText(",", 216, 10)
-			drawText(tostring(editor.cursor_y), 224, 10)
+			graphics.drawText(tostring(editor.cursor_x), 184, 10)
+			graphics.drawText(",", 216, 10)
+			graphics.drawText(tostring(editor.cursor_y), 224, 10)
 
 			-- Calculate height and width of edit view
-			editor.level_height = area_heights[area] - editor.view_y
-			editor.level_width = area_widths[area] - editor.view_x
+			editor.level_height = world.area_heights[world.area] - editor.view_y
+			editor.level_width = world.area_widths[world.area] - editor.view_x
 
 			if editor.level_height > 208 then
 				editor.level_height = 208
@@ -916,7 +912,7 @@ function love.draw()
 			-- Draw tiles
 			for i=0, (editor.level_height / 16) - 1 do
 				for j=0, (editor.level_width / 16) - 1 do
-					drawTile(area_tiles[(editor.view_y / 16) + i][(editor.view_x / 16) + j], j * 16, 32 + (i * 16))
+					graphics.drawTile(world.area_tiles[(editor.view_y / 16) + i][(editor.view_x / 16) + j], j * 16, 32 + (i * 16))
 				end
 			end
 
@@ -927,27 +923,27 @@ function love.draw()
 			--TODO: Add more!
 		end
 
-	elseif game_state == "debug" then
+	elseif state.name == "debug" then
 	-- Draw debug screen stuff
-		drawText("OPENSMB2 DEBUG MODE", 48, 56)
-		drawText("F-TOGGLE FPS COUNTER", 48, 80)
-		drawText("R-TOGGLE FRAME COUNTER", 48, 96)
-		drawText("M-TOGGLE MUSIC MUTE", 48, 112)
-		drawText("L-ENTER LEVEL EDITOR", 48, 128)
-		drawText("S-START GAME RIGHT NOW", 48, 144)
+		graphics.drawText("OPENSMB2 DEBUG MODE", 48, 56)
+		graphics.drawText("F-TOGGLE FPS COUNTER", 48, 80)
+		graphics.drawText("R-TOGGLE FRAME COUNTER", 48, 96)
+		graphics.drawText("M-TOGGLE MUSIC MUTE", 48, 112)
+		graphics.drawText("L-ENTER LEVEL EDITOR", 48, 128)
+		graphics.drawText("S-START GAME RIGHT NOW", 48, 144)
 
-		drawText("ENABLED FLAGS", 64, 160)
+		graphics.drawText("ENABLED FLAGS", 64, 160)
 
 		if debug.fps == true then
-			drawText("FPS", 64, 176)
+			graphics.drawText("FPS", 64, 176)
 		end
 
 		if debug.frames == true then
-			drawText("FRAMES", 104, 176)
+			graphics.drawText("FRAMES", 104, 176)
 		end
 
 		if debug.mute == true then
-			drawText("MUTED", 168, 176)
+			graphics.drawText("MUTED", 168, 176)
 		end
 	end
 
@@ -955,332 +951,38 @@ function love.draw()
 	if debug.enabled == true then
 		-- Draw FPS
 		if debug.fps == true then
-			drawText(tostring(love.timer.getFPS()).." FPS", 2, 2)
+			graphics.drawText(tostring(love.timer.getFPS()).." FPS", 2, 2)
 		end
 
 		-- Draw lasted frames
 		if debug.frames == true then
 			timerx = 0
-			n = timer
+			n = state.timer
 
 			while n > 0 do
 				timerx = timerx + 1
 				n = math.floor(n / 10)
 			end
 
-			drawText(tostring(timer), 256 - (timerx * 8), 2)
+			graphics.drawText(tostring(state.timer), 256 - (timerx * 8), 2)
 		end
 	end
-end
-
-function loadLevel()
-	leveldir = "levels/"..tostring(world).."-"..tostring(level).."/"
-	levelfile = love.filesystem.read(leveldir.."settings.cfg")
-
-	-- Get level variables
-	all_areas = tonumber(string.sub(levelfile, 7, 7))
-	hero_start_x = tonumber(string.sub(levelfile, 16, 19))
-	hero_start_y = tonumber(string.sub(levelfile, 28, 31))
-
-	for i=0, all_areas - 1 do
-	-- Fill area width, height and background arrays
-		areafile = love.filesystem.read(leveldir..tostring(area))
-
-		diff = i * 38
-
-		area_widths[i] = tonumber(string.sub(levelfile, 49 + diff, 52 + diff))
-		area_heights[i] = tonumber(string.sub(levelfile, 61 + diff, 64 + diff))
-		area_backgrounds[i] = tonumber(string.sub(levelfile, 69 + diff, 69 + diff))
-		area_music[i] = tonumber(string.sub(levelfile, 77 + diff, 77 + diff))
-	end
-
-	loadArea()
-end
-
-function loadArea()
-	areafile = love.filesystem.read(leveldir..tostring(area))
-
-	-- Check level background and set it
-	if area_backgrounds[area] == 0 then
-		utils.setBackgroundColor("black")
-	else
-		utils.setBackgroundColor("light_blue")
-	end
-
-	playAreaMusic()
-
-	for i=0, (area_heights[area] / 16) - 1 do
-	-- Fill tile data
-	area_tiles[i] = {}
-		for j=0, (area_widths[area] / 16) - 1 do
-			diff = i * (((area_widths[area] / 16) * 3) + 1)
-
-			area_tiles[i][j] = tonumber(string.sub(areafile, (j * 3) + 1 + diff, (j * 3) + 2 + diff))
-		end
-	end
-
-	--TODO: Add more!
-end
-
-function saveLevel()
-	leveldir = "levels/"..tostring(world).."-"..tostring(level).."/"
-
-	-- Convert startx and starty to string variables
-	startx_str = utils.toPaddedString(hero_start_x, 4)
-	starty_str = utils.toPaddedString(hero_start_y, 4)
-
-	areadata = ""
-	areawidth_str = {}
-	areaheight_str = {}
-
-	for i=0, all_areas - 1 do
-		-- Convert areawidths and areaheights to string variables
-		areawidth_str[i] = utils.toPaddedString(area_widths[i], 4)
-		areaheight_str[i] = utils.toPaddedString(area_heights[i], 4)
-
-		areadata = areadata..i.." width="..areawidth_str[i].." height="..areaheight_str[i].." bg="..tostring(area_backgrounds[i]).." music="..tostring(area_music[i]).."\n"
-	end
-
-	-- Save file with all variables
-	data = "areas="..tostring(all_areas).."\nstartx="..startx_str.."\nstarty="..starty_str.."\n\nareas:\n"..areadata
-	levelfile = love.filesystem.write(leveldir.."settings.cfg", data)
-
-	saveArea()
-
-	--TODO: Add more!
-end
-
-function saveArea()
-	areadir = "levels/"..tostring(world).."-"..tostring(level).."/"..tostring(area)
-
-	areadata = ""
-
-	for i=0, (area_heights[area] / 16) - 1 do
-	-- Fill file
-		for j=0, (area_widths[area] / 16) - 1 do
-			areatiles_str = utils.toPaddedString(area_tiles[i][j], 2)
-
-			areadata = areadata..areatiles_str.."."
-		end
-
-		areadata = areadata.."\n"
-	end
-
-	areafile = love.filesystem.write(areadir, areadata)
-end
-
-function playAreaMusic()
-	if debug.mute == false then
-		if area_music[area] == 0 then
-			music_overworld:play()
-
-			music_underworld:stop()
-			music_boss:stop()
-		elseif area_music[area] == 1 then
-			music_underworld:play()
-
-			music_overworld:stop()
-			music_boss:stop()
-		else
-			music_boss:play()
-
-			music_overworld:stop()
-			music_underworld:stop()
-		end
-	end
-end
-
-function stopAreaMusic()
-	music_overworld:stop()
-	music_underworld:stop()
-	music_boss:stop()
-end
-
-function checkEditCursorBounds()
-	if editor.cursor_x > area_widths[area] - 16 then
-		editor.cursor_x = area_widths[area] - 16
-	end
-
-	if editor.cursor_y > area_heights[area] - 16 then
-		editor.cursor_y = area_heights[area] - 16
-	end
-end
-
-function checkEditGridBounds()
-	if editor.cursor_x < editor.view_x then
-		editor.view_x = editor.view_x - 16
-
-	elseif editor.cursor_x == editor.view_x + 256 then
-		editor.view_x = editor.view_x + 16
-	end
-
-	if editor.cursor_y < editor.view_y then
-		editor.view_y = editor.view_y - 16
-
-	elseif editor.cursor_y == editor.view_y + 208 then
-		editor.view_y = editor.view_y + 16
-	end
-end
-
-function placeTile(tileid)
-	editor.tile_x = editor.cursor_x / 16
-	editor.tile_y = editor.cursor_y / 16
-	area_tiles[editor.tile_y][editor.tile_x] = tileid
-end
-
-function quitEditor()
-	editor.option = "select"
-
-	editor.tile = 1
-
-	editor.cursor_x = 0
-	editor.cursor_y = 0
-
-	editor.view_x = 0
-	editor.view_y = 0
-
-	utils.setBackgroundColor("black")
-
-	stopAreaMusic()
-end
-
-function drawText(str, x, y, color)
-	realx = 0
-
-	for i=0, string.len(str) - 1 do
-		posx = x + (i * 16)
-		if realx == 0 then realx = posx end
-
-		code = string.byte(str, i + 1)
-
-		ax = (code % 32) * 16
-		ay = math.floor(code / 32) * 16
-
-		if color == "brown" then
-			symbol = love.graphics.newQuad(ax, ay, 16, 16, font_brown:getWidth(), font_brown:getHeight())
-
-			love.graphics.draw(font_brown, symbol, realx, y, 0, 0.5)
-		else
-			symbol = love.graphics.newQuad(ax, ay, 16, 16, font_white:getWidth(), font_white:getHeight())
-
-			love.graphics.draw(font_white, symbol, realx, y, 0, 0.5)
-		end
-
-		realx = realx + 8
-	end
-end
-
-function drawTile(tileid, tilex, tiley)
-	ax = (tileid % 16) * 16
-	ay = math.floor(tileid / 16) * 16
-
-	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tilemap:getWidth(), img_tilemap:getHeight())
-
-	love.graphics.draw(img_tilemap, tile, tilex, tiley)
-end
-
-function drawLevelTiles()
-	imin = 0
-	imax = 15
-
-	if transition_timer > 0 and transition_timer < 35 then
-	-- During transition draw additional row of tiles
-		if screen_y > 0 and screendir == - 1 then
-		-- Draw additional row of tiles on the top
-			imin = -1
-		end
-
-		if screen_y <= ((area_heights[area] - 192) / 16 / 12) and screendir == 1 then
-		-- Draw additional row of tiles on the bottom
-			imax = 16
-		end
-	end
-
-	for i=imin, imax - 1 do
-		for j=0, 16 - 1 do
-			if transition_timer > 0 then
-			-- Draw tiles when transitioning between screens
-				if screen_y == 0 then
-					transy = math.floor(transition_timer / 35 * 9)
-					tiley = transy + i
-					posy = (i * 16) - (transition_timer / 35 * 144) % 16
-				else
-					if screendir == 1 then
-						transy = math.floor(transition_timer / 35 * 9)
-						tiley = (screen_y * 9) + transy + i
-						posy = (i * 16) - (transition_timer / 35 * 144) % 16
-
-					else
-						transy = 9 - math.floor(transition_timer / 35 * 9)
-						tiley = ((screen_y - 1) * 9) + transy + i
-
-						posy = (i * 16) + (transition_timer / 35 * 144) % 16
-					end
-				end
-			else
-			-- Draw tiles on stationary screen
-				if screen_y == 0 then
-					tiley = i
-				else
-					tiley = (screen_y * 9) + i
-				end
-
-				posy = i * 16
-			end
-
-			tilex = (screen_x * 16) + j
-
-			drawTile(area_tiles[tiley][tilex], j * 16, posy)
-		end
-	end
-end
-
-function remainingLifes()
-	if lifes < 10 + 1 then
-		str = " "..tostring(lifes - 1)
-
-	elseif lifes < 100 + 1 then
-		str = tostring(lifes - 1)
-
-	elseif lifes < 255 + 1 then
-		if lifes < 110 + 1 then     letter = "A"
-		elseif lifes < 120 + 1 then letter = "B"
-		elseif lifes < 130 + 1 then letter = "C"
-		elseif lifes < 140 + 1 then letter = "D"
-		elseif lifes < 150 + 1 then letter = "E"
-		elseif lifes < 160 + 1 then letter = "F"
-		elseif lifes < 170 + 1 then letter = "G"
-		elseif lifes < 180 + 1 then letter = "H"
-		elseif lifes < 190 + 1 then letter = "I"
-		elseif lifes < 200 + 1 then letter = "J"
-		elseif lifes < 210 + 1 then letter = "K"
-		elseif lifes < 220 + 1 then letter = "L"
-		elseif lifes < 230 + 1 then letter = "M"
-		elseif lifes < 240 + 1 then letter = "N"
-		elseif lifes < 250 + 1 then letter = "O"
-		else                        letter = "P"
-		end
-
-		str = letter..tostring(math.floor((lifes - 1) % 10))
-	end
-
-	return str
 end
 
 function drawLevelbook()
 	love.graphics.draw(img_levelbook, 25, 32)
 
-	drawText("WORLD  "..tostring(world).."-"..tostring(level), 89, 48, "brown")
+	graphics.drawText("WORLD  "..tostring(world.number).."-"..tostring(world.level), 89, 48, "brown")
 
-		if world < 7 then
-			all_levels = 3
+		if world.number < 7 then
+			world.level_count = 3
 		else
-			all_levels = 2
+			world.level_count = 2
 		end
 
-		for i=0, all_levels - 1 do
+		for i=0, world.level_count - 1 do
 		-- Draw level indicators
-			if level == i + 1 then
+			if world.level == i + 1 then
 				love.graphics.draw(img_lb_current, 113 + (i * 16), 64)
 			else
 				love.graphics.draw(img_lb_other, 113 + (i * 16), 64)
@@ -1289,126 +991,9 @@ function drawLevelbook()
 end
 
 function drawWorldImage()
-	if world == 1 or world == 3 or world == 5 then love.graphics.draw(img_lb_world1, 65, 112)
-	elseif world == 2 or world == 6 then           love.graphics.draw(img_lb_world2, 65, 112)
-	elseif world == 4 then                         love.graphics.draw(img_lb_world4, 65, 112)
-	elseif world == 7 then                         love.graphics.draw(img_lb_world7, 65, 112)
+	if world.number == 1 or world.number == 3 or world.number == 5 then love.graphics.draw(img_lb_world1, 65, 112)
+	elseif world.number == 2 or world.number == 6 then           love.graphics.draw(img_lb_world2, 65, 112)
+	elseif world.number == 4 then                         love.graphics.draw(img_lb_world4, 65, 112)
+	elseif world.number == 7 then                         love.graphics.draw(img_lb_world7, 65, 112)
 	end
-end
-
-function drawCharacter()
-	-- Calculate offset for character sprite
-	if hero_side == -1 then
-		offset = 16
-
-	elseif hero_side == 1 then
-		offset = 0
-	end
-
-	-- Calculate desired character sprite
-	if hero_state == "stationary" then
-	-- Calculate sprite if character is walking
-		if hero_speed > 0 then
-			if hero_animation_timer >= 10 then
-				hero_animation_timer = 0
-			end
-
-			if hero_animation_timer >= 5 then
-				ax = 0 * 16
-			else
-				ax = 1 * 16
-			end
-
-			hero_animation_timer = hero_animation_timer + 1
-		else
-			ax = 0 * 16
-
-			hero_animation_timer = 0
-		end
-	elseif character == "luigi" and hero_state == "falling" then
-	-- Calculate sprite if character is Luigi and falling
-		if hero_animation_timer >= 6 then
-			hero_animation_timer = 0
-		end
-
-		if hero_animation_timer >= 3 then
-			ax = 0 * 16
-		else
-			ax = 1 * 16
-		end
-
-		if transition_timer == 0 then
-			hero_animation_timer = hero_animation_timer + 1
-		end
-	else
-		ax = 1 * 16
-
-		hero_animation_timer = 0
-	end
-
-	if screen_y == 0 then
-		posy = hero_pos_y - screen_y * 240
-
-	else
-		posy = hero_pos_y - screen_y * 144
-	end
-
-	if transition_timer > 0 then
-		if screendir == 1 then posy = posy - (transition_timer / 35) * 144
-		else                   posy = posy + (transition_timer / 35) * 144
-		end
-	end
-
-	-- Draw character sprite
-	if character == "mario" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_mario:getWidth(), img_chars_mario:getHeight())
-
-		love.graphics.draw(img_chars_mario, sprite, hero_pos_x, posy, 0, hero_side, 1, offset)
-
-	elseif character == "luigi" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_luigi:getWidth(), img_chars_luigi:getHeight())
-
-		love.graphics.draw(img_chars_luigi, sprite, hero_pos_x, posy, 0, hero_side, 1, offset)
-
-	elseif character == "toad" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_luigi:getWidth(), img_chars_luigi:getHeight())
-
-		love.graphics.draw(img_chars_toad, sprite, hero_pos_x, posy, 0, hero_side, 1, offset)
-
-	elseif character == "peach" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_peach:getWidth(), img_chars_peach:getHeight())
-
-		love.graphics.draw(img_chars_peach, sprite, hero_pos_x, posy, 0, hero_side, 1, offset)
-	end
-
-	-- Draw character sprite when it's horizontally wraping
-	if hero_pos_x > 256 - 16 then
-		if character == "mario" then
-			love.graphics.draw(img_chars_mario, sprite, hero_pos_x - area_widths[area], posy, 0, hero_side, 1, offset)
-
-		elseif character == "luigi" then
-			love.graphics.draw(img_chars_luigi, sprite, hero_pos_x - area_widths[area], posy, 0, hero_side, 1, offset)
-
-		elseif character == "toad" then
-			love.graphics.draw(img_chars_toad, sprite, hero_pos_x - area_widths[area], posy, 0, hero_side, 1, offset)
-
-		elseif character == "peach" then
-			love.graphics.draw(img_chars_peach, sprite, hero_pos_x - area_widths[area], posy, 0, hero_side, 1, offset)
-		end
-	end
-end
-
-function screenTrans()
-	if transition_timer == 35 then
-		transition_timer = 0
-
-		screen_y = screen_y + screendir
-	else
-		transition_timer = transition_timer + 1
-	end
-end
-
-function transitionClear()
-	transition_timer = 0
-	transition = false
 end

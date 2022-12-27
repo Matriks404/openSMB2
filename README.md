@@ -9,12 +9,7 @@
 	* NOTE: Make sure to update your resources if necessary (e.g. if you update your local repository).
 	* BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
 
-4. Copy levels (in `_move_to_saves_directory`) to game user data directory.
-	* On Windows: Run `RunOnce.bat`.
-	* On macOS: Copy manually to `/Users/<username>/Library/Application Support/LOVE/openSMB2`
-	* On Linux: Execute `chmod +x RunOnce.Linux.sh && ./RunOnce.Linux.sh` in the console.
-
-5. Run the game!
+4. Run the game!
 	* On Windows: Drag game folder onto LÖVE program shortcut.
 	* On macOS and Linux: Execute `love .` in the console (you might need to change directory to game path first).
 

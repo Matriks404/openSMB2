@@ -20,4 +20,52 @@ function editor.init()
 	editor.view_y = 0
 end
 
+function editor.checkCursorBounds()
+	if editor.cursor_x > world.area_widths[world.area] - 16 then
+		editor.cursor_x = world.area_widths[world.area] - 16
+	end
+
+	if editor.cursor_y > world.area_heights[world.area] - 16 then
+		editor.cursor_y = world.area_heights[world.area] - 16
+	end
+end
+
+function editor.checkGridBounds()
+	if editor.cursor_x < editor.view_x then
+		editor.view_x = editor.view_x - 16
+
+	elseif editor.cursor_x == editor.view_x + 256 then
+		editor.view_x = editor.view_x + 16
+	end
+
+	if editor.cursor_y < editor.view_y then
+		editor.view_y = editor.view_y - 16
+
+	elseif editor.cursor_y == editor.view_y + 208 then
+		editor.view_y = editor.view_y + 16
+	end
+end
+
+function editor.placeTile(tileid)
+	editor.tile_x = editor.cursor_x / 16
+	editor.tile_y = editor.cursor_y / 16
+	world.area_tiles[editor.tile_y][editor.tile_x] = tileid
+end
+
+function editor.quit()
+	editor.option = "select"
+
+	editor.tile = 1
+
+	editor.cursor_x = 0
+	editor.cursor_y = 0
+
+	editor.view_x = 0
+	editor.view_y = 0
+
+	graphics.setBackgroundColor("black")
+
+	world.stopAreaMusic()
+end
+
 return editor
