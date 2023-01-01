@@ -27,8 +27,6 @@ function love.load()
 
 	resources.load()
 	state.init()
-
-	debug.reset()
 end
 
 function love.update()

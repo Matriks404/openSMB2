@@ -1,28 +1,24 @@
 local state = {}
 
+-- Game state (title, intro, character_select, level_intro, gameplay, pause, death, game_over, editor, debug)
+state.name = "title"
+
+-- Timers
+state.timer = 0
+state.backup_timer = 0
+state.text_timer = 0
+state.transition_timer = 0
+state.char_anim_timer = 0
+
+state.transition = false
+
+state.cursor = 0 -- Menu cursor
+
+state.screen_x = 0
+state.screen_y = 0
+
 function state.init()
-	-- Game state (title, intro, character_select, level_intro, gameplay, pause, death, game_over, editor, debug)
-	state.name = "title"
-
-	-- Timers
-	state.timer = 0
-	state.backup_timer = 0
-	state.text_timer = 0
-	state.transition_timer = 0
-	state.char_anim_timer = 0
-
-	state.transition = false
-
-	state.cursor = 0 -- Menu cursor
-
-	state.screen_x = 0
-	state.screen_y = 0
-
 	graphics.setBackgroundColor("blue")
-
-	world.init()
-	character.init()
-	editor.init()
 end
 
 function state.resetGame()

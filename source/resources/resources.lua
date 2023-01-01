@@ -11,7 +11,6 @@ function resources.load()
 	graphics.load()
 	music.load()
 	sfx.load()
-	story.load()
 end
 
 return resources

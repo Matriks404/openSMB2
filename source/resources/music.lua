@@ -1,4 +1,4 @@
-music = {}
+local music = {}
 
 music_dir = "resources/sound/music/"
 

@@ -1,28 +1,26 @@
 local world = {}
+
+world.count = 8 --TODO: Use this variable.
 world.current = 1
 
-function world.init()
-	world.count = 8 --TODO: Use this variable.
+world.level_count = 3
+world.level = 1
 
-	world.level_count = 3
-	world.level = 1
+world.area_count = 1
 
-	world.area_count = 1
+world.area = 0
 
-	world.area = 0
+world.area_widths = {} -- Array of area widths
+world.area_heights = {} -- Array of area heights
+world.area_backgrounds = {} -- Array of backgrounds (0 - Black, 1 - Light blue)
+world.area_music = {} -- Array of music (0 - Overworld, 1 - Underworld)
+world.area_tiles = {} -- Array of area tiles
 
-	world.area_widths = {} -- Array of area widths
-	world.area_heights = {} -- Array of area heights
-	world.area_backgrounds = {} -- Array of backgrounds (0 - Black, 1 - Light blue)
-	world.area_music = {} -- Array of music (0 - Overworld, 1 - Underworld)
-	world.area_tiles = {} -- Array of area tiles
+-- Start coordinates
+world.start_x = 0
+world.start_y = 0
 
-	-- Start coordinates
-	world.start_x = 0
-	world.start_y = 0
-
-	world.level_directory = ""
-end
+world.level_directory = ""
 
 function world.reset()
 	world.world = 1
