@@ -416,7 +416,7 @@ function love.keyreleased(key)
 				editor.option = "edit"
 				level_no = ((string.byte(key) - 97) % 3) + 1
 
-				world.loadAll(world.current, world.level)
+				world.loadAll(world_no, level_no)
 
 			elseif key == "q" then
 			-- Quit menu to debug screen
