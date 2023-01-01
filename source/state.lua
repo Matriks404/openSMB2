@@ -17,10 +17,6 @@ state.cursor = 0 -- Menu cursor
 state.screen_x = 0
 state.screen_y = 0
 
-function state.init()
-	graphics.setBackgroundColor("blue")
-end
-
 function state.resetGame()
 	world.reset()
 	character.reset()

@@ -9,6 +9,10 @@ img_gameplay_dir = img_dir.."gameplay/" -- Gameplay screen graphics
 img_chars_dir = img_dir.."gameplay/characters/" -- Character graphics
 img_editor_dir = img_dir.."leveleditor/" -- Level editor graphics
 
+function graphics.init()
+	graphics.setBackgroundColor("blue")
+end
+
 function graphics.load()
 	-- Title screen and intro graphics
 	do

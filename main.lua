@@ -26,7 +26,7 @@ function love.load()
 	filesystem.setup()
 
 	resources.load()
-	state.init()
+	graphics.init()
 end
 
 function love.update()
