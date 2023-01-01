@@ -2,9 +2,9 @@ local story = {}
 
 function story.load()
 	story.lines = 0
-	story.page = 0
+	story.page = 1
 
-	story.page1 = { "WHEN  MARIO OPENED A",
+	story[1] = { "WHEN  MARIO OPENED A",
 	           "DOOR AFTER  CLIMBING",
 	           "A LONG STAIR IN  HIS",
 	           "DREAM, ANOTHER WORLD",
@@ -14,7 +14,7 @@ function story.load()
 	           " FREED  FROM A SPELL"
 	         }
 
-	story.page2 = { "AFTER  AWAKENING,   ",
+	story[2] = { "AFTER  AWAKENING,   ",
 	           "MARIO  WENT TO  A   ",
 	           "CAVE  NEARBY AND  TO",
 	           "HIS  SURPRISE HE SAW",

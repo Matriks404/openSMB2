@@ -1,70 +1,80 @@
 local graphics = {}
 
+img_dir = "resources/images/"
+
+img_title_dir = img_dir.."title/" -- Title screen and intro graphics
+img_cs_dir = img_dir.."charselect/" -- Character select screen graphics
+img_lb_dir = img_dir.."levelbook/" -- Levelbook screen graphics
+img_gameplay_dir = img_dir.."gameplay/" -- Gameplay screen graphics
+img_chars_dir = img_dir.."gameplay/characters/" -- Character graphics
+img_editor_dir = img_dir.."leveleditor/" -- Level editor graphics
+
 function graphics.load()
 	-- Title screen and intro graphics
-	img_title = "resources/images/title/"
-
-	img_title_border = love.graphics.newImage(img_title.."border.png")
-	img_title_logo = love.graphics.newImage(img_title.."logo.png")
+	do
+		img_title_border = love.graphics.newImage(img_title_dir.."border.png")
+		img_title_logo = love.graphics.newImage(img_title_dir.."logo.png")
+	end
 
 	-- Character select screen graphics
-	img_cs = "resources/images/charselect/"
+	do
+		img_cs_border = love.graphics.newImage(img_cs_dir.."border.png")
 
-	img_cs_border = love.graphics.newImage(img_cs.."border.png")
+		img_cs_mario = love.graphics.newImage(img_cs_dir.."mario.png")
+		img_cs_luigi = love.graphics.newImage(img_cs_dir.."luigi.png")
+		img_cs_toad = love.graphics.newImage(img_cs_dir.."toad.png")
+		img_cs_peach = love.graphics.newImage(img_cs_dir.."peach.png")
 
-	img_cs_mario = love.graphics.newImage(img_cs.."mario.png")
-	img_cs_luigi = love.graphics.newImage(img_cs.."luigi.png")
-	img_cs_toad = love.graphics.newImage(img_cs.."toad.png")
-	img_cs_peach = love.graphics.newImage(img_cs.."peach.png")
+		img_cs_mario_active = love.graphics.newImage(img_cs_dir.."mario_active.png")
+		img_cs_luigi_active = love.graphics.newImage(img_cs_dir.."luigi_active.png")
+		img_cs_toad_active = love.graphics.newImage(img_cs_dir.."toad_active.png")
+		img_cs_peach_active = love.graphics.newImage(img_cs_dir.."peach_active.png")
 
-	img_cs_mario_active = love.graphics.newImage(img_cs.."mario_active.png")
-	img_cs_luigi_active = love.graphics.newImage(img_cs.."luigi_active.png")
-	img_cs_toad_active = love.graphics.newImage(img_cs.."toad_active.png")
-	img_cs_peach_active = love.graphics.newImage(img_cs.."peach_active.png")
+		img_cs_mario_select = love.graphics.newImage(img_cs_dir.."mario_select.png")
+		img_cs_luigi_select = love.graphics.newImage(img_cs_dir.."luigi_select.png")
+		img_cs_toad_select = love.graphics.newImage(img_cs_dir.."toad_select.png")
+		img_cs_peach_select = love.graphics.newImage(img_cs_dir.."peach_select.png")
 
-	img_cs_mario_select = love.graphics.newImage(img_cs.."mario_select.png")
-	img_cs_luigi_select = love.graphics.newImage(img_cs.."luigi_select.png")
-	img_cs_toad_select = love.graphics.newImage(img_cs.."toad_select.png")
-	img_cs_peach_select = love.graphics.newImage(img_cs.."peach_select.png")
-
-	img_cs_arrow = love.graphics.newImage(img_cs.."arrow.png")
+		img_cs_arrow = love.graphics.newImage(img_cs_dir.."arrow.png")
+	end
 
 	-- Levelbook screen graphics
-	img_lb = "resources/images/levelbook/"
+	do
+		img_levelbook = love.graphics.newImage(img_lb_dir.."levelbook.png")
+		img_lb_current = love.graphics.newImage(img_lb_dir.."level_current.png")
+		img_lb_other = love.graphics.newImage(img_lb_dir.."level_other.png")
 
-	img_levelbook = love.graphics.newImage(img_lb.."levelbook.png")
-	img_lb_current = love.graphics.newImage(img_lb.."level_current.png")
-	img_lb_other = love.graphics.newImage(img_lb.."level_other.png")
-
-	img_lb_world1 = love.graphics.newImage(img_lb.."world1.png")
-	img_lb_world2 = love.graphics.newImage(img_lb.."world2.png")
-	img_lb_world4 = love.graphics.newImage(img_lb.."world4.png")
-	img_lb_world7 = love.graphics.newImage(img_lb.."world7.png")
+		img_lb_world1 = love.graphics.newImage(img_lb_dir.."world1.png")
+		img_lb_world2 = love.graphics.newImage(img_lb_dir.."world2.png")
+		img_lb_world4 = love.graphics.newImage(img_lb_dir.."world4.png")
+		img_lb_world7 = love.graphics.newImage(img_lb_dir.."world7.png")
+	end
 
 	-- Gameplay screen graphics
-	img_gp = "resources/images/gameplay/"
-
-	img_gp_filled = love.graphics.newImage(img_gp.."lifebar_filled.png")
-	img_gp_empty = love.graphics.newImage(img_gp.."lifebar_empty.png")
-
-	-- Level editor graphics
-	img_editor = "resources/images/leveleditor/"
-
-	img_editor_16x16_empty = love.graphics.newImage(img_editor.."16x16.png")
-	img_editor_16x16_cursor = love.graphics.newImage(img_editor.."16x16_cursor.png")
-
-	-- Tilemap graphics
-	img_tilemap = love.graphics.newImage("resources/images/tilemap.png")
+	do
+		img_gp_filled = love.graphics.newImage(img_gameplay_dir.."lifebar_filled.png")
+		img_gp_empty = love.graphics.newImage(img_gameplay_dir.."lifebar_empty.png")
+	end
 
 	-- Character graphics
-	img_chars = "resources/images/gameplay/characters/"
+	do
+		img_chars_mario = love.graphics.newImage(img_chars_dir.."mario.png")
+		img_chars_luigi = love.graphics.newImage(img_chars_dir.."luigi.png")
+		img_chars_toad = love.graphics.newImage(img_chars_dir.."toad.png")
+		img_chars_peach = love.graphics.newImage(img_chars_dir.."peach.png")
+	end
 
-	img_chars_mario = love.graphics.newImage(img_chars.."mario.png")
-	img_chars_luigi = love.graphics.newImage(img_chars.."luigi.png")
-	img_chars_toad = love.graphics.newImage(img_chars.."toad.png")
-	img_chars_peach = love.graphics.newImage(img_chars.."peach.png")
+	-- Level editor graphics
+	do
+		img_editor_16x16_empty = love.graphics.newImage(img_editor_dir.."16x16.png")
+		img_editor_16x16_cursor = love.graphics.newImage(img_editor_dir.."16x16_cursor.png")
+	end
 
-	img_indicator = love.graphics.newImage("resources/images/indicator.png")
+	-- Tilemap
+	img_tilemap = love.graphics.newImage(img_dir.."tilemap.png")
+
+	-- Selection indicator
+	img_indicator = love.graphics.newImage(img_dir.."indicator.png")
 end
 
 function graphics.setBackgroundColor(color)
@@ -276,9 +286,9 @@ end
 function graphics.drawLevelbook()
 	love.graphics.draw(img_levelbook, 25, 32)
 
-	graphics.drawText("WORLD  "..tostring(world.number).."-"..tostring(world.level), 89, 48, "brown")
+	graphics.drawText("WORLD  "..tostring(world.current).."-"..tostring(world.level), 89, 48, "brown")
 
-	if world.number < 7 then
+	if world.current < 7 then
 		world.level_count = 3
 	else
 		world.level_count = 2
@@ -295,10 +305,10 @@ function graphics.drawLevelbook()
 end
 
 function graphics.drawWorldImage()
-	if world.number == 1 or world.number == 3 or world.number == 5 then love.graphics.draw(img_lb_world1, 65, 112)
-	elseif world.number == 2 or world.number == 6 then           love.graphics.draw(img_lb_world2, 65, 112)
-	elseif world.number == 4 then                         love.graphics.draw(img_lb_world4, 65, 112)
-	elseif world.number == 7 then                         love.graphics.draw(img_lb_world7, 65, 112)
+	if world.current == 1 or world.current == 3 or world.current == 5 then love.graphics.draw(img_lb_world1, 65, 112)
+	elseif world.current == 2 or world.current == 6 then           love.graphics.draw(img_lb_world2, 65, 112)
+	elseif world.current == 4 then                         love.graphics.draw(img_lb_world4, 65, 112)
+	elseif world.current == 7 then                         love.graphics.draw(img_lb_world7, 65, 112)
 	end
 end
 

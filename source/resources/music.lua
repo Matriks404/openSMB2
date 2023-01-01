@@ -1,7 +1,8 @@
 music = {}
 
+music_dir = "resources/sound/music/"
+
 function music.load()
-	music_dir = "resources/sound/music/" -- Music folder
 
 	music_title = love.audio.newSource(music_dir.."title.ogg", "stream")
 	music_char_select = love.audio.newSource(music_dir.."charselect.ogg", "stream")

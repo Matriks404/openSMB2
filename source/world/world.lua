@@ -1,14 +1,14 @@
 local world = {}
+world.current = 1
 
 function world.init()
-	world.number = 1
+	world.count = 8 --TODO: Use this variable.
 
 	world.level_count = 3
 	world.level = 1
 
 	world.area_count = 1
 
-	world.area = {}
 	world.area = 0
 
 	world.area_widths = {} -- Array of area widths
@@ -27,6 +27,24 @@ end
 function world.reset()
 	world.world = 1
 	world.level = 1
+end
+
+function world.getLevelDirectory(directory)
+	world_level_str = tostring(world.current).."-"..tostring(world.level)
+
+	return directory.."/"..world_level_str.."/"
+end
+
+function world.doLoadFromLevelDirectory(directory)
+	if not love.filesystem.getInfo(directory) then
+		return false
+	end
+
+	if not love.filesystem.getInfo(directory.."settings.lua") then
+		return false
+	end
+
+	return true
 end
 
 function world.loadLevel()
@@ -90,6 +108,10 @@ function world.loadArea()
 	--TODO: Add more!
 end
 
+function world.loadAllAreas()
+
+end
+
 function world.saveLevel()
 	level_directory = world.getLevelDirectory("userlevels")
 
@@ -128,22 +150,8 @@ function world.saveArea()
 	love.filesystem.write(area_file, area_data)
 end
 
-function world.getLevelDirectory(directory)
-	world_level_str = tostring(world.number).."-"..tostring(world.level)
+function world.saveAllAreas()
 
-	return directory.."/"..world_level_str.."/"
-end
-
-function world.doLoadFromLevelDirectory(directory)
-	if not love.filesystem.getInfo(directory) then
-		return false
-	end
-
-	if not love.filesystem.getInfo(directory.."settings.lua") then
-		return false
-	end
-
-	return true
 end
 
 return world

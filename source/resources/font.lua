@@ -1,9 +1,8 @@
 local font = {}
 
-function font.load()
-	font_dir = "resources/images/font/" -- Fonts folder
+font_dir = "resources/images/font/" -- Fonts folder
 
-	-- White and brown font graphics
+function font.load()
 	font_white = love.graphics.newImage(font_dir.."white.png")
 	font_brown = love.graphics.newImage(font_dir.."brown.png")
 end

@@ -1,13 +1,14 @@
 TSerial = require "source/external/TSerial"
 
+resources = require "source/resources/resources"
+world = require "source/world/world"
+
 character = require "source/character"
 debug = require "source/debug"
 editor = require "source/editor"
 filesystem = require "source/filesystem"
 game = require "source/game"
-resources = require "source/resources/resources"
 state = require "source/state"
-world = require "source/world"
 utils = require "source/utils"
 
 function love.load()
@@ -55,9 +56,9 @@ function love.update()
 				state.text_timer = 0
 
 				story.lines = 0
-				story.page = 0
+				story.page = 1
 
-				transitionClear()
+				state.transitionClear()
 			end
 		end
 
@@ -397,13 +398,13 @@ function love.keyreleased(key)
 		if editor.option == "select" then
 		-- Level select
 			-- Set world according to world table
-			if key >= "1" and key <= "3" then                  world.number = 1
-			elseif key >= "4" and key <= "6" then              world.number = 2
-			elseif key >= "7" and key <= "9" then              world.number = 3
-			elseif key == "a" or key == "b" or key == "c" then world.number = 4
-			elseif key == "d" or key == "e" or key == "f" then world.number = 5
-			elseif key == "g" or key == "h" or key == "i" then world.number = 6
-			elseif key == "j" or key == "k" then               world.number = 7
+			if key >= "1" and key <= "3" then                  world.current = 1
+			elseif key >= "4" and key <= "6" then              world.current = 2
+			elseif key >= "7" and key <= "9" then              world.current = 3
+			elseif key == "a" or key == "b" or key == "c" then world.current = 4
+			elseif key == "d" or key == "e" or key == "f" then world.current = 5
+			elseif key == "g" or key == "h" or key == "i" then world.current = 6
+			elseif key == "j" or key == "k" then               world.current = 7
 			end
 
 			-- Go to proper editor
@@ -675,13 +676,13 @@ function love.draw()
 				story.lines = story.lines + 1
 				state.text_timer = 0
 
-				if story.page == 0 and story.lines > 8 then
+				if story.page == 1 and story.lines > 8 then
 				-- Change to 2nd story page if all lines are displayed
 					story.lines = 0
-					story.page = 1
+					story.page = 2
 					state.text_timer = 50
 
-				elseif story.page == 1 and story.lines > 8 then
+				elseif story.page == 2 and story.lines > 8 then
 				-- Enable transition which will go to title screen after some time
 					story.lines = 8
 					state.transition = true
@@ -692,11 +693,7 @@ function love.draw()
 
 			for i=0, story.lines do
 			-- Draw lines of text
-				if story.page == 0 then
-					graphics.drawText(tostring(story.page1[i]), 48, 64 + ((i - 1) * 16))
-				else
-					graphics.drawText(tostring(story.page2[i]), 48, 64 + ((i - 1) * 16))
-				end
+				graphics.drawText(tostring(story[story.page][i]), 48, 64 + ((i - 1) * 16))
 			end
 		end
 
@@ -857,7 +854,7 @@ function love.draw()
 		elseif editor.option == "edit" then
 		-- Draw editor
 			-- Draw world, level and area indicators
-			graphics.drawText(tostring(world.number).."-"..tostring(world.level), 64, 2)
+			graphics.drawText(tostring(world.current).."-"..tostring(world.level), 64, 2)
 			graphics.drawText("A-"..tostring(world.area), 104, 2)
 
 			-- Draw background value
