@@ -13,12 +13,12 @@ end
 
 function music.play()
 	if debug.mute == false then
-		if world.area_music[world.area] == 0 then
+		if world.current_area.music == 0 then
 			music_overworld:play()
 
 			music_underworld:stop()
 			music_boss:stop()
-		elseif world.area_music[world.area] == 1 then
+		elseif world.current_area.music == 1 then
 			music_underworld:play()
 
 			music_overworld:stop()

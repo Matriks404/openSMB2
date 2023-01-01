@@ -29,6 +29,7 @@ function love.load()
 	graphics.init()
 end
 
+
 function love.update()
 	state.timer = state.timer + 1
 
@@ -88,11 +89,11 @@ function love.update()
 			state.name = "gameplay"
 			state.timer = 0
 
-			world.loadLevel()
+			world.load(world.current, world.level, world.area)
 
 			state.screen_y = 0 --TEMPORARY
-			character.pos_x = world.start_x
-			character.pos_y = world.start_y
+			character.pos_x = world.current_level.start_x
+			character.pos_y = world.current_level.start_y
 
 			state.char_anim_timer = 0
 		end
@@ -108,11 +109,11 @@ function love.update()
 		-- When on subsequent screen
 			if character.pos_y > 192 + state.screen_y * 144 then
 			-- Switching vertical screen downwards
-				if character.pos_y <= world.area_heights[world.area] - 48 then
+				if character.pos_y <= world.current_area.height - 48 then
 				-- If not above lowest screen border switch screen
 					screendir = 1
 					state.verticalScreenTransition()
-				elseif character.pos_y >= world.area_heights[world.area] - 1 then
+				elseif character.pos_y >= world.current_area.height - 1 then
 				-- Die!
 					character.dying_timer = character.dying_timer + 1
 				end
@@ -125,7 +126,6 @@ function love.update()
 		end
 
 		if state.timer > 146 and state.transition_timer == 0 then
-
 			if debug.enabled == true and love.keyboard.isDown("a") then
 			-- Ascending
 				character.pos_y = character.pos_y - 3.25
@@ -197,11 +197,11 @@ function love.update()
 				end
 
 				-- Horizontal character position wraping
-				if character.pos_x > world.area_widths[world.area] then
-					character.pos_x = 0 + character.pos_x % world.area_widths[world.area]
+				if character.pos_x > world.current_area.width then
+					character.pos_x = 0 + character.pos_x % world.current_area.width
 
 				elseif character.pos_x < 0 then
-					character.pos_x = world.area_widths[world.area] + character.pos_x
+					character.pos_x = world.current_area.width + character.pos_x
 				end
 
 			elseif character.speed < 0 then
@@ -237,8 +237,8 @@ function love.update()
 
 					-- Reset character position and side
 					state.screen_y = 0 --TEMPORARY
-					character.pos_x = world.start_x
-					character.pos_y = world.start_y
+					character.pos_x = world.current_level.start_x
+					character.pos_y = world.current_level.start_y
 					character.side = 1
 
 					state.name = "death"
@@ -396,29 +396,27 @@ function love.keyreleased(key)
 		if editor.option == "select" then
 		-- Level select
 			-- Set world according to world table
-			if key >= "1" and key <= "3" then                  world.current = 1
-			elseif key >= "4" and key <= "6" then              world.current = 2
-			elseif key >= "7" and key <= "9" then              world.current = 3
-			elseif key == "a" or key == "b" or key == "c" then world.current = 4
-			elseif key == "d" or key == "e" or key == "f" then world.current = 5
-			elseif key == "g" or key == "h" or key == "i" then world.current = 6
-			elseif key == "j" or key == "k" then               world.current = 7
+			if key >= "1" and key <= "3" then                  world_no = 1
+			elseif key >= "4" and key <= "6" then              world_no = 2
+			elseif key >= "7" and key <= "9" then              world_no = 3
+			elseif key == "a" or key == "b" or key == "c" then world_no = 4
+			elseif key == "d" or key == "e" or key == "f" then world_no = 5
+			elseif key == "g" or key == "h" or key == "i" then world_no = 6
+			elseif key == "j" or key == "k" then               world_no = 7
 			end
 
 			-- Go to proper editor
 			if key >= "1" and key <= "9" then
 				editor.option = "edit"
-				world.level = ((key - 1) % 3) + 1
-				world.area = 0
+				level_no = ((key - 1) % 3) + 1
 
-				world.loadLevel()
+				world.loadAll(world_no, level_no)
 
 			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				editor.option = "edit"
-				world.level = ((string.byte(key) - 97) % 3) + 1
-				world.area = 0
+				level_no = ((string.byte(key) - 97) % 3) + 1
 
-				world.loadLevel()
+				world.loadAll(world.current, world.level)
 
 			elseif key == "q" then
 			-- Quit menu to debug screen
@@ -432,86 +430,91 @@ function love.keyreleased(key)
 		-- Edit map option
 			if key == "b" then
 			-- Change background color
-				if world.area_backgrounds[world.area] == 0 then
-					world.area_backgrounds[world.area] = 1
+				if world.current_area.background == 0 then
+					world.current_area.background = 1
 
 					graphics.setBackgroundColor("light_blue")
 				else
-					world.area_backgrounds[world.area] = 0
+					world.current_area.background = 0
 
 					graphics.setBackgroundColor("black")
 				end
 
 			elseif key == "m" then
 			-- Change music
-				if world.area_music[world.area] < 2 then
-					world.area_music[world.area] = world.area_music[world.area] + 1
+				if world.current_area.music < 2 then
+					world.current_area.music = world.current_area.music + 1
 
 					music.play()
 				else
-					world.area_music[world.area] = 0
+					world.current_area.music = 0
 
 					music.play()
 				end
 
 			-- Shrink or scratch width/height
 			elseif key == "kp4" then
-				if world.area_widths[world.area] > 16 then
-					world.area_widths[world.area] = world.area_widths[world.area] - 16
+				if world.current_area.width > 16 then
+					world.current_area.width = world.current_area.width - 16
 
 					editor.checkCursorBounds()
 					editor.checkGridBounds()
 				end
 
 			elseif key == "kp6" then
-				if world.area_widths[world.area] < 3744 then
-					world.area_widths[world.area] = world.area_widths[world.area] + 16
+				if world.current_area.width < 3744 then
+					world.current_area.width = world.current_area.width + 16
 
 					editor.checkCursorBounds()
 					editor.checkGridBounds()
 
-					for i=0, (world.area_heights[world.area] / 16) - 1 do
+					for i=0, (world.current_area.height / 16) - 1 do
 					-- Clear newly added tile blocks
-						world.area_tiles[i][(world.area_widths[world.area] / 16) - 1] = 0
+						width = world.current_area.width / 16
+						world.current_area.tiles[i][width - 1] = 0
 					end
 				end
 
 			elseif key == "kp8" then
-				if world.area_heights[world.area] > 16 then
-					world.area_heights[world.area] = world.area_heights[world.area] - 16
+				if world.current_area.height > 16 then
+					world.current_area.height = world.current_area.height - 16
 
 					editor.checkCursorBounds()
 					editor.checkGridBounds()
 				end
 
 			elseif key == "kp2" then
-				if world.area_heights[world.area] < 1440 then
-					world.area_heights[world.area] = world.area_heights[world.area] + 16
+				if world.current_area.height < 1440 then
+					world.current_area.height = world.current_area.height + 16
 
 					editor.checkCursorBounds()
 					editor.checkGridBounds()
 
 					-- Clear newly added tile blocks
-					world.area_tiles[(world.area_heights[world.area] / 16) - 1] = {}
 
-					for j=0, (world.area_widths[world.area] / 16) - 1 do
-						world.area_tiles[(world.area_heights[world.area] / 16) - 1][j] = 0
+					height = world.current_area.height / 16
+
+					world.current_area.tiles[height - 1] = {}
+
+					for j=0, (world.current_area.width / 16) - 1 do
+						world.current_area.tiles[height - 1][j] = 0
 					end
 				end
 
 			-- Change current areas
 			elseif key == "[" then
-				world.saveLevel()
+				--TODO: Save only all areas at once.
+				--world.saveLevel()
 
 				if world.area > 0 then
 					world.area = world.area - 1
 
 				else
-					world.area  = world.area_count - 1
+					world.area  = world.current_level.area_count - 1
 
 				end
 
-				world.loadArea()
+				world.loadArea(world.current, world.level, world.area)
 
 				editor.cursor_x = 0
 				editor.cursor_y = 0
@@ -520,15 +523,16 @@ function love.keyreleased(key)
 				editor.view_y = 0
 
 			elseif key == "]" then
-				world.saveLevel()
+				--TODO: Save only all areas at once.
+				--world.saveLevel()
 
-				if world.area < world.area_count - 1 then
+				if world.area < world.current_level.area_count - 1 then
 					world.area = world.area + 1
 				else
 					world.area = 0
 				end
 
-				world.loadArea()
+				world.loadArea(world.current, world.level, world.area)
 
 				editor.cursor_x = 0
 				editor.cursor_y = 0
@@ -542,7 +546,7 @@ function love.keyreleased(key)
 
 				editor.checkGridBounds()
 
-			elseif key == "right" and editor.cursor_x < world.area_widths[world.area] - 16 then
+			elseif key == "right" and editor.cursor_x < world.current_area.width - 16 then
 				editor.cursor_x = editor.cursor_x + 16
 
 				editor.checkGridBounds()
@@ -552,7 +556,7 @@ function love.keyreleased(key)
 
 				editor.checkGridBounds()
 
-			elseif key == "down" and editor.cursor_y < world.area_heights[world.area] - 16 then
+			elseif key == "down" and editor.cursor_y < world.current_area.height - 16 then
 				editor.cursor_y = editor.cursor_y + 16
 
 				editor.checkGridBounds()
@@ -580,7 +584,7 @@ function love.keyreleased(key)
 
 			elseif key == "l" then
 			-- Load this level from file
-				world.loadLevel()
+				world.load(world.current, world.level, world.area)
 
 			elseif key == "v" then
 			-- Save this level to file
@@ -856,24 +860,24 @@ function love.draw()
 			graphics.drawText("A-"..tostring(world.area), 104, 2)
 
 			-- Draw background value
-			if world.area_backgrounds[world.area] == 0 then
+			if world.current_area.background == 0 then
 				graphics.drawText("BG-BLK", 144, 2)
 			else
 				graphics.drawText("BG-BLU", 144, 2)
 			end
 
 			-- Draw music indicator
-			if world.area_music[world.area] == 0 then
+			if world.current_area.music == 0 then
 				graphics.drawText("M-OVER", 208, 2)
-			elseif world.area_music[world.area] == 1 then
+			elseif world.current_area.music == 1 then
 				graphics.drawText("M-UNDR", 208, 2)
 			else
 				graphics.drawText("M-BOSS", 208, 2)
 			end
 
 			-- Draw width and height values
-			graphics.drawText("W-"..tostring(world.area_widths[world.area]), 2, 10)
-			graphics.drawText("H-"..tostring(world.area_heights[world.area]), 56, 10)
+			graphics.drawText("W-"..tostring(world.current_area.width), 2, 10)
+			graphics.drawText("H-"..tostring(world.current_area.height), 56, 10)
 
 			-- Draw currently selected tile
 			graphics.drawText("T-"..tostring(editor.tile), 120, 10)
@@ -885,8 +889,8 @@ function love.draw()
 			graphics.drawText(tostring(editor.cursor_y), 224, 10)
 
 			-- Calculate height and width of edit view
-			editor.level_height = world.area_heights[world.area] - editor.view_y
-			editor.level_width = world.area_widths[world.area] - editor.view_x
+			editor.level_height = world.current_area.height - editor.view_y
+			editor.level_width = world.current_area.width - editor.view_x
 
 			if editor.level_height > 208 then
 				editor.level_height = 208
@@ -906,7 +910,7 @@ function love.draw()
 			-- Draw tiles
 			for i=0, (editor.level_height / 16) - 1 do
 				for j=0, (editor.level_width / 16) - 1 do
-					graphics.drawTile(world.area_tiles[(editor.view_y / 16) + i][(editor.view_x / 16) + j], j * 16, 32 + (i * 16))
+					graphics.drawTile(world.current_area.tiles[(editor.view_y / 16) + i][(editor.view_x / 16) + j], j * 16, 32 + (i * 16))
 				end
 			end
 

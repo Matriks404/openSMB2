@@ -9,10 +9,6 @@ img_gameplay_dir = img_dir.."gameplay/" -- Gameplay screen graphics
 img_chars_dir = img_dir.."gameplay/characters/" -- Character graphics
 img_editor_dir = img_dir.."leveleditor/" -- Level editor graphics
 
-function graphics.init()
-	graphics.setBackgroundColor("blue")
-end
-
 function graphics.load()
 	-- Title screen and intro graphics
 	do
@@ -81,6 +77,11 @@ function graphics.load()
 	img_indicator = love.graphics.newImage(img_dir.."indicator.png")
 end
 
+function graphics.init()
+	graphics.setBackgroundColor("blue")
+end
+
+
 function graphics.setBackgroundColor(color)
 	if color == "black" then
 		love.graphics.setBackgroundColor(0, 0, 0)
@@ -140,7 +141,7 @@ function graphics.drawLevelTiles()
 			imin = -1
 		end
 
-		if state.screen_y <= ((world.area_heights[world.area] - 192) / 16 / 12) and screendir == 1 then
+		if state.screen_y <= ((world.current_area.height - 192) / 16 / 12) and screendir == 1 then
 		-- Draw additional row of tiles on the bottom
 			imax = 16
 		end
@@ -180,7 +181,7 @@ function graphics.drawLevelTiles()
 
 			tilex = (state.screen_x * 16) + j
 
-			graphics.drawTile(world.area_tiles[tiley][tilex], j * 16, posy)
+			graphics.drawTile(world.current_area.tiles[tiley][tilex], j * 16, posy)
 		end
 	end
 end
@@ -273,16 +274,16 @@ function graphics.drawCharacter()
 	-- Draw character sprite when it's horizontally wraping
 	if character.pos_x > 256 - 16 then
 		if character.current == "mario" then
-			love.graphics.draw(img_chars_mario, sprite, character.pos_x - world.area_widths[world.area], posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_mario, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
 
 		elseif character.current == "luigi" then
-			love.graphics.draw(img_chars_luigi, sprite, character.pos_x - world.area_widths[world.area], posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_luigi, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
 
 		elseif character.current == "toad" then
-			love.graphics.draw(img_chars_toad, sprite, character.pos_x - world.area_widths[world.area], posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_toad, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
 
 		elseif character.current == "peach" then
-			love.graphics.draw(img_chars_peach, sprite, character.pos_x - world.area_widths[world.area], posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_peach, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
 		end
 	end
 end

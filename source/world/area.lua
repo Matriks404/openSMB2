@@ -1,3 +1,0 @@
-local area = {}
-
-return area

@@ -19,12 +19,12 @@ editor.view_x = 0
 editor.view_y = 0
 
 function editor.checkCursorBounds()
-	if editor.cursor_x > world.area_widths[world.area] - 16 then
-		editor.cursor_x = world.area_widths[world.area] - 16
+	if editor.cursor_x > world.current_area.width - 16 then
+		editor.cursor_x = world.current_area.width - 16
 	end
 
-	if editor.cursor_y > world.area_heights[world.area] - 16 then
-		editor.cursor_y = world.area_heights[world.area] - 16
+	if editor.cursor_y > world.current_area.height - 16 then
+		editor.cursor_y = world.current_area.height - 16
 	end
 end
 
@@ -47,7 +47,7 @@ end
 function editor.placeTile(tileid)
 	editor.tile_x = editor.cursor_x / 16
 	editor.tile_y = editor.cursor_y / 16
-	world.area_tiles[editor.tile_y][editor.tile_x] = tileid
+	world.current_area.tiles[editor.tile_y][editor.tile_x] = tileid
 end
 
 function editor.quit()

@@ -1,3 +1,0 @@
-local level = {}
-
-return level

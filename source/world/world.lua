@@ -1,34 +1,17 @@
 local world = {}
 
 world.count = 8 --TODO: Use this variable.
-world.current = 1
 
-world.level_count = 3
-world.level = 1
-
-world.area_count = 1
-
-world.area = 0
-
-world.area_widths = {} -- Array of area widths
-world.area_heights = {} -- Array of area heights
-world.area_backgrounds = {} -- Array of backgrounds (0 - Black, 1 - Light blue)
-world.area_music = {} -- Array of music (0 - Overworld, 1 - Underworld)
-world.area_tiles = {} -- Array of area tiles
-
--- Start coordinates
-world.start_x = 0
-world.start_y = 0
-
-world.level_directory = ""
+world.level_count = 3 --TODO: Use this variable.
 
 function world.reset()
-	world.world = 1
+	world.current = 1
 	world.level = 1
+	world.area = 0
 end
 
-function world.getLevelDirectory(directory)
-	world_level_str = tostring(world.current).."-"..tostring(world.level)
+function world.getLevelDirectory(world_no, level_no, directory)
+	world_level_str = tostring(world_no).."-"..tostring(level_no)
 
 	return directory.."/"..world_level_str.."/"
 end
@@ -45,69 +28,102 @@ function world.doLoadFromLevelDirectory(directory)
 	return true
 end
 
-function world.loadLevel()
-	base_level_dir = world.getLevelDirectory("levels")
-	user_level_dir = world.getLevelDirectory("userlevels")
+function world.setup(world_no, level_no, area_no)
+	world.current = world_no
+	world.current_level = world[world_no][level_no]
+	world.current_area = world[world_no][level_no][area_no]
 
-	if world.doLoadFromLevelDirectory(user_level_dir) then
-
-		world.level_directory = user_level_dir
-	elseif world.doLoadFromLevelDirectory(base_level_dir) then
-		world.level_directory = base_level_dir
-	else
-		--TODO: This is just a placeholder, do something about that.
-		love.window.showMessageBox("Error", "no valid level found!")
-	end
-
-	level_settings_data = love.filesystem.read(world.level_directory.."settings.lua")
-	level_settings = TSerial.unpack(level_settings_data)
-
-	-- Get level variables
-	world.area_count = level_settings[1]
-	world.start_x = level_settings[2]
-	world.start_y = level_settings[3]
-
-	for i=0, world.area_count - 1 do
-	-- TODO: ???
-		area_settings = level_settings[4 + i]
-
-		-- Fill area width, height, background and music arrays
-		world.area_widths[i] = area_settings[1]
-		world.area_heights[i] = area_settings[2]
-		world.area_backgrounds[i] = area_settings[3]
-		world.area_music[i] = area_settings[4]
-	end
-
-	world.loadArea()
+	music.play()
 end
 
-function world.loadArea()
-	area_data = love.filesystem.read(world.level_directory..tostring(world.area))
+function world.loadAll(world_no, level_no)
+	world.loadLevel(world_no, level_no)
+
+	for area = 0, world[world_no][level_no].area_count - 1 do
+		world.loadArea(world_no, level_no, area)
+	end
+
+	world.setup(world_no, level_no, 0)
+end
+
+
+
+function world.load(world_no, level_no, area_no)
+	world.loadLevel(world_no, level_no)
+	world.loadArea(world_no, level_no, area_no)
+
+	world.setup(world_no, level_no, area_no)
+end
+
+function world.loadLevel(world_no, level_no, area_no)
+	if (not world[world_no]) then
+		world[world_no] = {}
+	end
+
+	world.level = level_no
+
+	if (not world[world_no][level_no]) then
+		base_level_dir = world.getLevelDirectory(world_no, level_no, "levels")
+		user_level_dir = world.getLevelDirectory(world_no, level_no, "userlevels")
+
+		world[world_no][level_no] = {}
+
+		if world.doLoadFromLevelDirectory(user_level_dir) then
+			world[world_no][level_no].directory = user_level_dir
+		elseif world.doLoadFromLevelDirectory(base_level_dir) then
+			world[world_no][level_no].directory = base_level_dir
+		else
+			--TODO: This is just a placeholder, do something about that.
+			love.window.showMessageBox("Error", "no valid level found!")
+		end
+
+		level_settings_data = love.filesystem.read(world[world_no][level_no].directory.."settings.lua")
+		level_settings = TSerial.unpack(level_settings_data)
+
+		-- Get level variables
+		world[world_no][level_no].area_count = level_settings[1]
+		world[world_no][level_no].start_x = level_settings[2]
+		world[world_no][level_no].start_y = level_settings[3]
+
+		for area=0, world[world_no][level_no].area_count - 1 do
+			area_settings = level_settings[4 + area]
+
+			-- Fill area width, height, background and music arrays
+			world[world_no][level_no][area] = {}
+			world[world_no][level_no][area].width = area_settings[1]
+			world[world_no][level_no][area].height = area_settings[2]
+			world[world_no][level_no][area].background = area_settings[3]
+			world[world_no][level_no][area].music = area_settings[4]
+		end
+	end
+end
+
+function world.loadArea(world_no, level_no, area_no)
+	world.area = area_no
+
+	area_data = love.filesystem.read(world[world_no][level_no].directory..tostring(area_no))
 
 	-- Check level background and set it
-	if world.area_backgrounds[world.area] == 0 then
+	if world[world_no][level_no][area_no].background == 0 then
 		graphics.setBackgroundColor("black")
 	else
 		graphics.setBackgroundColor("light_blue")
 	end
 
-	music.play()
+	height = world[world_no][level_no][area_no].height / 16
+	width = world[world_no][level_no][area_no].width / 16
+
+	world[world_no][level_no][area_no].tiles = {}
 
 	-- Fill tile data
-	for i=0, (world.area_heights[world.area] / 16) - 1 do
-		diff = i * (world.area_widths[world.area] / 16)
-		world.area_tiles[i] = {}
+	for y=0, height - 1 do
+		diff = y * width
+		world[world_no][level_no][area_no].tiles[y] = {}
 
-		for j=0, (world.area_widths[world.area] / 16) - 1 do
-				world.area_tiles[i][j] = string.byte(string.sub(area_data, diff + j + 1))
+		for x=0, width - 1 do
+				world[world_no][level_no][area_no].tiles[y][x] = string.byte(string.sub(area_data, diff + x + 1))
 		end
 	end
-
-	--TODO: Add more!
-end
-
-function world.loadAllAreas()
-
 end
 
 function world.saveLevel()
@@ -117,10 +133,10 @@ function world.saveLevel()
 		love.filesystem.createDirectory(level_directory)
 	end
 
-	data = { world.area_count, world.start_x, world.start_y}
+	data = { world.area_count, world[world.current][world.level].start_x, world[world.current][world.level].start_y}
 
-	for i=0, world.area_count - 1 do
-		table.insert(data, {world.area_widths[i], world.area_heights[i], world.area_backgrounds[i], world.area_music[i] })
+	for area=0, world.area_count - 1 do
+		table.insert(data, {world[world.current][world.level][area].width, world[world.current][world.level][area].height, world[world.current][world.level][area].background, world[world.current][world.level][i].music })
 	end
 
 	data = TSerial.pack(data, false, true)
@@ -139,9 +155,9 @@ function world.saveArea()
 
 	area_data = ""
 
-	for i = 0, (world.area_heights[world.area] / 16) - 1 do
-		for j = 0, (world.area_widths[world.area] / 16) - 1 do
-			area_data = area_data..string.char(world.area_tiles[i][j])
+	for i = 0, (world.current_area.height / 16) - 1 do
+		for j = 0, (world.current_area.width / 16) - 1 do
+			area_data = area_data..string.char(world.current_area.tiles[i][j])
 		end
 	end
 
