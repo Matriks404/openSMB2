@@ -54,10 +54,6 @@ function world.enter(world_no, level_no, area_no)
 end
 
 function world.load(world_no, level_no, area_no)
-	if (not world[world_no]) then
-		world[world_no] = {}
-	end
-
 	base_level_dir = world.getLevelDirectory(world_no, level_no, "levels")
 	user_level_dir = world.getLevelDirectory(world_no, level_no, "userlevels")
 
