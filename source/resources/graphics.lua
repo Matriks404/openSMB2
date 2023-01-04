@@ -9,6 +9,11 @@ img_gameplay_dir = img_dir.."gameplay/" -- Gameplay screen graphics
 img_chars_dir = img_dir.."gameplay/characters/" -- Character graphics
 img_editor_dir = img_dir.."leveleditor/" -- Level editor graphics
 
+bg = {}
+bg["black"] = { short_name = "BLK", r = 0, g = 0, b = 0 }
+bg["light_blue"] = { short_name = "LBL", r = 0.36, g = 0.58, b = 0.99 }
+bg["blue"] = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
+
 function graphics.load()
 	-- Title screen and intro graphics
 	do
@@ -83,16 +88,9 @@ end
 
 
 function graphics.setBackgroundColor(color)
-	if color == "black" then
-		love.graphics.setBackgroundColor(0, 0, 0)
+	r, g, b = bg[color].r, bg[color].g, bg[color].b
 
-	elseif color == "light_blue" then
-
-		love.graphics.setBackgroundColor(0.24, 0.74, 0.99)
-	elseif color == "blue" then
-
-		love.graphics.setBackgroundColor(0.36, 0.58, 0.99)
-	end
+	love.graphics.setBackgroundColor(r, g, b)
 end
 
 function graphics.drawText(str, x, y, color)

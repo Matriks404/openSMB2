@@ -2,8 +2,14 @@ local music = {}
 
 music_dir = "resources/sound/music/"
 
-function music.load()
+mus = {}
+mus["title"] = { short_name = "TITL" }
+mus["character_select"] = { short_name = "CHAR" }
+mus["overworld"] = { short_name = "OVER" }
+mus["underworld"] = { short_name = "UNDR" }
+mus["boss"] = { short_name = "BOSS" }
 
+function music.load()
 	music_title = love.audio.newSource(music_dir.."title.ogg", "stream")
 	music_char_select = love.audio.newSource(music_dir.."charselect.ogg", "stream")
 	music_overworld = love.audio.newSource(music_dir.."overworld.ogg", "stream")
@@ -13,21 +19,24 @@ end
 
 function music.play()
 	if debug.mute == false then
-		if world.current_area.music == 0 then
+		if world.current_area.music == "overworld" then
 			music_overworld:play()
-
-			music_underworld:stop()
-			music_boss:stop()
-		elseif world.current_area.music == 1 then
+		elseif world.current_area.music == "underworld" then
 			music_underworld:play()
-
-			music_overworld:stop()
-			music_boss:stop()
-		else
+		elseif world.current_area.music == "boss" then
 			music_boss:play()
+		end
 
+		if world.current_area.music ~= "overworld" then
 			music_overworld:stop()
+		end
+
+		if world.current_area.music ~= "underworld" then
 			music_underworld:stop()
+		end
+
+		if world.current_area.music ~= "boss" then
+			music_boss:stop()
 		end
 	end
 end

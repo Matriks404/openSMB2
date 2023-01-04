@@ -37,6 +37,10 @@ function world.enter(world_no, level_no, area_no)
 		world.load(world_no, level_no, area_no)
 	end
 
+	if (not world[world_no][level_no]) then
+		return
+	end
+
 	if (not area_no) then
 		area_no = 0
 	end
@@ -50,7 +54,16 @@ function world.enter(world_no, level_no, area_no)
 
 	music.play()
 
+	-- Check level background and set it
+	graphics.setBackgroundColor(world.current_area.background)
+
 	print("Entering (and rendering) area "..area_no.." of level "..world_no.."-"..level_no)
+end
+
+function world.unload(world_no, level_no)
+	if world.current_level.modified then
+		world[world_no][level_no] = nil
+	end
 end
 
 function world.load(world_no, level_no, area_no)
@@ -63,7 +76,9 @@ function world.load(world_no, level_no, area_no)
 		level_directory = base_level_dir
 	else
 		--TODO: This is just a placeholder, do something about that.
-		love.window.showMessageBox("Error", "no valid level found!")
+		love.window.showMessageBox("Error", "No valid level found!")
+
+		return
 	end
 
 	print("Loading level from "..level_directory)
@@ -134,14 +149,6 @@ function world.loadArea(world_no, level_no, area_no, level_directory)
 	area = world[world_no][level_no][area_no]
 
 	area_data = love.filesystem.read(level_directory..tostring(area_no))
-
-	-- Check level background and set it
-	if area.background == 0 then
-		graphics.setBackgroundColor("black")
-	else
-		graphics.setBackgroundColor("light_blue")
-	end
-
 
 	height = area.height / 16
 	width = area.width / 16

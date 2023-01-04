@@ -1,14 +1,13 @@
 TSerial = require "source/external/TSerial"
 
 resources = require "source/resources/resources"
-world = require "source/world/world"
-
 character = require "source/character"
 debug = require "source/debug"
 editor = require "source/editor"
 filesystem = require "source/filesystem"
 game = require "source/game"
 state = require "source/state"
+world = require "source/world"
 utils = require "source/utils"
 
 function love.load()
@@ -383,7 +382,7 @@ function love.keyreleased(key)
 
 				state.name = "character_select"
 			else
-				utils.setBackgroundColor("blue")
+				graphics.setBackgroundColor("blue")
 
 				state.cursor = 0
 				state.timer = 0
@@ -405,218 +404,91 @@ function love.keyreleased(key)
 			elseif key == "j" or key == "k" then               world_no = 7
 			end
 
-			-- Go to proper editor
 			if key >= "1" and key <= "9" then
-				editor.option = "edit"
 				level_no = ((key - 1) % 3) + 1
 
-				world.enter(world_no, level_no)
+				editor.openLevel(world_no, level_no)
 
 			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
-				editor.option = "edit"
 				level_no = ((string.byte(key) - 97) % 3) + 1
 
-				world.enter(world_no, level_no)
+				editor.openLevel(world_no, level_no)
 
 			elseif key == "q" then
-			-- Quit menu to debug screen
-				state.name = "debug"
-				state.timer = 0
-
-				graphics.setBackgroundColor("blue")
+				editor.quitToDebugMenu()
 			end
 
 		elseif editor.option == "edit" then
 		-- Edit map option
 			if key == "b" then
-			-- Change background color
-				if world.current_area.background == 0 then
-					world.current_area.background = 1
-
-					graphics.setBackgroundColor("light_blue")
-				else
-					world.current_area.background = 0
-
-					graphics.setBackgroundColor("black")
-				end
-
-				world.current_area.modified = true
+				editor.updateBackground()
 
 			elseif key == "m" then
-			-- Change music
-				if world.current_area.music < 2 then
-					world.current_area.music = world.current_area.music + 1
+				editor.updateMusic()
 
-					music.play()
-				else
-					world.current_area.music = 0
-
-					music.play()
-				end
-
-				world.current_area.modified = true
-
-			-- Shrink or scratch width/height
 			elseif key == "kp4" then
-				if world.current_area.width > 16 then
-					world.current_area.width = world.current_area.width - 16
-
-					editor.checkCursorBounds()
-					editor.checkGridBounds()
-				end
-
-				world.current_area.modified = true
+				editor.shrinkAreaWidth()
 
 			elseif key == "kp6" then
-				if world.current_area.width < 3744 then
-					world.current_area.width = world.current_area.width + 16
-
-					editor.checkCursorBounds()
-					editor.checkGridBounds()
-
-					for i=0, (world.current_area.height / 16) - 1 do
-					-- Clear newly added tile blocks
-						width = world.current_area.width / 16
-						world.current_area.tiles[i][width - 1] = 0
-					end
-				end
-
-				world.current_area.modified = true
+				editor.scratchAreaWidth()
 
 			elseif key == "kp8" then
-				if world.current_area.height > 16 then
-					world.current_area.height = world.current_area.height - 16
-
-					editor.checkCursorBounds()
-					editor.checkGridBounds()
-				end
-
-				world.current_area.modified = true
+				editor.shrinkAreaHeight()
 
 			elseif key == "kp2" then
-				if world.current_area.height < 1440 then
-					world.current_area.height = world.current_area.height + 16
+				editor.scratchAreaHeight()
 
-					editor.checkCursorBounds()
-					editor.checkGridBounds()
-
-					-- Clear newly added tile blocks
-
-					height = world.current_area.height / 16
-
-					world.current_area.tiles[height - 1] = {}
-
-					for j=0, (world.current_area.width / 16) - 1 do
-						world.current_area.tiles[height - 1][j] = 0
-					end
-				end
-
-				world.current_area.modified = true
-
-			-- Change current areas
 			elseif key == "[" then
-				if world.area > 0 then
-					world.area = world.area - 1
-
-				else
-					world.area  = world.current_level.area_count - 1
-
-				end
-
-				world.enter(world.current, world.level, world.area)
-
-				editor.cursor_x = 0
-				editor.cursor_y = 0
-
-				editor.view_x = 0
-				editor.view_y = 0
+				editor.goToPreviousArea()
 
 			elseif key == "]" then
-				if world.area < world.current_level.area_count - 1 then
-					world.area = world.area + 1
-				else
-					world.area = 0
-				end
+				editor.goToNextArea()
 
-				world.enter(world.current, world.level, world.area)
+			elseif key == "left" then
+				editor.moveCursor(-16, 0)
 
-				editor.cursor_x = 0
-				editor.cursor_y = 0
+			elseif key == "right" then
+				editor.moveCursor(16, 0)
 
-				editor.view_x = 0
-				editor.view_y = 0
+			elseif key == "up" then
+				editor.moveCursor(0, -16)
 
-			-- Move edit cursor
-			elseif key == "left" and editor.cursor_x > 0 then
-				editor.cursor_x = editor.cursor_x - 16
+			elseif key == "down" then
+				editor.moveCursor(0, 16)
 
-				editor.checkGridBounds()
+			-- Decrease tile ID by 16
+			elseif key == "w" then
+				editor.changeTile(-16)
 
-			elseif key == "right" and editor.cursor_x < world.current_area.width - 16 then
-				editor.cursor_x = editor.cursor_x + 16
+			-- Increase tile ID by 16
+			elseif key == "s" then
+				editor.changeTile(16)
 
-				editor.checkGridBounds()
+			-- Decrease tile ID by 1
+			elseif key == "a" then
+				editor.changeTile(-1)
 
-			elseif key == "up" and editor.cursor_y > 0 then
-				editor.cursor_y = editor.cursor_y - 16
+			-- Increase tile ID by 1
+			elseif key == "d" then
+				editor.changeTile(1)
 
-				editor.checkGridBounds()
-
-			elseif key == "down" and editor.cursor_y < world.current_area.height - 16 then
-				editor.cursor_y = editor.cursor_y + 16
-
-				editor.checkGridBounds()
-
-			-- Change selected tile
-			elseif key == "w" and editor.tile > 15 then
-				editor.tile = editor.tile - 16
-
-			elseif key == "s" and editor.tile < 240 then
-				editor.tile = editor.tile + 16
-
-			elseif key == "a" and editor.tile > 0 then
-				editor.tile = editor.tile - 1
-
-			elseif key == "d" and editor.tile < 255 then
-				editor.tile = editor.tile + 1
-
-			elseif key == "z" then
 			-- Remove tile
+			elseif key == "z" then
 				editor.placeTile(0)
 
-				world.current_area.modified = true --TODO: Move to editor.placeTile()
-
 			elseif key == "x" then
-			-- Place tile
 				editor.placeTile(editor.tile)
 
-				world.current_area.modified = true --TODO: Move to editor.placeTile()
-
 			elseif key == "l" then
-			-- Load this level from file
-				world.load(world.current, world.level, world.area)
+				editor.loadLevel(world.current, world.level)
 
 			elseif key == "v" then
-			-- Save this level to file
 				world.save(world.current, world.level)
 
 			elseif key == "p" then
-			-- Play from this level (doesn't return to level editor)
-				world.save(world.current, world.level)
-
-				state.name = "character_select"
-				world.area = 0
-				frames = 0
-
-				if debug.mute == false then
-					music.stop()
-					music_char_select:play()
-				end
-
-				graphics.setBackgroundColor("black")
+				editor.playLevel()
 
 			elseif key == "q" then
-			-- Quit to editor menu
 				editor.quit()
 			end
 		end
@@ -855,8 +727,9 @@ function love.draw()
 			graphics.drawText(" A - 4-1  D - 5-1  G - 6-1", 32, 160)
 			graphics.drawText(" B - 4-2  E - 5-2  H - 6-2", 32, 176)
 			graphics.drawText(" C - 4-3  F - 5-3  I - 6-3", 32, 192)
+			graphics.drawText(" J - 7-1  K - 7-2         ", 32, 208)
 
-			graphics.drawText(" J - 7-1  K - 7-2  Q - QUIT", 32, 224)
+			graphics.drawText("                  Q - QUIT", 32, 224)
 
 		elseif editor.option == "edit" then
 		-- Draw editor
@@ -864,21 +737,9 @@ function love.draw()
 			graphics.drawText(tostring(world.current).."-"..tostring(world.level), 64, 2)
 			graphics.drawText("A-"..tostring(world.area), 104, 2)
 
-			-- Draw background value
-			if world.current_area.background == 0 then
-				graphics.drawText("BG-BLK", 144, 2)
-			else
-				graphics.drawText("BG-BLU", 144, 2)
-			end
-
-			-- Draw music indicator
-			if world.current_area.music == 0 then
-				graphics.drawText("M-OVER", 208, 2)
-			elseif world.current_area.music == 1 then
-				graphics.drawText("M-UNDR", 208, 2)
-			else
-				graphics.drawText("M-BOSS", 208, 2)
-			end
+			-- Draw background and music indicators
+			graphics.drawText("BG-"..bg[world.current_area.background].short_name, 144, 2)
+			graphics.drawText("M-"..mus[world.current_area.music].short_name, 208, 2)
 
 			-- Draw width and height values
 			graphics.drawText("W-"..tostring(world.current_area.width), 2, 10)
@@ -921,7 +782,6 @@ function love.draw()
 
 			-- Draw edit cursor
 			love.graphics.draw(img_editor_16x16_cursor, editor.cursor_x - editor.view_x, editor.cursor_y - editor.view_y + 32)
-
 
 			--TODO: Add more!
 		end
