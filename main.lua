@@ -101,7 +101,7 @@ function love.update()
 	-- Gameplay stuff
 		if state.screen_y == 0 and character.pos_y > 192 then
 		-- When on first screen, switching vertical screen downwards
-			screendir = 1
+			state.screen_dir = 1
 			state.verticalScreenTransition()
 
 		elseif state.screen_y > 0 then
@@ -110,7 +110,7 @@ function love.update()
 			-- Switching vertical screen downwards
 				if character.pos_y <= world.current_area.height - 48 then
 				-- If not above lowest screen border switch screen
-					screendir = 1
+					state.screen_dir = 1
 					state.verticalScreenTransition()
 				elseif character.pos_y >= world.current_area.height - 1 then
 				-- Die!
@@ -118,8 +118,8 @@ function love.update()
 				end
 
 			elseif character.pos_y < 16 + state.screen_y * 144 then
-			-- Switching vertical screen upwords
-				screendir = -1
+			-- Switching vertical screen upwards
+				state.screen_dir = -1
 				state.verticalScreenTransition()
 			end
 		end
@@ -127,7 +127,7 @@ function love.update()
 		if state.timer > 146 and state.transition_timer == 0 then
 			if debug.enabled == true and love.keyboard.isDown("a") then
 			-- Ascending
-				character.pos_y = character.pos_y - 3.25
+				character.pos_y = character.pos_y - 6
 			end
 
 			-- Left/Right movement

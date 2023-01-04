@@ -119,13 +119,13 @@ function graphics.drawText(str, x, y, color)
 	end
 end
 
-function graphics.drawTile(tileid, tilex, tiley)
-	ax = (tileid % 16) * 16
-	ay = math.floor(tileid / 16) * 16
+function graphics.drawTile(id, x, y)
+	ax = (id % 16) * 16
+	ay = math.floor(id / 16) * 16
 
 	tile = love.graphics.newQuad(ax, ay, 16, 16, img_tilemap:getWidth(), img_tilemap:getHeight())
 
-	love.graphics.draw(img_tilemap, tile, tilex, tiley)
+	love.graphics.draw(img_tilemap, tile, x, y)
 end
 
 function graphics.drawLevelTiles()
@@ -134,52 +134,53 @@ function graphics.drawLevelTiles()
 
 	if state.transition_timer > 0 and state.transition_timer < 35 then
 	-- During transition draw additional row of tiles
-		if state.screen_y > 0 and screendir == - 1 then
+		if state.screen_y > 0 and state.screen_dir == - 1 then
 		-- Draw additional row of tiles on the top
 			imin = -1
 		end
 
-		if state.screen_y <= ((world.current_area.height - 192) / 16 / 12) and screendir == 1 then
+		if state.screen_y <= ((world.current_area.height - 192) / 16 / 12) and state.screen_dir == 1 then
 		-- Draw additional row of tiles on the bottom
 			imax = 16
 		end
 	end
 
-	for i=imin, imax - 1 do
-		for j=0, 16 - 1 do
+	for i = imin, imax - 1 do
+		for j = 0, 16 - 1 do
 			if state.transition_timer > 0 then
 			-- Draw tiles when transitioning between screens
 				if state.screen_y == 0 then
-					transy = math.floor(state.transition_timer / 35 * 9)
-					tiley = transy + i
-					posy = (i * 16) - (state.transition_timer / 35 * 144) % 16
+					trans_y = math.floor(state.transition_timer / 35 * 9)
+					tile_y = trans_y + i
+					pos_y = (i * 16) - (state.transition_timer / 35 * 144) % 16
 				else
-					if screendir == 1 then
-						transy = math.floor(state.transition_timer / 35 * 9)
-						tiley = (state.screen_y * 9) + transy + i
-						posy = (i * 16) - (state.transition_timer / 35 * 144) % 16
+					if state.screen_dir == 1 then
+						trans_y = math.floor(state.transition_timer / 35 * 9)
+						tile_y = (state.screen_y * 9) + trans_y + i
+						pos_y = (i * 16) - (state.transition_timer / 35 * 144) % 16
 
 					else
-						transy = 9 - math.floor(state.transition_timer / 35 * 9)
-						tiley = ((state.screen_y - 1) * 9) + transy + i
+						trans_y = 9 - math.floor(state.transition_timer / 35 * 9)
+						tile_y = ((state.screen_y - 1) * 9) + trans_y + i
 
-						posy = (i * 16) + (state.transition_timer / 35 * 144) % 16
+						pos_y = (i * 16) + (state.transition_timer / 35 * 144) % 16
 					end
 				end
 			else
 			-- Draw tiles on stationary screen
 				if state.screen_y == 0 then
-					tiley = i
+					tile_y = i
 				else
-					tiley = (state.screen_y * 9) + i
+					tile_y = (state.screen_y * 9) + i
 				end
 
-				posy = i * 16
+				pos_y = i * 16
 			end
 
-			tilex = (state.screen_x * 16) + j
+			tile_x = (state.screen_x * 16) + j
+			pos_x = j * 16
 
-			graphics.drawTile(world.current_area.tiles[tiley][tilex], j * 16, posy)
+			graphics.drawTile(world.current_area.tiles[tile_y][tile_x], pos_x, pos_y)
 		end
 	end
 end
@@ -235,53 +236,59 @@ function graphics.drawCharacter()
 	end
 
 	if state.screen_y == 0 then
-		posy = character.pos_y - state.screen_y * 240
+		pos_y = character.pos_y - state.screen_y * 240
 
 	else
-		posy = character.pos_y - state.screen_y * 144
+		pos_y = character.pos_y - state.screen_y * 144
 	end
 
 	if state.transition_timer > 0 then
-		if screendir == 1 then posy = posy - (state.transition_timer / 35) * 144
-		else                   posy = posy + (state.transition_timer / 35) * 144
+		if state.screen_dir == 1 then
+			pos_y = pos_y - (state.transition_timer / 35) * 144
+		else
+			pos_y = pos_y + (state.transition_timer / 35) * 144
 		end
 	end
+
+	pos_x = character.pos_x
 
 	-- Draw character sprite
 	if character.current == "mario" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_mario:getWidth(), img_chars_mario:getHeight())
 
-		love.graphics.draw(img_chars_mario, sprite, character.pos_x, posy, 0, character.side, 1, offset)
+		love.graphics.draw(img_chars_mario, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 	elseif character.current == "luigi" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_luigi:getWidth(), img_chars_luigi:getHeight())
 
-		love.graphics.draw(img_chars_luigi, sprite, character.pos_x, posy, 0, character.side, 1, offset)
+		love.graphics.draw(img_chars_luigi, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 	elseif character.current == "toad" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_luigi:getWidth(), img_chars_luigi:getHeight())
 
-		love.graphics.draw(img_chars_toad, sprite, character.pos_x, posy, 0, character.side, 1, offset)
+		love.graphics.draw(img_chars_toad, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 	elseif character.current == "peach" then
 		sprite = love.graphics.newQuad(ax, 0, 16, 32, img_chars_peach:getWidth(), img_chars_peach:getHeight())
 
-		love.graphics.draw(img_chars_peach, sprite, character.pos_x, posy, 0, character.side, 1, offset)
+		love.graphics.draw(img_chars_peach, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 	end
 
 	-- Draw character sprite when it's horizontally wraping
 	if character.pos_x > 256 - 16 then
+		pos_x = pos_x - world.current_area.width
+
 		if character.current == "mario" then
-			love.graphics.draw(img_chars_mario, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_mario, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 		elseif character.current == "luigi" then
-			love.graphics.draw(img_chars_luigi, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_luigi, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 		elseif character.current == "toad" then
-			love.graphics.draw(img_chars_toad, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_toad, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 		elseif character.current == "peach" then
-			love.graphics.draw(img_chars_peach, sprite, character.pos_x - world.current_area.width, posy, 0, character.side, 1, offset)
+			love.graphics.draw(img_chars_peach, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 		end
 	end
 end
@@ -297,7 +304,7 @@ function graphics.drawLevelbook()
 		world.level_count = 2
 	end
 
-	for i=0, world.level_count - 1 do
+	for i = 0, world.level_count - 1 do
 	-- Draw level indicators
 		if world.level == i + 1 then
 			love.graphics.draw(img_lb_current, 113 + (i * 16), 64)
@@ -308,10 +315,14 @@ function graphics.drawLevelbook()
 end
 
 function graphics.drawWorldImage()
-	if world.current == 1 or world.current == 3 or world.current == 5 then love.graphics.draw(img_lb_world1, 65, 112)
-	elseif world.current == 2 or world.current == 6 then           love.graphics.draw(img_lb_world2, 65, 112)
-	elseif world.current == 4 then                         love.graphics.draw(img_lb_world4, 65, 112)
-	elseif world.current == 7 then                         love.graphics.draw(img_lb_world7, 65, 112)
+	if world.current == 1 or world.current == 3 or world.current == 5 then
+		love.graphics.draw(img_lb_world1, 65, 112)
+	elseif world.current == 2 or world.current == 6 then
+		love.graphics.draw(img_lb_world2, 65, 112)
+	elseif world.current == 4 then
+		love.graphics.draw(img_lb_world4, 65, 112)
+	elseif world.current == 7 then
+		love.graphics.draw(img_lb_world7, 65, 112)
 	end
 end
 
