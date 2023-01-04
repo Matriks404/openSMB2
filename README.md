@@ -54,26 +54,26 @@
 	* Toggle FPS counter.
 	* Toggle Frames counter.
 	* Toggle Mute option.
-	* Enter level editor (just very basic functions)
-	* Start game in debug mode which allows above counters to work.
+	* Enter level editor.
+	* Start game in debug mode which allows above options to work.
 
 * In level editor menu:
 	* Press one of the keys that will enter editing of some level.
 	* Press `Q` to quit to debug screen.
 
 * In level editor:
-	* Press `B` to change background color (Black/Blue)
-	* Press `M` to change music
-	* Press `4` or `6` on keypad to shrink or stretch width
-	* Press `8` or `2` on keypad to shrink or stretch height
+	* Press `B` to change background color.
+	* Press `M` to change music.
+	* Press `4` or `6` on keypad to shrink or stretch width.
+	* Press `8` or `2` on keypad to shrink or stretch height.
 	* Press `[` or `]` to switch between level areas.
 	* Press arrow keys to move edit cursor.
-	* Press `W`, `S`, `A`, `D` keys to change selected tile
-	* Press `Z` to remove tile
-	* Press `X` to place tile
+	* Press `W`, `S`, `A`, `D` keys to change selected tile.
+	* Press `Z` to remove tile.
+	* Press `X` to place tile.
 	* Press `L` to load level again.
 	* Press `V` to save level.
-	* Press `P` to play this level (Note that it automatically saves the level and game doesn't return to level editor afterwards)
+	* Press `P` to play this level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
 	* Press `Q` to quit to menu.
 
 * During gameplay:
