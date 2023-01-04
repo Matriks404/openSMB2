@@ -89,7 +89,7 @@ function love.update()
 			state.name = "gameplay"
 			state.timer = 0
 
-			world.load(world.current, world.level, world.area)
+			world.enter(world.current, world.level, world.area)
 
 			state.screen_y = 0 --TEMPORARY
 			character.pos_x = world.current_level.start_x
@@ -410,13 +410,13 @@ function love.keyreleased(key)
 				editor.option = "edit"
 				level_no = ((key - 1) % 3) + 1
 
-				world.loadAll(world_no, level_no)
+				world.enter(world_no, level_no)
 
 			elseif string.byte(key) >= string.byte("a") and string.byte(key) <= string.byte("k") then
 				editor.option = "edit"
 				level_no = ((string.byte(key) - 97) % 3) + 1
 
-				world.loadAll(world_no, level_no)
+				world.enter(world_no, level_no)
 
 			elseif key == "q" then
 			-- Quit menu to debug screen
@@ -440,6 +440,8 @@ function love.keyreleased(key)
 					graphics.setBackgroundColor("black")
 				end
 
+				world.current_area.modified = true
+
 			elseif key == "m" then
 			-- Change music
 				if world.current_area.music < 2 then
@@ -452,6 +454,8 @@ function love.keyreleased(key)
 					music.play()
 				end
 
+				world.current_area.modified = true
+
 			-- Shrink or scratch width/height
 			elseif key == "kp4" then
 				if world.current_area.width > 16 then
@@ -460,6 +464,8 @@ function love.keyreleased(key)
 					editor.checkCursorBounds()
 					editor.checkGridBounds()
 				end
+
+				world.current_area.modified = true
 
 			elseif key == "kp6" then
 				if world.current_area.width < 3744 then
@@ -475,6 +481,8 @@ function love.keyreleased(key)
 					end
 				end
 
+				world.current_area.modified = true
+
 			elseif key == "kp8" then
 				if world.current_area.height > 16 then
 					world.current_area.height = world.current_area.height - 16
@@ -482,6 +490,8 @@ function love.keyreleased(key)
 					editor.checkCursorBounds()
 					editor.checkGridBounds()
 				end
+
+				world.current_area.modified = true
 
 			elseif key == "kp2" then
 				if world.current_area.height < 1440 then
@@ -501,11 +511,10 @@ function love.keyreleased(key)
 					end
 				end
 
+				world.current_area.modified = true
+
 			-- Change current areas
 			elseif key == "[" then
-				--TODO: Save only all areas at once.
-				--world.saveLevel()
-
 				if world.area > 0 then
 					world.area = world.area - 1
 
@@ -514,7 +523,7 @@ function love.keyreleased(key)
 
 				end
 
-				world.loadArea(world.current, world.level, world.area)
+				world.enter(world.current, world.level, world.area)
 
 				editor.cursor_x = 0
 				editor.cursor_y = 0
@@ -523,16 +532,13 @@ function love.keyreleased(key)
 				editor.view_y = 0
 
 			elseif key == "]" then
-				--TODO: Save only all areas at once.
-				--world.saveLevel()
-
 				if world.area < world.current_level.area_count - 1 then
 					world.area = world.area + 1
 				else
 					world.area = 0
 				end
 
-				world.loadArea(world.current, world.level, world.area)
+				world.enter(world.current, world.level, world.area)
 
 				editor.cursor_x = 0
 				editor.cursor_y = 0
@@ -578,9 +584,13 @@ function love.keyreleased(key)
 			-- Remove tile
 				editor.placeTile(0)
 
+				world.current_area.modified = true --TODO: Move to editor.placeTile()
+
 			elseif key == "x" then
 			-- Place tile
 				editor.placeTile(editor.tile)
+
+				world.current_area.modified = true --TODO: Move to editor.placeTile()
 
 			elseif key == "l" then
 			-- Load this level from file
@@ -588,11 +598,11 @@ function love.keyreleased(key)
 
 			elseif key == "v" then
 			-- Save this level to file
-				world.saveLevel()
+				world.save(world.current, world.level)
 
 			elseif key == "p" then
 			-- Play from this level (doesn't return to level editor)
-				world.saveLevel()
+				world.save(world.current, world.level)
 
 				state.name = "character_select"
 				world.area = 0
@@ -608,11 +618,6 @@ function love.keyreleased(key)
 			elseif key == "q" then
 			-- Quit to editor menu
 				editor.quit()
-
-			elseif key == "e" then
-			-- Quit to editor menu and save level
-				world.saveLevel()
-				world.quit()
 			end
 		end
 

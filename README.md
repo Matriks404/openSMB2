@@ -73,9 +73,8 @@
 	* Press `X` to place tile
 	* Press `L` to load level again.
 	* Press `V` to save level.
-	* Press `P` to play this level (Game doesn't return to level editor after doing that)
+	* Press `P` to play this level (Note that it automatically saves the level and game doesn't return to level editor afterwards)
 	* Press `Q` to quit to menu.
-	* Press `E` to save and quit to menu.
 
 * During gameplay:
 	* Press `A` to ascend.
