@@ -349,7 +349,7 @@ function love.keyreleased(key)
 			-- Die!
 				character.dying_timer = 84
 
-				stopAreaMusic()
+				music.stop()
 			end
 		end
 

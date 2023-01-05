@@ -25,7 +25,8 @@
 
 * Controls:
 	* On any screen:
-		* `-` or `=` key - Scale graphics down or up (only integer scaling)
+		* `-` or `=` key - Scale graphics down or up (only integer scaling).
+		* `ALT+ENTER` or `F11` key - Enable or disable fullscreen mode.
 	* `S` key on title screen - Enter character select screen.
 	* In character select screen:
 		* `Left` or `Right` key - Select character
@@ -64,6 +65,7 @@
 	* Press `Q` to quit to debug screen.
 
 * In level editor:
+	* Resize the window to have more screen space for editing purposes.
 	* Press `B` to change background color.
 	* Press `M` to change music.
 	* Press `4` or `6` on keypad to shrink or stretch width.
