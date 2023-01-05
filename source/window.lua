@@ -1,13 +1,7 @@
 local window = {}
 
+window.fullscreen = false
 window.resizable = false
-
-function window.setup()
-	window.calculateMaxSize()
-	window.update()
-
-	love.window.setTitle(game.full_title)
-end
 
 function window.calculateMaxSize()
 	local _, _, flags = love.window.getMode()
@@ -20,7 +14,20 @@ function window.calculateMaxSize()
 end
 
 function window.update()
-	love.window.setMode(graphics.width * graphics.scale, graphics.height * graphics.scale, {vsync = true, resizable = window.resizable})
+	love.window.setMode(graphics.width * graphics.scale, graphics.height * graphics.scale, {fullscreen = window.fullscreen, resizable = window.resizable, vsync = true})
+end
+
+function window.updateFullscreen()
+	window.fullscreen = not window.fullscreen
+
+	window.update()
+end
+
+function window.setup()
+	window.calculateMaxSize()
+	window.update()
+
+	love.window.setTitle(game.full_title)
 end
 
 return window

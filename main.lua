@@ -258,6 +258,9 @@ function love.keyreleased(key)
 	if key == "escape" then
 		love.event.quit()
 
+	elseif (love.keyboard.isDown("lalt") and key == "return") or key == "f11" then
+		window.updateFullscreen()
+
 	elseif key == "-" then
 		graphics.scaleDown()
 

@@ -8,8 +8,8 @@ graphics.bg["blue"] = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
 graphics.width = 256
 graphics.height = 240
 
-graphics.scale = 1
-graphics.max_scale = 2
+graphics.scale = 3
+graphics.max_scale = 3
 
 function graphics.init()
 	love.graphics.setDefaultFilter("nearest")
