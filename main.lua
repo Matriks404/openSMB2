@@ -1,31 +1,26 @@
 TSerial = require "source/external/TSerial"
 
 resources = require "source/resources/resources"
+utils = require "source/utils"
+
 character = require "source/character"
 debug = require "source/debug"
 editor = require "source/editor"
 filesystem = require "source/filesystem"
 game = require "source/game"
+graphics = require "source/graphics"
+music = require "source/music"
 state = require "source/state"
+window = require "source/window"
 world = require "source/world"
-utils = require "source/utils"
 
 function love.load()
-	GAME_TITLE = "openSMB2"
-	GAME_FULL_TITLE = GAME_TITLE.." v"..utils.getVersion()
-
-	-- Game window size (NES resolution)
-	GAME_WIDTH = 256
-	GAME_HEIGHT = 240
-
-	-- Setting up window
-	love.window.setMode(GAME_WIDTH, GAME_HEIGHT, {vsync = true, resizable = true})
-	love.window.setTitle(GAME_FULL_TITLE)
+	window.setup()
 
 	filesystem.setup()
 
-	resources.load()
 	graphics.init()
+	resources.load()
 end
 
 
@@ -254,8 +249,6 @@ function love.update()
 					state.name = "game_over"
 				end
 			end
-
-			--TODO: More physics!
 		end
 	end
 end
@@ -264,6 +257,12 @@ function love.keyreleased(key)
 	-- Quit if user pressed ESC key
 	if key == "escape" then
 		love.event.quit()
+
+	elseif key == "-" then
+		graphics.scaleDown()
+
+	elseif key == "=" then
+		graphics.scaleUp()
 	end
 
 	-- Title screen, intro story or debug screen
@@ -533,14 +532,16 @@ function love.keyreleased(key)
 end
 
 function love.draw()
+	love.graphics.scale(graphics.scale, graphics.scale)
+
 	if state.name == "title" or state.name == "intro" or state.name == "debug" then
 	-- Draw border on title screen and intro
-		love.graphics.draw(img_title_border, 0, 0)
+		love.graphics.draw(img.title_border, 0, 0)
 	end
 
 	if state.name == "title" then
 	-- Draw title screen stuff
-		love.graphics.draw(img_title_logo, 48, 48)
+		love.graphics.draw(img.title_logo, 48, 48)
 
 		graphics.drawText("!\"", 193, 72)
 		graphics.drawText("#1988 NINTENDO", 72, 184)
@@ -578,55 +579,55 @@ function love.draw()
 
 	elseif state.name == "character_select" then
 	-- Draw character select screen stuff
-		love.graphics.draw(img_cs_border, 0, 0)
+		love.graphics.draw(img.cs_border, 0, 0)
 
 		graphics.drawText("PLEASE SELECT", 72, 80)
 		graphics.drawText("PLAYER", 96, 96)
 
-		love.graphics.draw(img_cs_arrow, 72 + (state.cursor * 32), 112)
+		love.graphics.draw(img.cs_arrow, 72 + (state.cursor * 32), 112)
 
 		if state.cursor == 0 then
 		-- Draw Mario
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img_cs_mario_active, 72, 144)
+				love.graphics.draw(img.cs_mario_active, 72, 144)
 			else
-				love.graphics.draw(img_cs_mario_select, 72, 144)
+				love.graphics.draw(img.cs_mario_select, 72, 144)
 			end
 		else
-			love.graphics.draw(img_cs_mario, 72, 144)
+			love.graphics.draw(img.cs_mario, 72, 144)
 		end
 
 		if state.cursor == 1 then
 		-- Draw Luigi
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img_cs_luigi_active, 104, 144)
+				love.graphics.draw(img.cs_luigi_active, 104, 144)
 			else
-				love.graphics.draw(img_cs_luigi_select, 104, 144)
+				love.graphics.draw(img.cs_luigi_select, 104, 144)
 			end
 		else
-			love.graphics.draw(img_cs_luigi, 104, 144)
+			love.graphics.draw(img.cs_luigi, 104, 144)
 		end
 
 		if state.cursor == 2 then
 		-- Draw Toad
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img_cs_toad_active, 136, 144)
+				love.graphics.draw(img.cs_toad_active, 136, 144)
 			else
-				love.graphics.draw(img_cs_toad_select, 136, 144)
+				love.graphics.draw(img.cs_toad_select, 136, 144)
 			end
 		else
-			love.graphics.draw(img_cs_toad, 136, 144)
+			love.graphics.draw(img.cs_toad, 136, 144)
 		end
 
 		if state.cursor == 3 then
 		-- Draw Peach
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img_cs_peach_active, 168, 144)
+				love.graphics.draw(img.cs_peach_active, 168, 144)
 			else
-				love.graphics.draw(img_cs_peach_select, 168, 144)
+				love.graphics.draw(img.cs_peach_select, 168, 144)
 			end
 		else
-			love.graphics.draw(img_cs_peach, 168, 144)
+			love.graphics.draw(img.cs_peach, 168, 144)
 		end
 
 		graphics.drawText("EXTRA LIFE", 64, 208)
@@ -652,9 +653,9 @@ function love.draw()
 			for i=0, character.energy_bars - 1 do
 			-- Draw energy bars
 				if i+1 <= character.energy then
-					love.graphics.draw(img_gp_filled, 12, 48 + (i * 16))
+					love.graphics.draw(img.gp_filled, 12, 48 + (i * 16))
 				else
-					love.graphics.draw(img_gp_empty, 12, 48 + (i * 16))
+					love.graphics.draw(img.gp_empty, 12, 48 + (i * 16))
 				end
 			end
 
@@ -708,14 +709,14 @@ function love.draw()
 
 			graphics.drawText("RETRY", 96, 104)
 
-			love.graphics.draw(img_indicator, 81, 89 + state.cursor * 16)
+			love.graphics.draw(img.indicator, 81, 89 + state.cursor * 16)
 		end
 
 	elseif state.name == "editor" then
 	-- Draw level editor stuff
 		if editor.option == "select" then
 		-- Draw level editor menu
-			graphics.drawText(string.upper(GAME_FULL_TITLE), 32, 32)
+			graphics.drawText(string.upper(game.full_title), 32, 32)
 			graphics.drawText("LEVEL EDITOR", 32, 48)
 
 			graphics.drawText("LEVEL SELECT", 32, 80)
@@ -738,8 +739,8 @@ function love.draw()
 			graphics.drawText("A-"..tostring(world.area), 104, 2)
 
 			-- Draw background and music indicators
-			graphics.drawText("BG-"..bg[world.current_area.background].short_name, 144, 2)
-			graphics.drawText("M-"..mus[world.current_area.music].short_name, 208, 2)
+			graphics.drawText("BG-"..graphics.bg[world.current_area.background].short_name, 144, 2)
+			graphics.drawText("M-"..music.mus[world.current_area.music].short_name, 208, 2)
 
 			-- Draw width and height values
 			graphics.drawText("W-"..tostring(world.current_area.width), 2, 10)
@@ -769,7 +770,7 @@ function love.draw()
 			-- Draw boxes for each square
 			for i=0, (editor.level_height / 16) - 1 do
 				for j=0, (editor.level_width / 16) - 1 do
-					love.graphics.draw(img_editor_16x16_empty, j * 16, 32 + (i * 16))
+					love.graphics.draw(img.editor_16x16_empty, j * 16, 32 + (i * 16))
 				end
 			end
 
@@ -781,9 +782,7 @@ function love.draw()
 			end
 
 			-- Draw edit cursor
-			love.graphics.draw(img_editor_16x16_cursor, editor.cursor_x - editor.view_x, editor.cursor_y - editor.view_y + 32)
-
-			--TODO: Add more!
+			love.graphics.draw(img.editor_16x16_cursor, editor.cursor_x - editor.view_x, editor.cursor_y - editor.view_y + 32)
 		end
 
 	elseif state.name == "debug" then

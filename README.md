@@ -24,6 +24,8 @@
 	* Game over screen
 
 * Controls:
+	* On any screen:
+		* `-` or `=` key - Scale graphics down or up (only integer scaling)
 	* `S` key on title screen - Enter character select screen.
 	* In character select screen:
 		* `Left` or `Right` key - Select character
@@ -33,10 +35,10 @@
 		* `Z` key - Run
 		* `S` key - Pause
 	* `S` key on pause screen - Unpause
-	* In game over screen:
+	* On game over screen:
 		* `A` key - Select option
 		* `S` key - Choose option
-	* `X` on title bar or `ESC` key - Quit the game
+	* `ESC` key - Quit the game
 
 # Screenshots
 

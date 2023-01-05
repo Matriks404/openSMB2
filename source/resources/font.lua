@@ -1,10 +1,10 @@
 local font = {}
 
-font_dir = "resources/images/font/" -- Fonts folder
+font.directory = "resources/images/font/"
 
 function font.load()
-	font_white = love.graphics.newImage(font_dir.."white.png")
-	font_brown = love.graphics.newImage(font_dir.."brown.png")
+	font_white = love.graphics.newImage(font.directory.."white.png")
+	font_brown = love.graphics.newImage(font.directory.."brown.png")
 end
 
 return font

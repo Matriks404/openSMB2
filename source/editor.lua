@@ -56,6 +56,9 @@ function editor.openLevel()
 	world.enter(world_no, level_no)
 
 	if world[world_no][level_no] then
+		window.resizable = true
+		window.update()
+
 		editor.option = "edit"
 	end
 end
@@ -87,6 +90,7 @@ function editor.placeTile(id)
 end
 
 function editor.updateBackground()
+	--TODO: This is dumb.
 	if world.current_area.background == "black" then
 		world.current_area.background = "light_blue"
 	else
@@ -243,6 +247,9 @@ function editor.quit()
 
 	editor.view_x = 0
 	editor.view_y = 0
+
+	window.resizable = false
+	window.update()
 
 	graphics.setBackgroundColor("black")
 
