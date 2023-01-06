@@ -4,6 +4,7 @@ resources = require "source/resources/resources"
 utils = require "source/utils"
 
 character = require "source/character"
+data = require "source/data"
 debug = require "source/debug"
 editor = require "source/editor"
 filesystem = require "source/filesystem"
@@ -482,7 +483,7 @@ function love.keyreleased(key)
 				editor.placeTile(editor.tile)
 
 			elseif key == "l" then
-				editor.loadLevel(world.current, world.level)
+				editor.loadLevel(world.current, world.level, world.area)
 
 			elseif key == "v" then
 				world.save(world.current, world.level)

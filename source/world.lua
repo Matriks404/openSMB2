@@ -16,16 +16,134 @@ function world.getLevelDirectory(world_no, level_no, directory)
 	return directory.."/"..world_level_str.."/"
 end
 
-function world.doLoadFromLevelDirectory(directory)
+function world.isGoodLevel(directory)
+	print("Level correctness check for level in `"..directory.."` directory")
+
 	if not love.filesystem.getInfo(directory) then
+		print("\tNo level directory!")
+
 		return false
 	end
 
-	if not love.filesystem.getInfo(directory.."settings.lua") then
+	level_settings_file = directory.."settings.lua"
+
+	if not love.filesystem.getInfo(level_settings_file) then
+		print("\tNo level settings file!")
+
 		return false
 	end
 
+	level_settings_data = love.filesystem.read(level_settings_file)
+	level_settings = TSerial.unpack(level_settings_data)
+
+	if not level_settings then
+		print("\tInvalid level settings file!")
+		return false
+	end
+
+	area_count = level_settings[1]
+	start_x = level_settings[2]
+	start_y = level_settings[3]
+
+	if not data.isGoodInteger(area_count, 1) then
+		print("\tInvalid area count: "..area_count)
+
+		return false
+	end
+
+	if not data.isGoodInteger(start_x, 0) then
+		print("\tInvalid starting X position: "..start_x)
+
+		return false
+	end
+
+	if not data.isGoodInteger(start_y, 0) then
+		print("\tInvalid starting Y position: "..start_y)
+
+		return false
+	end
+
+	for i = 0, area_count - 1 do
+		index = 4 + i
+
+		if not level_settings[index] then
+			print("\tNo settings for expected area "..i)
+
+			return false
+		end
+
+		area_settings = level_settings[index]
+
+		local width = area_settings[1]
+		local height = area_settings[2]
+		local background = area_settings[3]
+		local music_track = area_settings[4]
+
+		if not data.isGoodDivisibleInteger(width, 16, 16) then
+			print("\tArea width "..width.." is not valid for area "..i)
+
+			return false
+		end
+
+		if not data.isGoodDivisibleInteger(height, 16, 16) then
+			print("\tArea height "..height.." is not valid for area "..i)
+
+			return false
+		end
+
+		if not background then
+			print("\tBackground is not defined for area "..i)
+
+			return false
+		end
+
+		if not music then
+			print("\tMusic is not defined for area "..i)
+
+			return false
+		end
+
+		if not graphics.bg[background] then
+			print("\tBackground '"..background.."' is not valid for area "..i)
+
+			return false
+		end
+
+		if not music.mus[music_track] then
+			print("\tMusic '"..music_track.."' is not valid for area "..i)
+
+			return false
+		end
+
+		area_file_info = love.filesystem.getInfo(directory..i)
+
+		if not area_file_info then
+			print("\tNo file for area "..i)
+
+			return false
+		end
+
+		size = area_file_info.size
+		expected_size = (width / 16) * (height / 16)
+
+		if size ~= expected_size then
+			print("\tInvalid file size for area "..i..", expected: "..expected_size.." B, got: "..size.." B")
+
+			return false
+		end
+	end
+
+	print("\tEverything is OK!")
 	return true
+end
+
+function world.update (world_no, level_no, area_no)
+	world.current = world_no
+	world.level = level_no
+	world.area = area_no
+
+	world.current_level = world[world_no][level_no]
+	world.current_area = world[world_no][level_no][area_no]
 end
 
 function world.enter(world_no, level_no, area_no)
@@ -45,12 +163,7 @@ function world.enter(world_no, level_no, area_no)
 		area_no = 0
 	end
 
-	world.current = world_no
-	world.level = level_no
-	world.area = area_no
-
-	world.current_level = world[world_no][level_no]
-	world.current_area = world[world_no][level_no][area_no]
+	world.update(world_no, level_no, area_no)
 
 	music.play()
 
@@ -60,9 +173,17 @@ function world.enter(world_no, level_no, area_no)
 	print("Entering (and rendering) area "..area_no.." of level "..world_no.."-"..level_no)
 end
 
-function world.unload(world_no, level_no)
-	if world.current_level.modified then
-		world[world_no][level_no] = nil
+function world.isLevelModified(world_no, level_no)
+	local level = world[world_no][level_no]
+
+	if level.modified then
+		return true
+	end
+
+	for area = 0, level.area_count - 1 do
+		if level[area].modified then
+			return true
+		end
 	end
 end
 
@@ -70,9 +191,9 @@ function world.load(world_no, level_no, area_no)
 	base_level_dir = world.getLevelDirectory(world_no, level_no, "levels")
 	user_level_dir = world.getLevelDirectory(world_no, level_no, "userlevels")
 
-	if world.doLoadFromLevelDirectory(user_level_dir) then
+	if world.isGoodLevel(user_level_dir) then
 		level_directory = user_level_dir
-	elseif world.doLoadFromLevelDirectory(base_level_dir) then
+	elseif world.isGoodLevel(base_level_dir) then
 		level_directory = base_level_dir
 	else
 		--TODO: This is just a placeholder, do something about that.
@@ -81,7 +202,7 @@ function world.load(world_no, level_no, area_no)
 		return
 	end
 
-	print("Loading level from "..level_directory)
+	print("\nLoading level from `"..level_directory.."` directory")
 
 	world.loadLevel(world_no, level_no, level_directory)
 
@@ -147,6 +268,9 @@ end
 
 function world.loadArea(world_no, level_no, area_no, level_directory)
 	area = world[world_no][level_no][area_no]
+	area_file = level_directory..tostring(area_no)
+
+	--if not love.filesystem.getInfo(level_directory)
 
 	area_data = love.filesystem.read(level_directory..tostring(area_no))
 

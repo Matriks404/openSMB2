@@ -213,9 +213,10 @@ function editor.goToNextArea()
 	editor.goToArea(world.current, world.level, world.area)
 end
 
-function editor.loadLevel(world_no, level_no)
-	world.unload(world_no, level_no)
+function editor.loadLevel(world_no, level_no, area_no)
 	world.load(world_no, world_no)
+
+	world.update(world_no, level_no, area_no)
 end
 
 function editor.playLevel()
@@ -234,8 +235,8 @@ function editor.playLevel()
 end
 
 function editor.quit()
-	if world.current_level.modified then
-		world.unload(world.current, world.level)
+	if world.isLevelModified(world.current, world.level) then
+		world[world_no][level_no] = nil
 	end
 
 	editor.option = "select"
