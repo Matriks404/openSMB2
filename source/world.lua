@@ -11,7 +11,7 @@ function world.reset()
 end
 
 function world.getLevelDirectory(world_no, level_no, directory)
-	world_level_str = tostring(world_no).."-"..tostring(level_no)
+	local world_level_str = tostring(world_no).."-"..tostring(level_no)
 
 	return directory.."/"..world_level_str.."/"
 end
@@ -25,7 +25,7 @@ function world.isGoodLevel(directory)
 		return false
 	end
 
-	level_settings_file = directory.."settings.lua"
+	local level_settings_file = directory.."settings.lua"
 
 	if not love.filesystem.getInfo(level_settings_file) then
 		print("\tNo level settings file!")
@@ -33,17 +33,17 @@ function world.isGoodLevel(directory)
 		return false
 	end
 
-	level_settings_data = love.filesystem.read(level_settings_file)
-	level_settings = TSerial.unpack(level_settings_data)
+	local level_settings_data = love.filesystem.read(level_settings_file)
+	local level_settings = TSerial.unpack(level_settings_data)
 
 	if not level_settings then
 		print("\tInvalid level settings file!")
 		return false
 	end
 
-	area_count = level_settings[1]
-	start_x = level_settings[2]
-	start_y = level_settings[3]
+	local area_count = level_settings[1]
+	local start_x = level_settings[2]
+	local start_y = level_settings[3]
 
 	if not data.isGoodInteger(area_count, 1) then
 		print("\tInvalid area count: "..area_count)
@@ -64,7 +64,7 @@ function world.isGoodLevel(directory)
 	end
 
 	for i = 0, area_count - 1 do
-		index = 4 + i
+		local index = 4 + i
 
 		if not level_settings[index] then
 			print("\tNo settings for expected area "..i)
@@ -72,7 +72,7 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		area_settings = level_settings[index]
+		local area_settings = level_settings[index]
 
 		local width = area_settings[1]
 		local height = area_settings[2]
@@ -109,13 +109,13 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		if not music.mus[music_track] then
+		if not music.m[music_track] then
 			print("\tMusic '"..music_track.."' is not valid for area "..i)
 
 			return false
 		end
 
-		area_file_info = love.filesystem.getInfo(directory..i)
+		local area_file_info = love.filesystem.getInfo(directory..i)
 
 		if not area_file_info then
 			print("\tNo file for area "..i)
@@ -123,8 +123,8 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		size = area_file_info.size
-		expected_size = (width / 16) * (height / 16)
+		local size = area_file_info.size
+		local expected_size = (width / 16) * (height / 16)
 
 		if size ~= expected_size then
 			print("\tInvalid file size for area "..i..", expected: "..expected_size.." B, got: "..size.." B")
@@ -137,7 +137,7 @@ function world.isGoodLevel(directory)
 	return true
 end
 
-function world.update (world_no, level_no, area_no)
+function world.update(world_no, level_no, area_no)
 	world.current = world_no
 	world.level = level_no
 	world.area = area_no
@@ -159,13 +159,11 @@ function world.enter(world_no, level_no, area_no)
 		return
 	end
 
-	if (not area_no) then
-		area_no = 0
-	end
+	local area_no = area_no or 0
 
 	world.update(world_no, level_no, area_no)
 
-	music.play()
+	music.play(world[world_no][level_no][area_no].music)
 
 	-- Check level background and set it
 	graphics.setBackgroundColor(world.current_area.background)
@@ -174,7 +172,7 @@ function world.enter(world_no, level_no, area_no)
 end
 
 function world.isLevelModified(world_no, level_no)
-	local level = world[world_no][level_no]
+	level = world[world_no][level_no]
 
 	if level.modified then
 		return true
@@ -188,8 +186,10 @@ function world.isLevelModified(world_no, level_no)
 end
 
 function world.load(world_no, level_no, area_no)
-	base_level_dir = world.getLevelDirectory(world_no, level_no, "levels")
-	user_level_dir = world.getLevelDirectory(world_no, level_no, "userlevels")
+	local level_directory
+
+	local base_level_dir = world.getLevelDirectory(world_no, level_no, "levels")
+	local user_level_dir = world.getLevelDirectory(world_no, level_no, "userlevels")
 
 	if world.isGoodLevel(user_level_dir) then
 		level_directory = user_level_dir
@@ -220,7 +220,7 @@ function world.load(world_no, level_no, area_no)
 end
 
 function world.save(world_no, level_no)
-	level_directory = world.getLevelDirectory(world_no, level_no, "userlevels")
+	local level_directory = world.getLevelDirectory(world_no, level_no, "userlevels")
 	print("Saving level to "..level_directory)
 
 	if not love.filesystem.getInfo(level_directory) then
@@ -229,7 +229,7 @@ function world.save(world_no, level_no)
 
 	world.saveLevel(world_no, level_no, level_directory)
 
-	level = world[world_no][level_no]
+	local level = world[world_no][level_no]
 
 	for area = 0, level.area_count - 1 do
 		if level[area].modified or not love.filesystem.getInfo(level_directory..tostring(area)) then
@@ -244,8 +244,8 @@ function world.loadLevel(world_no, level_no, level_directory)
 	world[world_no][level_no] = {}
 	level = world[world_no][level_no]
 
-	level_settings_data = love.filesystem.read(level_directory.."settings.lua")
-	level_settings = TSerial.unpack(level_settings_data)
+	local level_settings_file = love.filesystem.read(level_directory.."settings.lua")
+	local level_settings = TSerial.unpack(level_settings_file)
 
 	-- Get level variables
 	level.area_count = level_settings[1]
@@ -253,7 +253,7 @@ function world.loadLevel(world_no, level_no, level_directory)
 	level.start_y = level_settings[3]
 
 	for i = 0, level.area_count - 1 do
-		area_settings = level_settings[4 + i]
+		local area_settings = level_settings[4 + i]
 
 		level[i] = {}
 		area = world[world_no][level_no][i]
@@ -268,21 +268,18 @@ end
 
 function world.loadArea(world_no, level_no, area_no, level_directory)
 	area = world[world_no][level_no][area_no]
-	area_file = level_directory..tostring(area_no)
 
-	--if not love.filesystem.getInfo(level_directory)
+	local area_data = love.filesystem.read(level_directory..tostring(area_no))
 
-	area_data = love.filesystem.read(level_directory..tostring(area_no))
-
-	height = area.height / 16
-	width = area.width / 16
+	local height = area.height / 16
+	local width = area.width / 16
 
 	if not area.tiles then
 		area.tiles = {}
 
 		-- Fill tile data
 		for y = 0, height - 1 do
-			diff = y * width
+			local diff = y * width
 			area.tiles[y] = {}
 
 			for x = 0, width - 1 do
@@ -297,7 +294,8 @@ end
 function world.saveLevel(world_no, level_no, level_directory)
 	level = world[world_no][level_no]
 
-	data = { level.area_count, level.start_x, level.start_y}
+	local level_settings_file = level_directory.."settings.lua"
+	local data = { level.area_count, level.start_x, level.start_y}
 
 	for i = 0, level.area_count - 1 do
 		area = level[i]
@@ -306,14 +304,14 @@ function world.saveLevel(world_no, level_no, level_directory)
 
 	data = TSerial.pack(data, false, true)
 
-	love.filesystem.write(level_directory.."settings.lua", data)
+	love.filesystem.write(level_settings_file, data)
 end
 
 function world.saveArea(world_no, level_no, area_no, level_directory)
-	area_file = level_directory..tostring(area_no)
-
-	area_data = ""
 	area = world[world_no][level_no][area_no]
+
+	local area_file = level_directory..tostring(area_no)
+	local area_data = ""
 
 	for i = 0, (area.height / 16) - 1 do
 		for j = 0, (area.width / 16) - 1 do

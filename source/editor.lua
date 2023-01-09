@@ -10,10 +10,6 @@ editor.tile = 1
 editor.cursor_x = 0
 editor.cursor_y = 0
 
--- Editor selected tile coordinates
-editor.tile_x = 0
-editor.tile_y = 0
-
 -- Editor view coordinates
 editor.view_x = 0
 editor.view_y = 0
@@ -82,9 +78,9 @@ function editor.changeTile(n)
 end
 
 function editor.placeTile(id)
-	editor.tile_x = editor.cursor_x / 16
-	editor.tile_y = editor.cursor_y / 16
-	world.current_area.tiles[editor.tile_y][editor.tile_x] = id
+	tile_x = editor.cursor_x / 16
+	tile_y = editor.cursor_y / 16
+	world.current_area.tiles[tile_y][tile_x] = id
 
 	world.current_area.modified = true
 end
@@ -112,7 +108,7 @@ function editor.updateMusic()
 		world.current_area.music = "overworld"
 	end
 
-	music.play()
+	music.play(world.current_area.music)
 
 	world.current_area.modified = true
 end
@@ -138,7 +134,7 @@ function editor.scratchAreaWidth()
 
 		for i = 0, (world.current_area.height / 16) - 1 do
 		-- Clear newly added tile blocks
-			width = world.current_area.width / 16
+			local width = world.current_area.width / 16
 			world.current_area.tiles[i][width - 1] = 0
 		end
 
@@ -168,11 +164,11 @@ function editor.scratchAreaHeight()
 
 		-- Clear newly added tile blocks
 
-		height = world.current_area.height / 16
+		local height = world.current_area.height / 16
 
 		world.current_area.tiles[height - 1] = {}
 
-		for j=0, (world.current_area.width / 16) - 1 do
+		for j = 0, (world.current_area.width / 16) - 1 do
 			world.current_area.tiles[height - 1][j] = 0
 		end
 	end
@@ -224,12 +220,6 @@ function editor.playLevel()
 
 	state.name = "character_select"
 	world.area = 0
-	frames = 0
-
-	if debug.mute == false then
-		music.stop()
-		music_char_select:play()
-	end
 
 	graphics.setBackgroundColor("black")
 end
@@ -254,7 +244,7 @@ function editor.quit()
 
 	graphics.setBackgroundColor("black")
 
-	music.stop()
+	music.stopAll()
 end
 
 function editor.quitToDebugMenu()

@@ -3,26 +3,25 @@ local snd = {}
 function snd.load()
 	snd.loadSFX()
 	snd.loadMusic()
-
 end
 
 function snd.loadSFX()
-	sfx_directory = "resources/sound/effects/"
+	local directory = "resources/sound/effects/"
 
-	sfx_fall = love.audio.newSource(sfx_directory.."fall.ogg", "static")
-	sfx_cherry = love.audio.newSource(sfx_directory.."cherry.ogg", "static")
-	sfx_death = love.audio.newSource(sfx_directory.."death.ogg", "static")
-	sfx_game_over = love.audio.newSource(sfx_directory.."gameover.ogg", "static")
+	snd.sfx_fall = love.audio.newSource(directory.."fall.ogg", "static")
+	snd.sfx_cherry = love.audio.newSource(directory.."cherry.ogg", "static")
+	snd.sfx_death = love.audio.newSource(directory.."death.ogg", "static")
+	snd.sfx_game_over = love.audio.newSource(directory.."gameover.ogg", "static")
 end
 
 function snd.loadMusic()
-	music_directory = "resources/sound/music/"
+	local directory = "resources/sound/music/"
 
-	music_title = love.audio.newSource(music_directory.."title.ogg", "stream")
-	music_char_select = love.audio.newSource(music_directory.."charselect.ogg", "stream")
-	music_overworld = love.audio.newSource(music_directory.."overworld.ogg", "stream")
-	music_underworld = love.audio.newSource(music_directory.."underworld.ogg", "stream")
-	music_boss = love.audio.newSource(music_directory.."boss.ogg", "stream")
+	snd.music_title = love.audio.newSource(directory.."title.ogg", "stream")
+	snd.music_char_select = love.audio.newSource(directory.."charselect.ogg", "stream")
+	snd.music_overworld = love.audio.newSource(directory.."overworld.ogg", "stream")
+	snd.music_underworld = love.audio.newSource(directory.."underworld.ogg", "stream")
+	snd.music_boss = love.audio.newSource(directory.."boss.ogg", "stream")
 end
 
 return snd

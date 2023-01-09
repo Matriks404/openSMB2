@@ -1,14 +1,14 @@
 local img = {}
 
 function img.load()
-	directory = "resources/images/"
+	local directory = "resources/images/"
 
-	title_dir = directory.."title/" -- Title screen and intro graphics
-	cs_dir = directory.."charselect/" -- Character select screen graphics
-	lb_dir = directory.."levelbook/" -- Levelbook screen graphics
-	gameplay_dir = directory.."gameplay/" -- Gameplay screen graphics
-	chars_dir = directory.."gameplay/characters/" -- Character graphics
-	editor_dir = directory.."leveleditor/" -- Level editor graphics
+	local title_dir = directory.."title/" -- Title screen and intro graphics
+	local cs_dir = directory.."charselect/" -- Character select screen graphics
+	local lb_dir = directory.."levelbook/" -- Levelbook screen graphics
+	local gameplay_dir = directory.."gameplay/" -- Gameplay screen graphics
+	local chars_dir = directory.."gameplay/characters/" -- Character graphics
+	local editor_dir = directory.."leveleditor/" -- Level editor graphics
 
 	-- Title screen and intro graphics
 	do

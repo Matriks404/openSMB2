@@ -4,6 +4,8 @@ game.title = "openSMB2"
 game.full_title = game.title.." v"..utils.getVersion()
 
 function game.getRemainingLives(lives)
+	local str, letter
+
 	if lives < 10 + 1 then
 		str = " "..tostring(lives - 1)
 

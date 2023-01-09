@@ -13,6 +13,7 @@ graphics.max_scale = 1
 
 function graphics.init()
 	love.graphics.setDefaultFilter("nearest")
+
 	graphics.setBackgroundColor("blue")
 end
 
@@ -37,42 +38,45 @@ function graphics.scaleUp()
 end
 
 function graphics.setBackgroundColor(color)
-	r = graphics.bg[color].r
-	g = graphics.bg[color].g
-	b = graphics.bg[color].b
+	local r = graphics.bg[color].r
+	local g = graphics.bg[color].g
+	local b = graphics.bg[color].b
 
 	love.graphics.setBackgroundColor(r, g, b)
 end
 
 function graphics.drawText(str, x, y, color)
-	realx = 0
+	local real_x = 0
 
-	for i=0, string.len(str) - 1 do
-		posx = x + (i * 16)
-		if realx == 0 then realx = posx end
+	for i = 0, string.len(str) - 1 do
+		local pos_x = x + (i * 16)
 
-		code = string.byte(str, i + 1)
-
-		ax = (code % 32) * 16
-		ay = math.floor(code / 32) * 16
-
-		if color == "brown" then
-			symbol = love.graphics.newQuad(ax, ay, 16, 16, font_brown:getWidth(), font_brown:getHeight())
-
-			love.graphics.draw(font_brown, symbol, realx, y, 0, 0.5)
-		else
-			symbol = love.graphics.newQuad(ax, ay, 16, 16, font_white:getWidth(), font_white:getHeight())
-
-			love.graphics.draw(font_white, symbol, realx, y, 0, 0.5)
+		if real_x == 0 then
+			real_x = pos_x
 		end
 
-		realx = realx + 8
+		local code = string.byte(str, i + 1)
+
+		local ax = (code % 32) * 16
+		local ay = math.floor(code / 32) * 16
+
+		if color == "brown" then
+			local symbol = love.graphics.newQuad(ax, ay, 16, 16, font.brown:getWidth(), font.brown:getHeight())
+
+			love.graphics.draw(font.brown, symbol, real_x, y, 0, 0.5)
+		else
+			local symbol = love.graphics.newQuad(ax, ay, 16, 16, font.white:getWidth(), font.white:getHeight())
+
+			love.graphics.draw(font.white, symbol, real_x, y, 0, 0.5)
+		end
+
+		real_x = real_x + 8
 	end
 end
 
 function graphics.drawTile(id, x, y)
-	ax = (id % 16) * 16
-	ay = math.floor(id / 16) * 16
+	local ax = (id % 16) * 16
+	local ay = math.floor(id / 16) * 16
 
 	tile = love.graphics.newQuad(ax, ay, 16, 16, img.tilemap:getWidth(), img.tilemap:getHeight())
 
@@ -80,8 +84,8 @@ function graphics.drawTile(id, x, y)
 end
 
 function graphics.drawLevelTiles()
-	imin = 0
-	imax = 15
+	local imin = 0
+	local imax = 15
 
 	if state.transition_timer > 0 and state.transition_timer < 35 then
 	-- During transition draw additional row of tiles
@@ -96,6 +100,8 @@ function graphics.drawLevelTiles()
 		end
 	end
 
+	local trans_y, tile_x, tile_y, pos_x, pos_y
+
 	for i = imin, imax - 1 do
 		for j = 0, 16 - 1 do
 			if state.transition_timer > 0 then
@@ -109,11 +115,9 @@ function graphics.drawLevelTiles()
 						trans_y = math.floor(state.transition_timer / 35 * 9)
 						tile_y = (state.screen_y * 9) + trans_y + i
 						pos_y = (i * 16) - (state.transition_timer / 35 * 144) % 16
-
 					else
 						trans_y = 9 - math.floor(state.transition_timer / 35 * 9)
 						tile_y = ((state.screen_y - 1) * 9) + trans_y + i
-
 						pos_y = (i * 16) + (state.transition_timer / 35 * 144) % 16
 					end
 				end
@@ -137,6 +141,9 @@ function graphics.drawLevelTiles()
 end
 
 function graphics.drawCharacter()
+	local offset, ax, pos_y
+	pos_x = character.pos_x
+
 	-- Calculate offset for character sprite
 	if character.side == -1 then
 		offset = 16
@@ -201,7 +208,7 @@ function graphics.drawCharacter()
 		end
 	end
 
-	pos_x = character.pos_x
+	local sprite
 
 	-- Draw character sprite
 	if character.current == "mario" then
@@ -275,6 +282,13 @@ function graphics.drawWorldImage()
 	elseif world.current == 7 then
 		love.graphics.draw(img.lb_world7, 65, 112)
 	end
+end
+
+function graphics.drawStartingPosition()
+	local start_x = world.current_level.start_x
+	local start_y = world.current_level.start_y
+
+	graphics.drawText("S", start_x, start_y, "brown")
 end
 
 return graphics

@@ -1,40 +1,39 @@
 local music = {}
 
-music.mus = {}
-music.mus["title"] = { short_name = "TITL" }
-music.mus["character_select"] = { short_name = "CHAR" }
-music.mus["overworld"] = { short_name = "OVER" }
-music.mus["underworld"] = { short_name = "UNDR" }
-music.mus["boss"] = { short_name = "BOSS" }
+music.m = {}
 
-function music.play()
-	if debug.mute == false then
-		if world.current_area.music == "overworld" then
-			music_overworld:play()
-		elseif world.current_area.music == "underworld" then
-			music_underworld:play()
-		elseif world.current_area.music == "boss" then
-			music_boss:play()
+function music.init()
+	music.m["title"] = { short_name = "TITL", track = snd.music_title }
+	music.m["character_select"] = { short_name = "CHAR", track = snd.music_char_select }
+	music.m["overworld"] = { short_name = "OVER", track = snd.music_overworld }
+	music.m["underworld"] = { short_name = "UNDR", track = snd.music_underworld }
+	music.m["boss"] = { short_name = "BOSS", track = snd.music_boss }
+end
+
+function music.play(name)
+	if debugging.mute == false then
+		if music.m[name] then
+			music.m[name].track:play()
 		end
 
-		if world.current_area.music ~= "overworld" then
-			music_overworld:stop()
-		end
+		music.stopAll(name) -- Stop all music except the current track.
+	end
+end
 
-		if world.current_area.music ~= "underworld" then
-			music_underworld:stop()
-		end
-
-		if world.current_area.music ~= "boss" then
-			music_boss:stop()
+function music.stopAll(except)
+	for k in pairs(music.m) do
+		if k ~= except then
+			music.stop(k)
 		end
 	end
 end
 
-function music.stop()
-	music_overworld:stop()
-	music_underworld:stop()
-	music_boss:stop()
+function music.stop(name)
+	if debugging.mute == false then
+		if music.m[name] then
+			music.m[name].track:stop()
+		end
+	end
 end
 
 return music

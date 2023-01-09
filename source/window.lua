@@ -15,8 +15,8 @@ function window.calculateMaxSize()
 end
 
 function window.update()
-	width = graphics.width
-	height = graphics.height
+	local width = graphics.width
+	local height = graphics.height
 
 	if graphics.scale < 1 then
 		graphics.scale = 0

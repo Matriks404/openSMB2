@@ -20,9 +20,9 @@ function data.isGoodDivisibleInteger(field, min, div)
 	return true
 end
 
-function data.tableContainsKey(table, key)
-	for _, value in pairs(table) do
-		if value == element then
+function data.tableContainsKey(t, k)
+	for _, v in pairs(t) do
+		if v == k then
 			return true
 		end
 	end

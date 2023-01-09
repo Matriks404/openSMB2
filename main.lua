@@ -5,7 +5,7 @@ utils = require "source/utils"
 
 character = require "source/character"
 data = require "source/data"
-debug = require "source/debug"
+debugging = require "source/debugging"
 editor = require "source/editor"
 filesystem = require "source/filesystem"
 game = require "source/game"
@@ -22,6 +22,9 @@ function love.load()
 
 	graphics.init()
 	resources.load()
+	music.init()
+
+	music.play("title")
 end
 
 
@@ -30,8 +33,6 @@ function love.update()
 
 	if state.name == "title" then
 	-- Title screen stuff
-		music_title:play()
-
 		-- After some time go to intro story
 		if state.timer == 500 then
 			state.name = "intro"
@@ -58,6 +59,8 @@ function love.update()
 
 	elseif state.name == "character_select" then
 	-- Character select stuff
+		music.play("character_select")
+
 		if state.transition == true then
 			state.transition_timer = state.transition_timer + 1
 
@@ -66,7 +69,7 @@ function love.update()
 				state.name = "level_intro"
 				state.timer = 0
 
-				music_char_select:stop()
+				music.stopAll()
 				state.transitionClear()
 
 				-- Chosen character is one that was selected previously by cursor
@@ -121,7 +124,7 @@ function love.update()
 		end
 
 		if state.timer > 146 and state.transition_timer == 0 then
-			if debug.enabled == true and love.keyboard.isDown("a") then
+			if debugging.enabled and love.keyboard.isDown("a") then
 			-- Ascending
 				character.pos_y = character.pos_y - 6
 			end
@@ -215,8 +218,8 @@ function love.update()
 			-- Deplate energy and play death sound
 				character.energy = 0
 
-				music.stop()
-				sfx_death:play()
+				music.stopAll()
+				snd.sfx_death:play()
 			end
 
 			if character.dying_timer == 84 then
@@ -239,7 +242,7 @@ function love.update()
 					state.name = "death"
 				else
 				-- No more lifes, go to game over screen
-					sfx_game_over:play()
+					snd.sfx_game_over:play()
 
 					if character.continues > 0 then
 						state.cursor = 0
@@ -276,32 +279,26 @@ function love.keyreleased(key)
 			state.name = "character_select"
 			state.timer = 0
 
-			music_title:stop()
 			state.transitionClear()
-
-			if debug.mute == false then
-				music_char_select:play()
-			end
-
 			state.resetGame()
 
 			graphics.setBackgroundColor("black")
 
 		elseif love.keyboard.isDown("lctrl") and key == "d" then
 		-- Go to debug screen or title screen (depending on origin screen)
-			if debug.enabled == false then
-				state.name = "debug"
-				state.timer = 0
-
-				debug.enabled = true
-
-				music_title:stop()
-			else
+			if debugging.enabled then
 				state.name = "title"
 				state.timer = 0
 
-				debug.enabled = false
-				debug.mute = false
+				debugging.enabled = false
+				debugging.mute = false
+			else
+				state.name = "debug"
+				state.timer = 0
+
+				debugging.enabled = true
+
+				music.stopAll()
 			end
 		end
 	end
@@ -316,7 +313,7 @@ function love.keyreleased(key)
 				state.cursor = 3
 			end
 
-			sfx_cherry:play()
+			snd.sfx_cherry:play()
 
 		elseif key == "right" and state.transition_timer == 0 then
 		-- Select character on the right
@@ -326,13 +323,13 @@ function love.keyreleased(key)
 				state.cursor = 0
 			end
 
-			sfx_cherry:play()
+			snd.sfx_cherry:play()
 
 		elseif key == "x" and state.transition_timer == 0 then
 		-- Choose character and enable transition which will go to levelbook after some time
 			state.transition = true
 
-			sfx_cherry:play()
+			snd.sfx_cherry:play()
 		end
 
 	elseif state.name == "gameplay" then
@@ -345,13 +342,11 @@ function love.keyreleased(key)
 			state.timer = 0
 		end
 
-		if debug.enabled == true then
-			if key == "d" then
-			-- Die!
-				character.dying_timer = 84
+		if debugging.enabled and key == "d" then
+		-- Die!
+			character.dying_timer = 84
 
-				music.stop()
-			end
+			music.stopAll()
 		end
 
 	elseif state.name == "pause" then
@@ -380,8 +375,6 @@ function love.keyreleased(key)
 				character.continues = character.continues - 1
 				character.lives = 3
 				character.energy = 2
-
-				music_char_select:play()
 
 				state.name = "character_select"
 			else
@@ -500,34 +493,22 @@ function love.keyreleased(key)
 	-- Debug screen
 		if key == "f" then
 		-- Show FPS counter or not
-			if debug.fps == false then
-				debug.fps = true
-			else
-				debug.fps = false
-			end
+			debugging.fps = not debugging.fps
 
 		elseif key == "r" then
 		-- Show frames counter or not
-			if debug.frames == false then
-				debug.frames = true
-			else
-				debug.frames = false
-			end
+			debugging.frames = not debugging.frames
 
 		-- Mute music or not
 		elseif key == "m" then
-			if debug.mute == false then
-				debug.mute = true
-			else
-				debug.mute = false
-			end
+			debugging.mute = not debugging.mute
 
 		elseif key == "l" then
 		-- Go to level editor
 			state.name = "editor"
 			state.timer = 0
 
-			debug.frames = false
+			debugging.frames = false
 			editor.option = "select"
 
 			graphics.setBackgroundColor("black")
@@ -651,7 +632,7 @@ function love.draw()
 		if state.timer > 146 then
 		-- Draw everything else
 			if state.timer == 147 then
-				sfx_fall:play() -- Play falling sound
+				snd.sfx_fall:play() -- Play falling sound
 			end
 
 			for i=0, character.energy_bars - 1 do
@@ -698,7 +679,7 @@ function love.draw()
 			state.name = "gameplay"
 			state.timer = 0
 
-			music.play()
+			music.play(world.current_area.music)
 		end
 
 	elseif state.name == "game_over" then
@@ -744,7 +725,7 @@ function love.draw()
 
 			-- Draw background and music indicators
 			graphics.drawText("BG-"..graphics.bg[world.current_area.background].short_name, 144, 2)
-			graphics.drawText("M-"..music.mus[world.current_area.music].short_name, 208, 2)
+			graphics.drawText("M-"..music.m[world.current_area.music].short_name, 208, 2)
 
 			-- Draw width and height values
 			graphics.drawText("W-"..tostring(world.current_area.width), 2, 10)
@@ -762,6 +743,10 @@ function love.draw()
 			-- Calculate height and width of edit view
 			editor.level_height = world.current_area.height - editor.view_y
 			editor.level_width = world.current_area.width - editor.view_x
+
+			if (world.area == 0) then
+				graphics.drawStartingPosition()
+			end
 
 			if editor.level_height > 208 then
 				editor.level_height = 208
@@ -800,28 +785,28 @@ function love.draw()
 
 		graphics.drawText("ENABLED FLAGS", 64, 160)
 
-		if debug.fps == true then
+		if debugging.fps then
 			graphics.drawText("FPS", 64, 176)
 		end
 
-		if debug.frames == true then
+		if debugging.frames then
 			graphics.drawText("FRAMES", 104, 176)
 		end
 
-		if debug.mute == true then
+		if debugging.mute then
 			graphics.drawText("MUTED", 168, 176)
 		end
 	end
 
 	-- Draw debug stuff
-	if debug.enabled == true then
+	if debugging.enabled then
 		-- Draw FPS
-		if debug.fps == true then
+		if debugging.fps then
 			graphics.drawText(tostring(love.timer.getFPS()).." FPS", 2, 2)
 		end
 
 		-- Draw lasted frames
-		if debug.frames == true then
+		if debugging.frames then
 			timerx = 0
 			n = state.timer
 
