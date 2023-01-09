@@ -46,6 +46,8 @@ function graphics.setBackgroundColor(color)
 end
 
 function graphics.drawText(str, x, y, color)
+	local color = color or "white"
+
 	local real_x = 0
 
 	for i = 0, string.len(str) - 1 do
@@ -60,15 +62,9 @@ function graphics.drawText(str, x, y, color)
 		local ax = (code % 32) * 16
 		local ay = math.floor(code / 32) * 16
 
-		if color == "brown" then
-			local symbol = love.graphics.newQuad(ax, ay, 16, 16, font.brown:getWidth(), font.brown:getHeight())
+		local symbol = love.graphics.newQuad(ax, ay, 16, 16, font[color]:getWidth(), font.brown:getHeight())
 
-			love.graphics.draw(font.brown, symbol, real_x, y, 0, 0.5)
-		else
-			local symbol = love.graphics.newQuad(ax, ay, 16, 16, font.white:getWidth(), font.white:getHeight())
-
-			love.graphics.draw(font.white, symbol, real_x, y, 0, 0.5)
-		end
+		love.graphics.draw(font[color], symbol, real_x, y, 0, 0.5)
 
 		real_x = real_x + 8
 	end
