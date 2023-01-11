@@ -301,6 +301,39 @@ function editor.drawSelectMenu()
 	graphics.drawText("                  Q - QUIT", 32, 224)
 end
 
+function editor.drawBoxes()
+	for i = 0, editor.view_height - 16, 16 do
+		for j = 0, editor.view_width - 16, 16 do
+			love.graphics.draw(img.editor_16x16_empty, j, 32 + i)
+		end
+	end
+end
+
+function editor.drawTiles()
+	for i = 0, (editor.view_height / 16) - 1 do
+		for j = 0, (editor.view_width / 16) - 1 do
+			local tile_x = (editor.view_x / 16) + j
+			local tile_y = (editor.view_y / 16) + i
+
+			local pos_x = j * 16
+			local pos_y = 32 + (i * 16)
+
+			graphics.drawTile(world.current_area.tiles[tile_y][tile_x], pos_x, pos_y)
+		end
+	end
+end
+
+function editor.drawStartingPosition()
+	local start_x = editor.view_x - world.current_level.start_x
+	local start_y = editor.view_y - world.current_level.start_y
+
+	graphics.drawText("S", start_x, start_y, "brown")
+end
+
+function editor.drawCursor()
+	love.graphics.draw(img.editor_16x16_cursor, editor.cursor_x - editor.view_x, editor.cursor_y - editor.view_y + 32)
+end
+
 function editor.drawLevelEditor()
 	-- Draw world, level and area indicators
 	graphics.drawText(tostring(world.current).."-"..tostring(world.level), 64, 2)
@@ -323,36 +356,14 @@ function editor.drawLevelEditor()
 	graphics.drawText(",", 216, 10)
 	graphics.drawText(tostring(editor.cursor_y), 224, 10)
 
-	-- Draw boxes for each square
-	for i = 0, editor.view_height - 16, 16 do
-		for j = 0, editor.view_width - 16, 16 do
-			love.graphics.draw(img.editor_16x16_empty, j, 32 + i)
-		end
-	end
+	editor.drawBoxes()
+	editor.drawTiles()
 
-	-- Draw tiles
-	for i = 0, (editor.view_height / 16) - 1 do
-		for j = 0, (editor.view_width / 16) - 1 do
-			local tile_x = (editor.view_x / 16) + j
-			local tile_y = (editor.view_y / 16) + i
-
-			local pos_x = j * 16
-			local pos_y = 32 + (i * 16)
-
-			graphics.drawTile(world.current_area.tiles[tile_y][tile_x], pos_x, pos_y)
-		end
-	end
-
-	-- Draw starting position
 	if (world.area == 0) then
-		local start_x = editor.view_x - world.current_level.start_x
-		local start_y = editor.view_y - world.current_level.start_y
-
-		graphics.drawText("S", start_x, start_y, "brown")
+		editor.drawStartingPosition()
 	end
 
-	-- Draw edit cursor
-	love.graphics.draw(img.editor_16x16_cursor, editor.cursor_x - editor.view_x, editor.cursor_y - editor.view_y + 32)
+	editor.drawCursor()
 end
 
 return editor
