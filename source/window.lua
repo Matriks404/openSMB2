@@ -35,7 +35,7 @@ function window.setup()
 	window.calculateMaxSize()
 	window.update()
 
-	love.window.setTitle(game.full_title)
+	love.window.setTitle(game.title)
 end
 
 return window

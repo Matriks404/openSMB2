@@ -72,6 +72,8 @@ function editor.checkCursorViewBounds()
 	if editor.cursor_y > editor.view_y + editor.view_height - 16 then
 		editor.cursor_y = editor.cursor_y - 16
 	end
+
+	editor.updateView()
 end
 
 function editor.checkViewBounds()
@@ -128,7 +130,6 @@ function editor.moveView(x, y)
 
 	editor.checkLevelBounds()
 	editor.checkCursorViewBounds()
-	editor.checkViewBounds()
 end
 
 function editor.moveCursor(x, y)
@@ -290,6 +291,9 @@ function editor.playLevel()
 	state.name = "character_select"
 	world.area = 0
 
+	window.resizable = false
+	window.update()
+
 	graphics.setBackgroundColor("black")
 end
 
@@ -379,25 +383,24 @@ end
 
 function editor.drawLevelEditor()
 	-- Draw world, level and area indicators
-	graphics.drawText(tostring(world.current).."-"..tostring(world.level), 64, 2)
-	graphics.drawText("A-"..tostring(world.area), 104, 2)
+	graphics.drawText(tostring(world.current).."-"..tostring(world.level), 2, 2)
+	graphics.drawText("A-"..tostring(world.area), 34, 2)
 
 	-- Draw background and music indicators
-	graphics.drawText("BG-"..graphics.bg[world.current_area.background].short_name, 144, 2)
-	graphics.drawText("M-"..music.m[world.current_area.music].short_name, 208, 2)
+	graphics.drawText("BG-"..graphics.bg[world.current_area.background].short_name, 74, 2)
+	graphics.drawText("M-"..music.m[world.current_area.music].short_name, 138, 2)
 
 	-- Draw width and height values
 	graphics.drawText("W-"..tostring(world.current_area.width), 2, 10)
-	graphics.drawText("H-"..tostring(world.current_area.height), 56, 10)
-
-	-- Draw currently selected tile
-	graphics.drawText("T-"..tostring(editor.tile), 120, 10)
-	graphics.drawTile(editor.tile, 152, 10)
+	graphics.drawText("H-"..tostring(world.current_area.height), 2, 18)
 
 	-- Draw coordinates for edit cursor
-	graphics.drawText(tostring(editor.cursor_x), 184, 10)
-	graphics.drawText(",", 216, 10)
-	graphics.drawText(tostring(editor.cursor_y), 224, 10)
+	graphics.drawText("X-"..tostring(editor.cursor_x), 66, 10)
+	graphics.drawText("Y-"..tostring(editor.cursor_y), 66, 18)
+
+	-- Draw currently selected tile
+	graphics.drawText("TILE-"..tostring(editor.tile), 170, 18)
+	graphics.drawTile(editor.tile, 238, 12)
 
 	editor.drawBoxes()
 	editor.drawTiles()

@@ -70,6 +70,27 @@ function graphics.drawText(str, x, y, color)
 	end
 end
 
+function graphics.drawCounter(n, y, add)
+	local width = 0
+	local d = n
+
+	while d > 0 do
+		width = width + 1
+		d = math.floor(d / 10)
+	end
+
+	local str = tostring(n)
+	local x = graphics.width - (width * 8)
+
+	if add then
+		str = str..add
+		x = x - (string.len(add) * 8)
+	end
+
+	graphics.drawText(str, x, y)
+
+end
+
 function graphics.drawTile(id, x, y)
 	local ax = (id % 16) * 16
 	local ay = math.floor(id / 16) * 16

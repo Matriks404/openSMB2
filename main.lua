@@ -268,6 +268,8 @@ function love.draw()
 	if state.name == "title" or state.name == "intro" or state.name == "debug" then
 	-- Draw border on title screen and intro
 		love.graphics.draw(img.title_border, 0, 0)
+
+		graphics.drawText("V"..utils.getVersion(), 2, 2)
 	end
 
 	if state.name == "title" then
@@ -470,24 +472,13 @@ function love.draw()
 		end
 	end
 
-	-- Draw debug stuff
 	if debugging.enabled then
-		-- Draw FPS
 		if debugging.fps then
-			graphics.drawText(tostring(love.timer.getFPS()).." FPS", 2, 2)
+			graphics.drawCounter(love.timer.getFPS(), 2, " FPS")
 		end
 
-		-- Draw lasted frames
 		if debugging.frames then
-			timerx = 0
-			n = state.timer
-
-			while n > 0 do
-				timerx = timerx + 1
-				n = math.floor(n / 10)
-			end
-
-			graphics.drawText(tostring(state.timer), 256 - (timerx * 8), 2)
+			graphics.drawCounter(state.timer, 12)
 		end
 	end
 end
