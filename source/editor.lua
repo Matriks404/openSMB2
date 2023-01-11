@@ -331,21 +331,18 @@ function editor.draw()
 end
 
 function editor.drawSelectMenu()
-	graphics.drawText(string.upper(game.full_title), 32, 32)
-	graphics.drawText("LEVEL EDITOR", 32, 48)
+	graphics.drawText("LEVEL EDITOR", 24, 32)
 
-	graphics.drawText("LEVEL SELECT", 32, 80)
+	graphics.drawText(" 1 - 1-1  4 - 2-1  7 - 3-1", 24, 64)
+	graphics.drawText(" 2 - 1-2  5 - 2-2  8 - 3-2", 24, 80)
+	graphics.drawText(" 3 - 1-3  6 - 2-3  9 - 3-3", 24, 96)
 
-	graphics.drawText(" 1 - 1-1  4 - 2-1  7 - 3-1", 32, 96)
-	graphics.drawText(" 2 - 1-2  5 - 2-2  8 - 3-2", 32, 112)
-	graphics.drawText(" 3 - 1-3  6 - 2-3  9 - 3-3", 32, 128)
+	graphics.drawText(" A - 4-1  D - 5-1  G - 6-1", 24, 128)
+	graphics.drawText(" B - 4-2  E - 5-2  H - 6-2", 24, 144)
+	graphics.drawText(" C - 4-3  F - 5-3  I - 6-3", 24, 160)
 
-	graphics.drawText(" A - 4-1  D - 5-1  G - 6-1", 32, 160)
-	graphics.drawText(" B - 4-2  E - 5-2  H - 6-2", 32, 176)
-	graphics.drawText(" C - 4-3  F - 5-3  I - 6-3", 32, 192)
-	graphics.drawText(" J - 7-1  K - 7-2         ", 32, 208)
-
-	graphics.drawText("                  Q - QUIT", 32, 224)
+	graphics.drawText(" J - 7-1                  ", 24, 192)
+	graphics.drawText(" K - 7-2          Q - QUIT", 24, 208)
 end
 
 function editor.drawBoxes()
