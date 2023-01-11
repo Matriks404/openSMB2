@@ -38,7 +38,7 @@ function editor.updateView()
 	end
 end
 
-function editor.checkCursorBounds()
+function editor.checkCursorAreaBounds()
 	if editor.cursor_x < 0 then
 		editor.cursor_x = 0
 	end
@@ -56,7 +56,25 @@ function editor.checkCursorBounds()
 	end
 end
 
-function editor.checkGridBounds()
+function editor.checkCursorViewBounds()
+	if editor.cursor_x < editor.view_x then
+		editor.cursor_x = editor.cursor_x + 16
+	end
+
+	if editor.cursor_x > editor.view_x + editor.view_width - 16 then
+		editor.cursor_x = editor.cursor_x - 16
+	end
+
+	if editor.cursor_y < editor.view_y then
+		editor.cursor_y = editor.cursor_y + 16
+	end
+
+	if editor.cursor_y > editor.view_y + editor.view_height - 16 then
+		editor.cursor_y = editor.cursor_y - 16
+	end
+end
+
+function editor.checkViewBounds()
 	if editor.cursor_x < editor.view_x then
 		editor.view_x = editor.view_x - 16
 
@@ -69,6 +87,26 @@ function editor.checkGridBounds()
 
 	elseif editor.cursor_y == editor.view_y + 208 then
 		editor.view_y = editor.view_y + 16
+	end
+
+	editor.updateView()
+end
+
+function editor.checkLevelBounds()
+	if editor.view_x < 0 then
+		editor.view_x = 0
+	end
+
+	if editor.view_x > world.current_area.width - editor.view_width then
+		editor.view_x = world.current_area.width - editor.view_width
+	end
+
+	if editor.view_y < 0 then
+		editor.view_y = 0
+	end
+
+	if editor.view_y > world.current_area.height - editor.view_height then
+		editor.view_y = world.current_area.height - editor.view_height
 	end
 end
 
@@ -84,12 +122,21 @@ function editor.openLevel()
 	end
 end
 
+function editor.moveView(x, y)
+	editor.view_y = editor.view_y + y
+	editor.view_x = editor.view_x + x
+
+	editor.checkLevelBounds()
+	editor.checkCursorViewBounds()
+	editor.checkViewBounds()
+end
+
 function editor.moveCursor(x, y)
 	editor.cursor_x = editor.cursor_x + x
 	editor.cursor_y = editor.cursor_y + y
 
-	editor.checkCursorBounds()
-	editor.checkGridBounds()
+	editor.checkCursorAreaBounds()
+	editor.checkViewBounds()
 end
 
 function editor.changeTile(n)
@@ -142,9 +189,8 @@ function editor.shrinkAreaWidth()
 	if world.current_area.width > 16 then
 		world.current_area.width = world.current_area.width - 16
 
-		editor.checkCursorBounds()
-		editor.checkGridBounds()
-		editor.updateView()
+		editor.checkCursorAreaBounds()
+		editor.checkViewBounds()
 
 		world.current_level.modified = true
 		world.current_area.modified = true
@@ -155,9 +201,8 @@ function editor.scratchAreaWidth()
 	if world.current_area.width < 3744 then
 		world.current_area.width = world.current_area.width + 16
 
-		editor.checkCursorBounds()
-		editor.checkGridBounds()
-		editor.updateView()
+		editor.checkCursorAreaBounds()
+		editor.checkViewBounds()
 
 		-- Clear newly added tile blocks
 		local width = world.current_area.width / 16
@@ -175,9 +220,8 @@ function editor.shrinkAreaHeight()
 	if world.current_area.height > 16 then
 		world.current_area.height = world.current_area.height - 16
 
-		editor.checkCursorBounds()
-		editor.checkGridBounds()
-		editor.updateView()
+		editor.checkCursorAreaBounds()
+		editor.checkViewBounds()
 
 		world.current_level.modified = true
 		world.current_area.modified = true
@@ -188,9 +232,8 @@ function editor.scratchAreaHeight()
 	if world.current_area.height < 1440 then
 		world.current_area.height = world.current_area.height + 16
 
-		editor.checkCursorBounds()
-		editor.checkGridBounds()
-		editor.updateView()
+		editor.checkCursorAreaBounds()
+		editor.checkViewBounds()
 
 		-- Clear newly added tile blocks
 		local height = world.current_area.height / 16

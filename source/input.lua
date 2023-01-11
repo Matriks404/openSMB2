@@ -5,7 +5,7 @@ function input.check(key)
 	if key == "escape" then
 		love.event.quit()
 
-	elseif (love.keyboard.isDown("lalt") and key == "return") or key == "f11" then
+	elseif ((love.keyboard.isDown("lalt") or love.keyboard.isDown("ralt")) and key == "return") or key == "f11" then
 		window.updateFullscreen()
 
 	elseif key == "-" then
@@ -27,7 +27,7 @@ function input.check(key)
 
 			graphics.setBackgroundColor("black")
 
-		elseif love.keyboard.isDown("lctrl") and key == "d" then
+		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "d" then
 		-- Go to debug screen or title screen (depending on origin screen)
 			if debugging.enabled then
 				state.name = "title"
@@ -35,6 +35,8 @@ function input.check(key)
 
 				debugging.enabled = false
 				debugging.mute = false
+
+				music.play("title")
 			else
 				state.name = "debug"
 				state.timer = 0
@@ -181,16 +183,32 @@ function input.check(key)
 				editor.goToNextArea()
 
 			elseif key == "left" then
-				editor.moveCursor(-16, 0)
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(-16, 0)
+				else
+					editor.moveCursor(-16, 0)
+				end
 
 			elseif key == "right" then
-				editor.moveCursor(16, 0)
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(16, 0)
+				else
+					editor.moveCursor(16, 0)
+				end
 
 			elseif key == "up" then
-				editor.moveCursor(0, -16)
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(0, -16)
+				else
+					editor.moveCursor(0, -16)
+				end
 
 			elseif key == "down" then
-				editor.moveCursor(0, 16)
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(0, 16)
+				else
+					editor.moveCursor(0, 16)
+				end
 
 			-- Decrease tile ID by 16
 			elseif key == "w" then

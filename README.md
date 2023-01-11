@@ -72,6 +72,7 @@
 	* Press `8` or `2` on keypad to shrink or stretch height.
 	* Press `[` or `]` to switch between level areas.
 	* Press arrow keys to move edit cursor.
+	* Press `SHIFT` + arrow keys to move edit view.
 	* Press `W`, `S`, `A`, `D` keys to change selected tile.
 	* Press `Z` to remove tile.
 	* Press `X` to place tile.
