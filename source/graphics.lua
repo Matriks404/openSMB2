@@ -280,11 +280,4 @@ function graphics.drawWorldImage()
 	end
 end
 
-function graphics.drawStartingPosition()
-	local start_x = world.current_level.start_x
-	local start_y = world.current_level.start_y
-
-	graphics.drawText("S", start_x, start_y, "brown")
-end
-
 return graphics
