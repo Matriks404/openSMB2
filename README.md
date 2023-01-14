@@ -66,6 +66,7 @@
 
 * In level editor:
 	* Resize the window to have more screen space for editing purposes.
+	* Press 'T' to change area type (horizontal or vertical).
 	* Press `B` to change background color.
 	* Press `M` to change music.
 	* Press `4` or `6` on keypad to shrink or stretch width.

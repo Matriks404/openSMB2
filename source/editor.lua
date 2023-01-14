@@ -158,6 +158,17 @@ function editor.placeTile(id)
 	world.current_area.modified = true
 end
 
+function editor.updateType()
+	--TODO: This is dumb.
+	if world.current_area.type == "horizontal" then
+		world.current_area.type = "vertical"
+	else
+		world.current_area.type = "horizontal"
+	end
+
+	world.current_area.modified = true
+end
+
 function editor.updateBackground()
 	--TODO: This is dumb.
 	if world.current_area.background == "black" then
@@ -380,23 +391,25 @@ end
 
 function editor.drawLevelEditor()
 	-- Draw world, level and area indicators
-	graphics.drawText(tostring(world.current).."-"..tostring(world.level), 2, 2)
-	graphics.drawText("A-"..tostring(world.area), 34, 2)
+	graphics.drawText(world.current.."-"..world.level.."-"..world.area, 2, 2)
+
+	-- Draw area type indicator
+	graphics.drawText("T-"..world.types[world.current_area.type].short_name, 50, 2)
 
 	-- Draw background and music indicators
-	graphics.drawText("BG-"..graphics.bg[world.current_area.background].short_name, 74, 2)
-	graphics.drawText("M-"..music.m[world.current_area.music].short_name, 138, 2)
+	graphics.drawText("B-"..graphics.bg[world.current_area.background].short_name, 90, 2)
+	graphics.drawText("M-"..music.m[world.current_area.music].short_name, 146, 2)
 
 	-- Draw width and height values
-	graphics.drawText("W-"..tostring(world.current_area.width), 2, 10)
-	graphics.drawText("H-"..tostring(world.current_area.height), 2, 18)
+	graphics.drawText("W-"..world.current_area.width, 2, 10)
+	graphics.drawText("H-"..world.current_area.height, 2, 18)
 
 	-- Draw coordinates for edit cursor
-	graphics.drawText("X-"..tostring(editor.cursor_x), 66, 10)
-	graphics.drawText("Y-"..tostring(editor.cursor_y), 66, 18)
+	graphics.drawText("X-"..editor.cursor_x, 66, 10)
+	graphics.drawText("Y-"..editor.cursor_y, 66, 18)
 
 	-- Draw currently selected tile
-	graphics.drawText("TILE-"..tostring(editor.tile), 170, 18)
+	graphics.drawText("TILE-"..editor.tile, 170, 18)
 	graphics.drawTile(editor.tile, 238, 12)
 
 	editor.drawBoxes()

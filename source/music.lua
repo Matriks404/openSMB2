@@ -4,10 +4,10 @@ music.m = {}
 
 function music.init()
 	music.m["title"] = { short_name = "TITL", track = snd.music_title }
-	music.m["character_select"] = { short_name = "CHAR", track = snd.music_char_select }
-	music.m["overworld"] = { short_name = "OVER", track = snd.music_overworld }
-	music.m["underworld"] = { short_name = "UNDR", track = snd.music_underworld }
-	music.m["boss"] = { short_name = "BOSS", track = snd.music_boss }
+	music.m["character_select"] = { short_name = "CHA", track = snd.music_char_select }
+	music.m["overworld"] = { short_name = "OVR", track = snd.music_overworld }
+	music.m["underworld"] = { short_name = "UND", track = snd.music_underworld }
+	music.m["boss"] = { short_name = "BOS", track = snd.music_boss }
 end
 
 function music.play(name)

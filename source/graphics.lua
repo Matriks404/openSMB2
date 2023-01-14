@@ -62,7 +62,7 @@ function graphics.drawText(str, x, y, color)
 		local ax = (code % 32) * 16
 		local ay = math.floor(code / 32) * 16
 
-		local symbol = love.graphics.newQuad(ax, ay, 16, 16, font[color]:getWidth(), font.brown:getHeight())
+		local symbol = love.graphics.newQuad(ax, ay, 16, 16, font[color]:getWidth(), font[color]:getHeight())
 
 		love.graphics.draw(font[color], symbol, real_x, y, 0, 0.5)
 

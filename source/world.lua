@@ -4,6 +4,10 @@ world.count = 8 --TODO: Use this variable.
 
 world.level_count = 3 --TODO: Use this variable.
 
+world.types = {}
+world.types["horizontal"] = { short_name = "H" }
+world.types["vertical"] = { short_name = "V" }
+
 function world.reset()
 	world.current = 1
 	world.level = 1
@@ -74,10 +78,23 @@ function world.isGoodLevel(directory)
 
 		local area_settings = level_settings[index]
 
-		local width = area_settings[1]
-		local height = area_settings[2]
-		local background = area_settings[3]
-		local music_track = area_settings[4]
+		local type = area_settings[1]
+		local width = area_settings[2]
+		local height = area_settings[3]
+		local background = area_settings[4]
+		local music_track = area_settings[5]
+
+		if not type then
+			print("\tType is not defined for area "..i)
+
+			return false
+		end
+
+		if not world.types[type] then
+			print("\tType '"..type.."' is not valid for area "..i)
+
+			return false
+		end
 
 		if not data.isGoodDivisibleInteger(width, 16, 16) then
 			print("\tArea width "..width.." is not valid for area "..i)
@@ -97,14 +114,14 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		if not music then
-			print("\tMusic is not defined for area "..i)
+		if not graphics.bg[background] then
+			print("\tBackground '"..background.."' is not valid for area "..i)
 
 			return false
 		end
 
-		if not graphics.bg[background] then
-			print("\tBackground '"..background.."' is not valid for area "..i)
+		if not music then
+			print("\tMusic is not defined for area "..i)
 
 			return false
 		end
@@ -247,7 +264,6 @@ function world.loadLevel(world_no, level_no, level_directory)
 	local level_settings_file = love.filesystem.read(level_directory.."settings.lua")
 	local level_settings = TSerial.unpack(level_settings_file)
 
-	-- Get level variables
 	level.area_count = level_settings[1]
 	level.start_x = level_settings[2]
 	level.start_y = level_settings[3]
@@ -258,11 +274,11 @@ function world.loadLevel(world_no, level_no, level_directory)
 		level[i] = {}
 		area = world[world_no][level_no][i]
 
-		-- Fill area width, height, background and music arrays
-		area.width = area_settings[1]
-		area.height = area_settings[2]
-		area.background = area_settings[3]
-		area.music = area_settings[4]
+		area.type = area_settings[1]
+		area.width = area_settings[2]
+		area.height = area_settings[3]
+		area.background = area_settings[4]
+		area.music = area_settings[5]
 	end
 end
 
@@ -299,7 +315,7 @@ function world.saveLevel(world_no, level_no, level_directory)
 
 	for i = 0, level.area_count - 1 do
 		area = level[i]
-		table.insert(data, {area.width, area.height, area.background, area.music })
+		table.insert(data, {area.type, area.width, area.height, area.background, area.music })
 	end
 
 	data = TSerial.pack(data, false, true)
