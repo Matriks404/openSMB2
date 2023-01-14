@@ -166,6 +166,8 @@ function editor.updateType()
 		world.current_area.type = "horizontal"
 	end
 
+	world.checkAreaSizeValidity(world.current, world.level, world.area)
+
 	world.current_area.modified = true
 end
 
@@ -201,6 +203,7 @@ function editor.shrinkAreaWidth()
 	if world.current_area.width > 16 then
 		world.current_area.width = world.current_area.width - 16
 
+		world.checkAreaSizeValidity(world.current, world.level, world.area)
 		editor.checkCursorAreaBounds()
 		editor.checkViewBounds()
 
@@ -213,6 +216,7 @@ function editor.scratchAreaWidth()
 	if world.current_area.width < 3744 then
 		world.current_area.width = world.current_area.width + 16
 
+		world.checkAreaSizeValidity(world.current, world.level, world.area)
 		editor.checkCursorAreaBounds()
 		editor.checkViewBounds()
 
@@ -232,6 +236,7 @@ function editor.shrinkAreaHeight()
 	if world.current_area.height > 16 then
 		world.current_area.height = world.current_area.height - 16
 
+		world.checkAreaSizeValidity(world.current, world.level, world.area)
 		editor.checkCursorAreaBounds()
 		editor.checkViewBounds()
 
@@ -244,6 +249,7 @@ function editor.scratchAreaHeight()
 	if world.current_area.height < 1440 then
 		world.current_area.height = world.current_area.height + 16
 
+		world.checkAreaSizeValidity(world.current, world.level, world.area)
 		editor.checkCursorAreaBounds()
 		editor.checkViewBounds()
 
@@ -390,19 +396,41 @@ function editor.drawCursor()
 end
 
 function editor.drawLevelEditor()
+	local area = world.current_area
+	local font
+
 	-- Draw world, level and area indicators
 	graphics.drawText(world.current.."-"..world.level.."-"..world.area, 2, 2)
 
 	-- Draw area type indicator
-	graphics.drawText("T-"..world.types[world.current_area.type].short_name, 50, 2)
+	if area.valid_size then
+		font = "white"
+	else
+		font = "brown"
+	end
+
+	graphics.drawText("T-"..world.types[area.type].short_name, 50, 2, font)
 
 	-- Draw background and music indicators
-	graphics.drawText("B-"..graphics.bg[world.current_area.background].short_name, 90, 2)
-	graphics.drawText("M-"..music.m[world.current_area.music].short_name, 146, 2)
+	graphics.drawText("B-"..graphics.bg[area.background].short_name, 90, 2)
+	graphics.drawText("M-"..music.m[area.music].short_name, 146, 2)
 
 	-- Draw width and height values
-	graphics.drawText("W-"..world.current_area.width, 2, 10)
-	graphics.drawText("H-"..world.current_area.height, 2, 18)
+	if area.valid_width then
+		font = "white"
+	else
+		font = "brown"
+	end
+
+	graphics.drawText("W-"..area.width, 2, 10, font)
+
+	if area.valid_height then
+		font = "white"
+	else
+		font = "brown"
+	end
+
+	graphics.drawText("H-"..area.height, 2, 18)
 
 	-- Draw coordinates for edit cursor
 	graphics.drawText("X-"..editor.cursor_x, 66, 10)

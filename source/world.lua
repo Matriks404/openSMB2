@@ -154,6 +154,21 @@ function world.isGoodLevel(directory)
 	return true
 end
 
+function world.checkAreaSizeValidity(world_no, level_no, area_no)
+	area = world[world_no][level_no][area_no]
+
+	if area.type == "horizontal" then
+		area.valid_width = area.width >= 16
+		area.valid_height = area.height >= 16
+
+	elseif area.type == "vertical" then
+		area.valid_width = area.width == 256
+		area.valid_height = area.height >= 16
+	end
+
+	area.valid_size = area.valid_width and area.valid_height
+end
+
 function world.update(world_no, level_no, area_no)
 	world.current = world_no
 	world.level = level_no
@@ -161,6 +176,8 @@ function world.update(world_no, level_no, area_no)
 
 	world.current_level = world[world_no][level_no]
 	world.current_area = world[world_no][level_no][area_no]
+
+	world.checkAreaSizeValidity(world_no, level_no, area_no)
 end
 
 function world.enter(world_no, level_no, area_no)
@@ -214,7 +231,7 @@ function world.load(world_no, level_no, area_no)
 		level_directory = base_level_dir
 	else
 		--TODO: This is just a placeholder, do something about that.
-		love.window.showMessageBox("Error", "No valid level found!")
+		love.window.showMessageBox("Error", "No valid level found! Check the console for details.", "error")
 
 		return
 	end
@@ -237,6 +254,18 @@ function world.load(world_no, level_no, area_no)
 end
 
 function world.save(world_no, level_no)
+	local level = world[world_no][level_no]
+
+	for area = 0, level.area_count - 1 do
+		world.checkAreaSizeValidity(world_no, level_no, area)
+
+		if not level[area].valid_size then
+			love.window.showMessageBox("Error", "Invalid size for area "..area.."!\nPlease make sure that the area size is valid for specified area type.", "error")
+
+			return
+		end
+	end
+
 	local level_directory = world.getLevelDirectory(world_no, level_no, "userlevels")
 	print("Saving level to "..level_directory)
 
@@ -246,8 +275,6 @@ function world.save(world_no, level_no)
 
 	world.saveLevel(world_no, level_no, level_directory)
 
-	local level = world[world_no][level_no]
-
 	for area = 0, level.area_count - 1 do
 		if level[area].modified or not love.filesystem.getInfo(level_directory..tostring(area)) then
 			print("Saving area "..area)
@@ -255,6 +282,8 @@ function world.save(world_no, level_no)
 			world.saveArea(world_no, level_no, area, level_directory)
 		end
 	end
+
+	love.window.showMessageBox("Info", "Level was saved to "..level_directory, "info")
 end
 
 function world.loadLevel(world_no, level_no, level_directory)
