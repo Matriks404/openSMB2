@@ -277,10 +277,8 @@ end
 function editor.goToPreviousArea()
 	if world.area > 0 then
 		world.area = world.area - 1
-
 	else
-		world.area  = world.current_level.area_count - 1
-
+		world.area = world.current_level.area_count - 1
 	end
 
 	editor.goToArea(world.current, world.level, world.area)

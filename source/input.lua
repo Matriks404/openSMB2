@@ -52,21 +52,13 @@ function input.check(key)
 	-- Character select screen
 		if key == "left" and state.transition_timer == 0 then
 		-- Select character on the left
-			if state.cursor > 0 then
-				state.cursor = state.cursor - 1
-			else
-				state.cursor = 3
-			end
+			state.cursor = (state.cursor > 0 and state.cursor - 1) or 3
 
 			snd.sfx_cherry:play()
 
 		elseif key == "right" and state.transition_timer == 0 then
 		-- Select character on the right
-			if state.cursor < 3 then
-				state.cursor = state.cursor + 1
-			else
-				state.cursor = 0
-			end
+			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
 			snd.sfx_cherry:play()
 
@@ -108,11 +100,7 @@ function input.check(key)
 	-- Game over screen
 		if key == "a" and character.continues > 0 then
 		-- Select option
-			if state.cursor == 0 then
-				state.cursor = 1
-			else
-				state.cursor = 0
-			end
+			state.cursor = (state.cursor == 0 and 1) or 0
 		end
 
 		if key == "s" then
@@ -128,6 +116,8 @@ function input.check(key)
 				state.cursor = 0
 				state.timer = 0
 				state.name = "title"
+
+				music.play("title")
 			end
 		end
 

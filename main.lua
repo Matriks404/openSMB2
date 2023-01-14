@@ -245,11 +245,7 @@ function love.update()
 				-- No more lifes, go to game over screen
 					snd.sfx_game_over:play()
 
-					if character.continues > 0 then
-						state.cursor = 0
-					else
-						state.cursor = 1
-					end
+					state.cursor = (character.continues > 0 and 0) or 1
 
 					state.name = "game_over"
 				end
@@ -319,49 +315,56 @@ function love.draw()
 
 		love.graphics.draw(img.cs_arrow, 72 + (state.cursor * 32), 112)
 
+		local mario, luigi, toad, peach
+
+		-- Mario
 		if state.cursor == 0 then
-		-- Draw Mario
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img.cs_mario_active, 72, 144)
+				mario = img.cs_mario_active
 			else
-				love.graphics.draw(img.cs_mario_select, 72, 144)
+				mario = img.cs_mario_select
 			end
 		else
-			love.graphics.draw(img.cs_mario, 72, 144)
+			mario = img.cs_mario
 		end
 
+		-- Luigi
 		if state.cursor == 1 then
-		-- Draw Luigi
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img.cs_luigi_active, 104, 144)
+				luigi = img.cs_luigi_active
 			else
-				love.graphics.draw(img.cs_luigi_select, 104, 144)
+				luigi = img.cs_luigi_select
 			end
 		else
-			love.graphics.draw(img.cs_luigi, 104, 144)
+			luigi = img.cs_luigi
 		end
 
+		-- Toad
 		if state.cursor == 2 then
-		-- Draw Toad
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img.cs_toad_active, 136, 144)
+				toad = img.cs_toad_active
 			else
-				love.graphics.draw(img.cs_toad_select, 136, 144)
+				toad = img.cs_toad_select
 			end
 		else
-			love.graphics.draw(img.cs_toad, 136, 144)
+			toad = img.cs_toad
 		end
 
+		-- Peach
 		if state.cursor == 3 then
-		-- Draw Peach
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				love.graphics.draw(img.cs_peach_active, 168, 144)
+				peach = img.cs_peach_active
 			else
-				love.graphics.draw(img.cs_peach_select, 168, 144)
+				peach = img.cs_peach_select
 			end
 		else
-			love.graphics.draw(img.cs_peach, 168, 144)
+			peach = img.cs_peach
 		end
+
+		love.graphics.draw(mario, 72, 144)
+		love.graphics.draw(luigi, 104, 144)
+		love.graphics.draw(toad, 136, 144)
+		love.graphics.draw(peach, 168, 144)
 
 		graphics.drawText("EXTRA LIFE", 64, 208)
 		graphics.drawText(game.getRemainingLives(character.lives), 176, 208)
@@ -385,11 +388,9 @@ function love.draw()
 
 			for i=0, character.energy_bars - 1 do
 			-- Draw energy bars
-				if i+1 <= character.energy then
-					love.graphics.draw(img.gp_filled, 12, 48 + (i * 16))
-				else
-					love.graphics.draw(img.gp_empty, 12, 48 + (i * 16))
-				end
+				local gp = (i + 1 <= character.energy and img.gp_filled) or img.gp_empty
+
+				love.graphics.draw(gp, 12, 48 + (i * 16))
 			end
 
 			graphics.drawCharacter() -- Draw character on screen

@@ -177,15 +177,11 @@ function graphics.drawCharacter()
 				state.char_anim_timer = 0
 			end
 
-			if state.char_anim_timer >= 5 then
-				ax = 0 * 16
-			else
-				ax = 1 * 16
-			end
+			ax = (state.char_anim_timer >= 5 and 0) or 16
 
 			state.char_anim_timer = state.char_anim_timer + 1
 		else
-			ax = 0 * 16
+			ax = 0
 
 			state.char_anim_timer = 0
 		end
@@ -195,24 +191,19 @@ function graphics.drawCharacter()
 			state.char_anim_timer = 0
 		end
 
-		if state.char_anim_timer >= 3 then
-			ax = 0 * 16
-		else
-			ax = 1 * 16
-		end
+		ax = (state.char_anim_timer >= 3 and 0) or 16
 
 		if state.transition_timer == 0 then
 			state.char_anim_timer = state.char_anim_timer + 1
 		end
 	else
-		ax = 1 * 16
+		ax = 16
 
 		state.char_anim_timer = 0
 	end
 
 	if state.screen_y == 0 then
 		pos_y = character.pos_y - state.screen_y * 240
-
 	else
 		pos_y = character.pos_y - state.screen_y * 144
 	end
@@ -225,46 +216,30 @@ function graphics.drawCharacter()
 		end
 	end
 
-	local sprite
+	local char, sprite
 
 	-- Draw character sprite
 	if character.current == "mario" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img.chars_mario:getWidth(), img.chars_mario:getHeight())
-
-		love.graphics.draw(img.chars_mario, sprite, pos_x, pos_y, 0, character.side, 1, offset)
+		char = img.chars_mario
 
 	elseif character.current == "luigi" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img.chars_luigi:getWidth(), img.chars_luigi:getHeight())
-
-		love.graphics.draw(img.chars_luigi, sprite, pos_x, pos_y, 0, character.side, 1, offset)
+		char = img.chars_luigi
 
 	elseif character.current == "toad" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img.chars_luigi:getWidth(), img.chars_luigi:getHeight())
-
-		love.graphics.draw(img.chars_toad, sprite, pos_x, pos_y, 0, character.side, 1, offset)
+		char = img.chars_toad
 
 	elseif character.current == "peach" then
-		sprite = love.graphics.newQuad(ax, 0, 16, 32, img.chars_peach:getWidth(), img.chars_peach:getHeight())
-
-		love.graphics.draw(img.chars_peach, sprite, pos_x, pos_y, 0, character.side, 1, offset)
+		char = img.chars_peach
 	end
+
+	sprite = love.graphics.newQuad(ax, 0, 16, 32, char:getWidth(), char:getHeight())
+	love.graphics.draw(char, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 	-- Draw character sprite when it's horizontally wraping
 	if character.pos_x > 256 - 16 then
 		pos_x = pos_x - world.current_area.width
 
-		if character.current == "mario" then
-			love.graphics.draw(img.chars_mario, sprite, pos_x, pos_y, 0, character.side, 1, offset)
-
-		elseif character.current == "luigi" then
-			love.graphics.draw(img.chars_luigi, sprite, pos_x, pos_y, 0, character.side, 1, offset)
-
-		elseif character.current == "toad" then
-			love.graphics.draw(img.chars_toad, sprite, pos_x, pos_y, 0, character.side, 1, offset)
-
-		elseif character.current == "peach" then
-			love.graphics.draw(img.chars_peach, sprite, pos_x, pos_y, 0, character.side, 1, offset)
-		end
+		love.graphics.draw(char, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 	end
 end
 
@@ -281,24 +256,26 @@ function graphics.drawLevelbook()
 
 	for i = 0, world.level_count - 1 do
 	-- Draw level indicators
-		if world.level == i + 1 then
-			love.graphics.draw(img.lb_current, 113 + (i * 16), 64)
-		else
-			love.graphics.draw(img.lb_other, 113 + (i * 16), 64)
-		end
+		local lb_indicator = (world.level == i + 1 and img.lb_current) or img.lb_other
+
+		love.graphics.draw(lb_indicator, 113 + (i * 16), 64)
 	end
 end
 
 function graphics.drawWorldImage()
+	local lb_world
+
 	if world.current == 1 or world.current == 3 or world.current == 5 then
-		love.graphics.draw(img.lb_world1, 65, 112)
+		lb_world = img.lb_world1
 	elseif world.current == 2 or world.current == 6 then
-		love.graphics.draw(img.lb_world2, 65, 112)
+		lb_world = img.lb_world2
 	elseif world.current == 4 then
-		love.graphics.draw(img.lb_world4, 65, 112)
+		lb_world = img.lb_world4
 	elseif world.current == 7 then
-		love.graphics.draw(img.lb_world7, 65, 112)
+		lb_world = img.lb_world7
 	end
+
+	love.graphics.draw(lb_world, 65, 112)
 end
 
 return graphics
