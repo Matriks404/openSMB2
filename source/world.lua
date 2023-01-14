@@ -159,7 +159,7 @@ function world.checkAreaSizeValidity(world_no, level_no, area_no)
 
 	if area.type == "horizontal" then
 		area.valid_width = area.width >= 16
-		area.valid_height = area.height >= 16
+		area.valid_height = area.height >= 16 and area.height <= 240
 
 	elseif area.type == "vertical" then
 		area.valid_width = area.width == 256

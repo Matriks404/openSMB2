@@ -403,12 +403,7 @@ function editor.drawLevelEditor()
 	graphics.drawText(world.current.."-"..world.level.."-"..world.area, 2, 2)
 
 	-- Draw area type indicator
-	if area.valid_size then
-		font = "white"
-	else
-		font = "brown"
-	end
-
+	font = (area.valid_size and "white") or "brown"
 	graphics.drawText("T-"..world.types[area.type].short_name, 50, 2, font)
 
 	-- Draw background and music indicators
@@ -416,21 +411,11 @@ function editor.drawLevelEditor()
 	graphics.drawText("M-"..music.m[area.music].short_name, 146, 2)
 
 	-- Draw width and height values
-	if area.valid_width then
-		font = "white"
-	else
-		font = "brown"
-	end
-
+	font = (area.valid_width and "white") or "brown"
 	graphics.drawText("W-"..area.width, 2, 10, font)
 
-	if area.valid_height then
-		font = "white"
-	else
-		font = "brown"
-	end
-
-	graphics.drawText("H-"..area.height, 2, 18)
+	font = (area.valid_height and "white") or "brown"
+	graphics.drawText("H-"..area.height, 2, 18, font)
 
 	-- Draw coordinates for edit cursor
 	graphics.drawText("X-"..editor.cursor_x, 66, 10)
