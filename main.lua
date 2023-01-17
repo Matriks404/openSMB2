@@ -28,7 +28,6 @@ function love.load()
 	music.play("title")
 end
 
-
 function love.update()
 	state.timer = state.timer + 1
 

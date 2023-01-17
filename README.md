@@ -66,6 +66,7 @@
 
 * In level editor:
 	* Resize the window to have more screen space for editing purposes.
+	* Press `C` to change view (normal or detailed, where the latter is showing hexadecimal values of tiles on top of them).
 	* Press `T` to change area type (horizontal or vertical).
 	* Press `B` to change background color.
 	* Press `M` to change music.

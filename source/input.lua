@@ -148,7 +148,10 @@ function input.check(key)
 			end
 
 		elseif editor.option == "edit" then
-			if key == "t" then
+			if key == "c" then
+				editor.changeView()
+
+			elseif key == "t" then
 				editor.updateType()
 
 			elseif key == "b" then

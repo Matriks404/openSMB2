@@ -2,6 +2,7 @@ local editor = {}
 
 -- Level editor variables
 editor.option = "select" -- Editor option (select, edit)
+editor.view = "normal" -- Editor view option (normal, detailed)
 editor.tile = 1
 
 -- Editor view height and width
@@ -22,6 +23,14 @@ function editor.resetView()
 
 	editor.view_x = 0
 	editor.view_y = 0
+end
+
+function editor.changeView()
+	if editor.view == "normal" then
+		editor.view = "detailed"
+	else
+		editor.view = "normal"
+	end
 end
 
 function editor.updateView()
@@ -377,7 +386,15 @@ function editor.drawTiles()
 			local pos_x = j * 16
 			local pos_y = 32 + (i * 16)
 
-			graphics.drawTile(world.current_area.tiles[tile_y][tile_x], pos_x, pos_y)
+			local tile = world.current_area.tiles[tile_y][tile_x]
+
+			graphics.drawTile(tile, pos_x, pos_y)
+
+			if editor.view == "detailed" then
+				tile = string.upper(string.format("%x", tile))
+
+				graphics.drawText(tile, pos_x, pos_y)
+			end
 		end
 	end
 end
@@ -392,6 +409,7 @@ end
 function editor.drawCursor()
 	love.graphics.draw(img.editor_16x16_cursor, editor.cursor_x - editor.view_x, editor.cursor_y - editor.view_y + 32)
 end
+
 
 function editor.drawLevelEditor()
 	local area = world.current_area
@@ -420,13 +438,14 @@ function editor.drawLevelEditor()
 	graphics.drawText("Y-"..editor.cursor_y, 66, 18)
 
 	-- Draw currently selected tile
-	graphics.drawText("TILE-"..editor.tile, 170, 18)
+	local tile = string.upper(string.format("%x", editor.tile))
+	graphics.drawText("TILE-"..tile, 178, 18)
 	graphics.drawTile(editor.tile, 238, 12)
 
 	editor.drawBoxes()
 	editor.drawTiles()
 
-	if (world.area == 0) then
+	if world.area == 0 then
 		editor.drawStartingPosition()
 	end
 
