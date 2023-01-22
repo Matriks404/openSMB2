@@ -102,8 +102,24 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
+		if i == 0 and start_x >= width then
+			local max = width - 1
+
+			print("\tStarting X position "..start_x.." is bigger than maximum "..max.." for area "..i)
+
+			return false
+		end
+
 		if not data.isGoodDivisibleInteger(height, 16, 16) then
 			print("\tArea height "..height.." is not valid for area "..i)
+
+			return false
+		end
+
+		if i == 0 and start_y >= height then
+			local max = height - 1
+
+			print("\tStarting Y position "..start_y.." is bigger than maximum "..max.." for area "..i)
 
 			return false
 		end

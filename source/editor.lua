@@ -9,6 +9,9 @@ editor.tile = 1
 editor.view_height = 0
 editor.view_width = 0
 
+-- Editor view height offset (because topbar takes some space)
+editor.view_y_offset = 32
+
 -- Editor view top-left coordinates
 editor.view_x = 0
 editor.view_y = 0
@@ -372,7 +375,7 @@ end
 function editor.drawBoxes()
 	for i = 0, editor.view_height - 16, 16 do
 		for j = 0, editor.view_width - 16, 16 do
-			love.graphics.draw(img.editor_16x16_empty, j, 32 + i)
+			love.graphics.draw(img.editor_16x16_empty, j, editor.view_y_offset + i)
 		end
 	end
 end
@@ -384,7 +387,7 @@ function editor.drawTiles()
 			local tile_y = (editor.view_y / 16) + i
 
 			local pos_x = j * 16
-			local pos_y = 32 + (i * 16)
+			local pos_y = editor.view_y_offset + (i * 16)
 
 			local tile = world.current_area.tiles[tile_y][tile_x]
 
@@ -400,10 +403,18 @@ function editor.drawTiles()
 end
 
 function editor.drawStartingPosition()
-	local start_x = editor.view_x - world.current_level.start_x
-	local start_y = editor.view_y - world.current_level.start_y
+	local x = world.current_level.start_x - editor.view_x
+	local y = editor.view_y_offset + world.current_level.start_y - editor.view_y
 
-	graphics.drawText("S", start_x, start_y, "brown")
+	if x < 0 or x >= editor.view_width then
+		return
+	end
+
+	if y < editor.view_y_offset or y >= editor.view_height + editor.view_y_offset then
+		return
+	end
+
+	love.graphics.draw(img.editor_sp, x, y)
 end
 
 function editor.drawCursor()
@@ -445,11 +456,11 @@ function editor.drawLevelEditor()
 	editor.drawBoxes()
 	editor.drawTiles()
 
+	editor.drawCursor()
+
 	if world.area == 0 then
 		editor.drawStartingPosition()
 	end
-
-	editor.drawCursor()
 end
 
 return editor

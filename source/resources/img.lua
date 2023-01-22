@@ -68,6 +68,7 @@ function img.load()
 	do
 		img.editor_16x16_empty = love.graphics.newImage(editor_dir.."16x16.png")
 		img.editor_16x16_cursor = love.graphics.newImage(editor_dir.."16x16_cursor.png")
+		img.editor_sp = love.graphics.newImage(editor_dir.."starting_point.png")
 	end
 
 	-- Tilemap
