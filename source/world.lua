@@ -5,8 +5,8 @@ world.count = 8 --TODO: Use this variable.
 world.level_count = 3 --TODO: Use this variable.
 
 world.types = {}
-world.types["horizontal"] = { short_name = "H" }
-world.types["vertical"] = { short_name = "V" }
+world.types["horizontal"] = { short_name = "HRZ" }
+world.types["vertical"] = { short_name = "VRT" }
 
 function world.reset()
 	world.current = 1

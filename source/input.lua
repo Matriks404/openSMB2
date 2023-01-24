@@ -148,86 +148,17 @@ function input.check(key)
 			end
 
 		elseif editor.option == "edit" then
-			if key == "c" then
-				editor.changeView()
-
-			elseif key == "t" then
-				editor.updateType()
-
-			elseif key == "b" then
-				editor.updateBackground()
-
-			elseif key == "m" then
-				editor.updateMusic()
-
-			elseif key == "kp4" then
-				editor.shrinkAreaWidth()
-
-			elseif key == "kp6" then
-				editor.scratchAreaWidth()
-
-			elseif key == "kp8" then
-				editor.shrinkAreaHeight()
-
-			elseif key == "kp2" then
-				editor.scratchAreaHeight()
-
-			elseif key == "[" then
+			if key == "[" then
 				editor.goToPreviousArea()
 
 			elseif key == "]" then
 				editor.goToNextArea()
 
-			elseif key == "left" then
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
-					editor.moveView(-16, 0)
-				else
-					editor.moveCursor(-16, 0)
-				end
+			elseif key == "tab" then
+				editor.changeMode()
 
-			elseif key == "right" then
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
-					editor.moveView(16, 0)
-				else
-					editor.moveCursor(16, 0)
-				end
-
-			elseif key == "up" then
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
-					editor.moveView(0, -16)
-				else
-					editor.moveCursor(0, -16)
-				end
-
-			elseif key == "down" then
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
-					editor.moveView(0, 16)
-				else
-					editor.moveCursor(0, 16)
-				end
-
-			-- Decrease tile ID by 16
-			elseif key == "w" then
-				editor.changeTile(-16)
-
-			-- Increase tile ID by 16
-			elseif key == "s" then
-				editor.changeTile(16)
-
-			-- Decrease tile ID by 1
-			elseif key == "a" then
-				editor.changeTile(-1)
-
-			-- Increase tile ID by 1
-			elseif key == "d" then
-				editor.changeTile(1)
-
-			-- Remove tile
-			elseif key == "z" then
-				editor.placeTile(0)
-
-			elseif key == "x" then
-				editor.placeTile(editor.tile)
+			elseif key == "c" then
+				editor.changeView()
 
 			elseif key == "l" then
 				editor.loadLevel(world.current, world.level, world.area)
@@ -240,6 +171,133 @@ function input.check(key)
 
 			elseif key == "q" then
 				editor.quit()
+
+			elseif key == "left" then
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(-16, 0)
+				else
+					if editor.mode == "normal" then
+						editor.moveCursor(-16, 0)
+
+					elseif editor.mode == "start" then
+						local x
+
+						if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+							x = -16
+						else
+							x = -1
+						end
+
+						editor.moveStartingPosition(x, 0)
+					end
+				end
+
+			elseif key == "right" then
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(16, 0)
+				else
+					if editor.mode == "normal" then
+						editor.moveCursor(16, 0)
+
+					elseif editor.mode == "start" then
+						local x
+
+						if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+							x = 16
+						else
+							x = 1
+						end
+
+						editor.moveStartingPosition(x, 0)
+					end
+				end
+
+			elseif key == "up" then
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(0, -16)
+				else
+					if editor.mode == "normal" then
+						editor.moveCursor(0, -16)
+
+					elseif editor.mode == "start" then
+						local y
+
+						if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+							y = -16
+						else
+							y = -1
+						end
+
+						editor.moveStartingPosition(0, y)
+					end
+				end
+
+			elseif key == "down" then
+				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+					editor.moveView(0, 16)
+				else
+					if editor.mode == "normal" then
+						editor.moveCursor(0, 16)
+
+					elseif editor.mode == "start" then
+						local y
+
+						if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+							y = 16
+						else
+							y = 1
+						end
+
+						editor.moveStartingPosition(0, y)
+					end
+				end
+			end
+
+			if editor.mode == "normal" then
+				if key == "t" then
+					editor.updateType()
+
+				elseif key == "b" then
+					editor.updateBackground()
+
+				elseif key == "m" then
+					editor.updateMusic()
+
+				elseif key == "kp4" then
+					editor.shrinkAreaWidth()
+
+				elseif key == "kp6" then
+					editor.scratchAreaWidth()
+
+				elseif key == "kp8" then
+					editor.shrinkAreaHeight()
+
+				elseif key == "kp2" then
+					editor.scratchAreaHeight()
+
+				-- Decrease tile ID by 16
+				elseif key == "w" then
+					editor.changeTile(-16)
+
+				-- Increase tile ID by 16
+				elseif key == "s" then
+					editor.changeTile(16)
+
+				-- Decrease tile ID by 1
+				elseif key == "a" then
+					editor.changeTile(-1)
+
+				-- Increase tile ID by 1
+				elseif key == "d" then
+					editor.changeTile(1)
+
+				-- Remove tile
+				elseif key == "z" then
+					editor.placeTile(0)
+
+				elseif key == "x" then
+					editor.placeTile(editor.tile)
+				end
 			end
 		end
 

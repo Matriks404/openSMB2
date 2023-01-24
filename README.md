@@ -13,7 +13,7 @@
 	* On Windows: Drag game folder onto LÖVE program shortcut.
 	* On macOS and Linux: Execute `love .` in the console (you might need to change directory to game path first).
 
-# Gameplay:
+# Gameplay
 
 * Screens that work are:
 	* Title screen
@@ -51,38 +51,46 @@
 ![Level editor](/screenshots/6.png)
 
 
-# Debugging:
+# Debugging
 
 * Press `CTRL+D` on title screen to enable debug mode and enter debug screen. Here you can:
 	* Toggle FPS counter.
 	* Toggle Frames counter.
 	* Toggle Mute option.
-	* Enter level editor.
+	* Enter level editor (see below).
 	* Start game in debug mode which allows above options to work.
 
-* In level editor menu:
-	* Press one of the keys that will enter editing of some level.
-	* Press `Q` to quit to debug screen.
-
-* In level editor:
-	* Resize the window to have more screen space for editing purposes.
-	* Press `C` to change view (normal or detailed, where the latter is showing hexadecimal values of tiles on top of them).
-	* Press `T` to change area type (horizontal or vertical).
-	* Press `B` to change background color.
-	* Press `M` to change music.
-	* Press `4` or `6` on keypad to shrink or stretch width.
-	* Press `8` or `2` on keypad to shrink or stretch height.
-	* Press `[` or `]` to switch between level areas.
-	* Press arrow keys to move edit cursor.
-	* Press `SHIFT` + arrow keys to move edit view.
-	* Press `W`, `S`, `A`, `D` keys to change selected tile.
-	* Press `Z` to remove tile.
-	* Press `X` to place tile.
-	* Press `L` to load level again.
-	* Press `V` to save level.
-	* Press `P` to play this level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
-	* Press `Q` to quit to menu.
-
-* During gameplay:
+* Also during gameplay (when debug mode is enabled) you can:
 	* Press `A` to ascend.
 	* Press `D` to die.
+
+# Level editor
+
+* In the level editor main menu:
+	* Press one of the keys that will enter editing of some level.
+	* Press `Q` to quit to the debug screen.
+
+* In the level editor proper:
+	* In any mode:
+		* Resize the window to have more screen space for editing purposes.
+		* Press `[` or `]` to switch between level areas.
+		* Press `Tab` to change editor mode (normal one or starting position movement tool)
+		* Press `C` to change editor view type (normal or detailed, where the latter is showing hexadecimal values of tiles on top of them).
+		* Press `SHIFT` + arrow keys to move the view.
+		* Press `L` to load the level (useful if you replace the files and need to reload the level in the editor).
+		* Press `V` to save the level.
+		* Press `P` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
+		* Press `Q` to quit to the main level editor menu.
+	* When in normal editing mode (`MODE-N`):
+		* Press `T` to change area type (horizontal or vertical).
+		* Press `B` to change background color.
+		* Press `M` to change music.
+		* Press `4` or `6` on keypad to shrink or stretch width.
+		* Press `8` or `2` on keypad to shrink or stretch height.
+		* Press `W`, `S`, `A`, `D` keys to change selected tile.
+		* Press arrow keys to move edit cursor.
+		* Press `Z` to remove tile.
+		* Press `X` to place tile.
+	* When in starting position movement tool mode (`MODE-S`):
+		* Press arrow keys to move starting position pixel-by-pixel.
+		* Press `CTRL` + arrow keys to move starting position by 16 pixels each time.
