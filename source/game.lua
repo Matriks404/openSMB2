@@ -1,3 +1,5 @@
+utils = require "source/utils"
+
 local game = {}
 
 game.title = "openSMB2"

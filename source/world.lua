@@ -1,3 +1,5 @@
+data = require "source/data"
+
 local world = {}
 
 world.count = 8 --TODO: Use this variable.

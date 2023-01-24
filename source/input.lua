@@ -148,7 +148,16 @@ function input.check(key)
 			end
 
 		elseif editor.option == "edit" then
-			if key == "[" then
+			if key == "l" then
+				editor.loadLevel(world.current, world.level, world.area)
+
+			elseif key == "v" then
+				editor.saveLevel(world.current, world.level)
+
+			elseif key == "p" then
+				editor.playLevel()
+
+			elseif key == "[" then
 				editor.goToPreviousArea()
 
 			elseif key == "]" then
@@ -159,15 +168,6 @@ function input.check(key)
 
 			elseif key == "c" then
 				editor.changeView()
-
-			elseif key == "l" then
-				editor.loadLevel(world.current, world.level, world.area)
-
-			elseif key == "v" then
-				world.save(world.current, world.level)
-
-			elseif key == "p" then
-				editor.playLevel()
 
 			elseif key == "q" then
 				editor.quit()

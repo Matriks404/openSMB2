@@ -1,12 +1,10 @@
 TSerial = require "source/external/TSerial"
 
-resources = require "source/resources/resources"
-utils = require "source/utils"
+editor = require "source/editor/main"
+resources = require "source/resources/main"
 
 character = require "source/character"
-data = require "source/data"
 debugging = require "source/debugging"
-editor = require "source/editor"
 filesystem = require "source/filesystem"
 game = require "source/game"
 graphics = require "source/graphics"
@@ -446,7 +444,7 @@ function love.draw()
 		end
 
 	elseif state.name == "level_editor" then
-		editor.draw()
+		editor.draw.main()
 
 	elseif state.name == "debug" then
 	-- Draw debug screen stuff

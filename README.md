@@ -73,13 +73,13 @@
 * In the level editor proper:
 	* In any mode:
 		* Resize the window to have more screen space for editing purposes.
+		* Press `L` to load the level (useful if you replace the files and need to reload the level in the editor).
+		* Press `V` to save the level.
+		* Press `P` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
 		* Press `[` or `]` to switch between level areas.
 		* Press `Tab` to change editor mode (normal one or starting position movement tool)
 		* Press `C` to change editor view type (normal or detailed, where the latter is showing hexadecimal values of tiles on top of them).
 		* Press `SHIFT` + arrow keys to move the view.
-		* Press `L` to load the level (useful if you replace the files and need to reload the level in the editor).
-		* Press `V` to save the level.
-		* Press `P` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
 		* Press `Q` to quit to the main level editor menu.
 	* When in normal editing mode (`MODE-N`):
 		* Press `T` to change area type (horizontal or vertical).
