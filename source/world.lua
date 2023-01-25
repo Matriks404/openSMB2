@@ -22,6 +22,31 @@ function world.getLevelDirectory(world_no, level_no, directory)
 	return directory.."/"..world_level_str.."/"
 end
 
+function world.isValidAreaWidth(type, width)
+	if type == "horizontal" then
+		return width >= 16
+	elseif type == "vertical" then
+		return width == 256
+	end
+end
+
+function world.isValidAreaHeight(type, height)
+	if type == "horizontal" then
+		return height >= 16 and height <= 240
+	elseif type == "vertical" then
+		return height >= 16
+	end
+end
+
+function world.checkAreaSizeValidity(world_no, level_no, area_no)
+	area = world[world_no][level_no][area_no]
+
+	area.valid_width = world.isValidAreaWidth(area.type, area.width)
+	area.valid_height = world.isValidAreaHeight(area.type, area.height)
+
+	area.valid_size = area.valid_width and area.valid_height
+end
+
 function world.isGoodLevel(directory)
 	print("Level correctness check for level in `"..directory.."` directory")
 
@@ -98,7 +123,7 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		if not data.isGoodDivisibleInteger(width, 16, 16) then
+		if not data.isGoodDivisibleInteger(width, 16, 16) or not world.isValidAreaWidth(type, width) then
 			print("\tArea width "..width.." is not valid for area "..i)
 
 			return false
@@ -112,7 +137,7 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		if not data.isGoodDivisibleInteger(height, 16, 16) then
+		if not data.isGoodDivisibleInteger(height, 16, 16) or not world.isValidAreaHeight(type, height) then
 			print("\tArea height "..height.." is not valid for area "..i)
 
 			return false
@@ -170,21 +195,6 @@ function world.isGoodLevel(directory)
 
 	print("\tEverything is OK!")
 	return true
-end
-
-function world.checkAreaSizeValidity(world_no, level_no, area_no)
-	area = world[world_no][level_no][area_no]
-
-	if area.type == "horizontal" then
-		area.valid_width = area.width >= 16
-		area.valid_height = area.height >= 16 and area.height <= 240
-
-	elseif area.type == "vertical" then
-		area.valid_width = area.width == 256
-		area.valid_height = area.height >= 16
-	end
-
-	area.valid_size = area.valid_width and area.valid_height
 end
 
 function world.update(world_no, level_no, area_no)
