@@ -85,12 +85,13 @@
 		* Press `T` to change area type (horizontal or vertical).
 		* Press `B` to change background color.
 		* Press `M` to change music.
+		* Press `R` to resize the area to valid size (that is height of maximum 240 pixels for horizontal levels and width of exact 256 pixels for vertical levels).
 		* Press `4` or `6` on keypad to shrink or stretch width.
 		* Press `8` or `2` on keypad to shrink or stretch height.
 		* Press `W`, `S`, `A`, `D` keys to change selected tile.
 		* Press arrow keys to move edit cursor.
-		* Press `Z` to remove tile.
 		* Press `X` to place tile.
+		* Press `Z` to remove tile.
 	* When in starting position movement tool mode (`MODE-S`):
 		* Press arrow keys to move starting position pixel-by-pixel.
 		* Press `CTRL` + arrow keys to move starting position by 16 pixels each time.

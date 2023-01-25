@@ -149,10 +149,10 @@ function input.check(key)
 
 		elseif editor.option == "edit" then
 			if key == "l" then
-				editor.loadLevel(world.current, world.level, world.area)
+				editor.loadLevel()
 
 			elseif key == "v" then
-				editor.saveLevel(world.current, world.level)
+				editor.saveLevel()
 
 			elseif key == "p" then
 				editor.playLevel()
@@ -263,6 +263,9 @@ function input.check(key)
 				elseif key == "m" then
 					editor.updateMusic()
 
+				elseif key == "r" then
+					editor.resizeAreaToValidSize()
+
 				elseif key == "kp4" then
 					editor.shrinkAreaWidth()
 
@@ -291,12 +294,11 @@ function input.check(key)
 				elseif key == "d" then
 					editor.changeTile(1)
 
-				-- Remove tile
-				elseif key == "z" then
-					editor.placeTile(0)
-
 				elseif key == "x" then
 					editor.placeTile(editor.tile)
+
+				elseif key == "z" then
+					editor.removeTile()
 				end
 			end
 		end

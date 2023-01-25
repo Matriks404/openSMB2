@@ -278,7 +278,11 @@ function world.save(world_no, level_no)
 		world.checkAreaSizeValidity(world_no, level_no, area)
 
 		if not level[area].valid_size then
-			love.window.showMessageBox("Error", "Invalid size for area "..area.."!\nPlease make sure that the area size is valid for specified area type.", "error")
+			local msg = "Invalid size for area "..area.."!"..
+			"\nPlease make sure that the area size is valid for specified area type."..
+			"\nYou can also press 'R' key in the editor to resize the area to valid size, although note that any data outside of legal area will be irreversibly deleted."
+
+			love.window.showMessageBox("Error", msg, "error")
 
 			return
 		end

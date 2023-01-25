@@ -37,26 +37,28 @@ function editor.openLevel()
 	end
 end
 
-function editor.loadLevel(world_no, level_no, area_no)
-	world.load(world_no, world_no)
+function editor.loadLevel()
+	world.load(world.current, world.level)
 
-	world.update(world_no, level_no, area_no)
+	world.update(world.current, world.level, world.area)
 end
 
-function editor.saveLevel(world_no, level_no)
+function editor.saveLevel()
 	world.save(world.current, world.level)
 end
 
 function editor.playLevel()
 	world.save(world.current, world.level)
 
-	state.name = "character_select"
-	world.area = 0
+	if world[world.current][world.level][world.area].valid_size then
+		state.name = "character_select"
+		world.area = 0
 
-	window.resizable = false
-	window.update()
+		window.resizable = false
+		window.update()
 
-	graphics.setBackgroundColor("black")
+		graphics.setBackgroundColor("black")
+	end
 end
 
 function editor.goToArea(world_no, level_no, area_no)
@@ -155,6 +157,8 @@ function editor.moveStartingPosition(x, y)
 
 	editor.check.startingPositionAreaBounds()
 	editor.view.alignToStartingPosition()
+
+	world.current_level.modified = true
 end
 
 function editor.updateType()
@@ -167,7 +171,7 @@ function editor.updateType()
 
 	world.checkAreaSizeValidity(world.current, world.level, world.area)
 
-	world.current_area.modified = true
+	world.current_level.modified = true
 end
 
 function editor.updateBackground()
@@ -180,7 +184,7 @@ function editor.updateBackground()
 
 	graphics.setBackgroundColor(world.current_area.background)
 
-	world.current_area.modified = true
+	world.current_level.modified = true
 end
 
 function editor.updateMusic()
@@ -195,12 +199,84 @@ function editor.updateMusic()
 
 	music.play(world.current_area.music)
 
-	world.current_area.modified = true
+	world.current_level.modified = true
+end
+
+function editor.resizeAreaToValidSize()
+	local area = world.current_area
+
+	if not area.valid_size then
+		local msgbox_name = "Resizing area "..world.area.." to valid size"
+
+		local msgbox_msg = "Are you sure you want to resize the area "..world.area.." to valid size?"..
+		"\nNote that if you proceed any data outside of legal area will be irreversibly deleted."
+
+		local msgbox_buttons = { "Proceed", "Cancel" }
+
+		local button = love.window.showMessageBox(msgbox_name, msgbox_msg, msgbox_buttons, "warning")
+
+		if button ~= 1 then
+			return
+		end
+
+		print("Resizing area "..world.area)
+
+		local previous_width = area.width
+		local previous_height = area.height
+
+		if not area.valid_width then
+			if area.type == "horizontal" then
+				area.width = 16
+
+			elseif area.type == "vertical" then
+				area.width = 256
+			end
+
+			print("\tPrevious width: "..previous_width.." -> new width: "..area.width)
+		end
+
+		if previous_width < area.width then
+
+			for i = 0, (area.height / 16) - 1 do
+				for j = (previous_width / 16), (area.width / 16) - 1 do
+					area.tiles[i][j] = 0
+				end
+			end
+		end
+
+		if not area.valid_height then
+			if area.type == "horizontal" then
+				if area.height < 16 then
+					area.height = 16
+				else
+					area.height = 240
+				end
+			elseif area.type == "vertical" then
+				area.height = 16
+			end
+
+			print("\tPrevious height: "..previous_height.." -> new height: "..area.height)
+		end
+
+		area.valid_width = true
+		area.valid_height = true
+		area.valid_size = true
+
+		editor.check.cursorAreaBounds()
+		editor.check.startingPositionAreaBounds()
+
+		editor.view.update()
+
+		world.current_level.modified = true
+		world.current_area.modified = true
+	end
 end
 
 function editor.shrinkAreaWidth()
-	if world.current_area.width > 16 then
-		world.current_area.width = world.current_area.width - 16
+	local area = world.current_area
+
+	if area.width > 16 then
+		area.width = area.width - 16
 
 		world.checkAreaSizeValidity(world.current, world.level, world.area)
 
@@ -215,18 +291,20 @@ function editor.shrinkAreaWidth()
 end
 
 function editor.scratchAreaWidth()
-	if world.current_area.width < 3744 then
-		world.current_area.width = world.current_area.width + 16
+	local area = world.current_area
+
+	if area.width < 3744 then
+		area.width = area.width + 16
 
 		world.checkAreaSizeValidity(world.current, world.level, world.area)
 
 		editor.check.viewBounds()
 
 		-- Clear newly added tile blocks
-		local width = world.current_area.width / 16
+		local width = area.width / 16
 
-		for i = 0, (world.current_area.height / 16) - 1 do
-			world.current_area.tiles[i][width - 1] = 0
+		for i = 0, (area.height / 16) - 1 do
+			area.tiles[i][width - 1] = 0
 		end
 
 		world.current_level.modified = true
@@ -235,8 +313,10 @@ function editor.scratchAreaWidth()
 end
 
 function editor.shrinkAreaHeight()
-	if world.current_area.height > 16 then
-		world.current_area.height = world.current_area.height - 16
+	local area = world.current_area
+
+	if area.height > 16 then
+		area.height = area.height - 16
 
 		world.checkAreaSizeValidity(world.current, world.level, world.area)
 
@@ -251,20 +331,22 @@ function editor.shrinkAreaHeight()
 end
 
 function editor.scratchAreaHeight()
-	if world.current_area.height < 1440 then
-		world.current_area.height = world.current_area.height + 16
+	local area = world.current_area
+
+	if area.height < 1440 then
+		area.height = area.height + 16
 
 		world.checkAreaSizeValidity(world.current, world.level, world.area)
 
 		editor.check.viewBounds()
 
 		-- Clear newly added tile blocks
-		local height = world.current_area.height / 16
+		local height = area.height / 16
 
-		world.current_area.tiles[height - 1] = {}
+		area.tiles[height - 1] = {}
 
-		for i = 0, (world.current_area.width / 16) - 1 do
-			world.current_area.tiles[height - 1][i] = 0
+		for i = 0, (area.width / 16) - 1 do
+			area.tiles[height - 1][i] = 0
 		end
 
 		world.current_level.modified = true
@@ -288,6 +370,10 @@ function editor.placeTile(id)
 	world.current_area.tiles[tile_y][tile_x] = id
 
 	world.current_area.modified = true
+end
+
+function editor.removeTile()
+	editor.placeTile(0)
 end
 
 return editor
