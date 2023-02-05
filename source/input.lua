@@ -9,10 +9,22 @@ function input.check(key)
 		window.updateFullscreen()
 
 	elseif key == "-" then
-		graphics.scaleDown()
+		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+			if state.name == "level_editor" and editor.option == "edit" and editor.mode == "normal" then
+				editor.removeArea()
+			end
+		else
+			graphics.scaleDown()
+		end
 
 	elseif key == "=" then
-		graphics.scaleUp()
+		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+			if state.name == "level_editor" and editor.option == "edit" and editor.mode == "normal" then
+				editor.addArea()
+			end
+		else
+			graphics.scaleUp()
+		end
 	end
 
 	-- Title screen, intro story or debug screen

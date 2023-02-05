@@ -10,6 +10,8 @@ world.types = {}
 world.types["horizontal"] = { short_name = "HRZ", horizontal_min_size = 16, vertical_min_size = 16, vertical_max_size = 240 }
 world.types["vertical"] = { short_name = "VRT", horizontal_size = 256, vertical_min_size = 16 }
 
+world.defaults = { type = "horizontal", width = 160, height = 160, background = "black", music = "overworld" }
+
 function world.reset()
 	world.current = 1
 	world.level = 1
@@ -45,7 +47,7 @@ function world.isValidAreaHeight(type, height)
 		valid = height >= type.vertical_min_size
 	end
 
-	if type.vertical_min_size_max_size then
+	if type.vertical_max_size then
 		valid = height <= type.vertical_max_size
 	end
 
@@ -320,6 +322,21 @@ function world.save(world_no, level_no)
 	end
 
 	world.saveLevel(world_no, level_no, level_directory)
+
+	-- Remove unneeded areas
+	local file_no = level.area_count
+
+	while (true) do
+		local area = level_directory.."/"..file_no
+
+		if love.filesystem.getInfo(area) then
+			love.filesystem.remove(area)
+		else
+			break
+		end
+
+		file_no = file_no + 1
+	end
 
 	for area = 0, level.area_count - 1 do
 		if level[area].modified or not love.filesystem.getInfo(level_directory..tostring(area)) then

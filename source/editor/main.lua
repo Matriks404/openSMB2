@@ -61,6 +61,105 @@ function editor.playLevel()
 	end
 end
 
+function editor.removeArea(area)
+	if level.area_count == 1 then
+		local msgbox_name = "Removing area "..world.area
+		local msgbox_msg = "You can't remove the last area from the level!"
+
+		love.window.showMessageBox(msgbox_name, msgbox_msg, "error")
+
+		return
+	end
+
+	local msgbox_name = "Removing area "..world.area
+	local msgbox_msg = "Are you sure you want to remove the area "..world.area.."?"
+	local msgbox_buttons = { "Proceed", "Cancel" }
+
+	local button = love.window.showMessageBox(msgbox_name, msgbox_msg, msgbox_buttons, "warning")
+
+	if button ~= 1 then
+		return
+	end
+
+	local level = world.current_level
+
+	print("Removing area "..world.area)
+
+	level[world.area] = {}
+
+	-- Reset starting position if we remove the first area of the level.
+	if world.area == 0 then
+		level.start_x = 0
+		level.start_y = 0
+	end
+
+	for i = world.area + 1, level.area_count - 1 do
+		level[i - 1] = level[i]
+		level[i - 1].modified = true
+
+		--level[i] = {}
+	end
+
+	level.area_count = level.area_count - 1
+
+	if world.area >= level.area_count then
+		world.area = world.area - 1
+	end
+
+	level.modified = true
+
+	editor.goToArea(world.current, world.level, world.area)
+end
+
+function editor.addArea()
+	local new_area = world.area + 1
+
+	local msgbox_name = "Adding area "..new_area
+
+	local msgbox_msg = "Are you sure you want to add new area with ID "..new_area.."?"..
+	"\nIf there are any areas after the currently edited one their ID will be increased by one."
+
+	local msgbox_buttons = { "Proceed", "Cancel" }
+
+	local button = love.window.showMessageBox(msgbox_name, msgbox_msg, msgbox_buttons, "warning")
+
+	if button ~= 1 then
+		return
+	end
+
+	local level = world.current_level
+
+	print("Adding new area "..new_area)
+
+	for i = level.area_count - 1, new_area, -1 do
+		level[i + 1] = level[i]
+		level[i + 1].modified = true
+	end
+
+	level[new_area] = {}
+	level[new_area].tiles = {}
+
+	for y = 0, (area.height / 16) - 1 do
+		level[new_area].tiles[y] = {}
+
+		for x = 0, (area.width / 16) - 1 do
+			level[new_area].tiles[y][x] = 0
+		end
+	end
+
+	for k, v in pairs(world.defaults) do
+		world.current_level[new_area][k] = v
+	end
+
+	level[new_area].modified = true
+
+	level.area_count = level.area_count + 1
+	level.modified = true
+
+	editor.goToArea(world.current, world.level, new_area)
+
+end
+
 function editor.goToArea(world_no, level_no, area_no)
 	if area_no ~= 0 and editor.mode == "start" then
 		editor.mode = "normal"
@@ -231,9 +330,9 @@ function editor.resizeAreaToValidSize()
 
 		if previous_width < area.width then
 
-			for i = 0, (area.height / 16) - 1 do
-				for j = (previous_width / 16), (area.width / 16) - 1 do
-					area.tiles[i][j] = 0
+			for y = 0, (area.height / 16) - 1 do
+				for x = (previous_width / 16), (area.width / 16) - 1 do
+					area.tiles[y][x] = 0
 				end
 			end
 		end
