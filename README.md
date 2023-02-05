@@ -83,6 +83,8 @@
 			* Press `CTRL` + arrow keys to move the view by one tile.
 			* Press `Page up` or `Page down` to move the view by one screen up or down.
 			* Press `CTRL` + (`Page up` or `Page down`) to move the view by one screen left or right.
+			* Press `Home` or `End` to jump view to the vertical start or end.
+			* Press `CTRL` + (`Home` or `End`) to jump view to the horizontal start or end.
 		* Press `Q` to quit to the main level editor menu.
 	* When in normal editing mode (`MODE-N`):
 		* Press `T` to change area type (horizontal or vertical).

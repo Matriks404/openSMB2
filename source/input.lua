@@ -174,7 +174,7 @@ function input.check(key)
 
 			elseif key == "left" then
 				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-					editor.moveViewByTile(-16, 0)
+					editor.view.moveByTile(-16, 0)
 				else
 					if editor.mode == "normal" then
 						editor.moveCursor(-16, 0)
@@ -194,7 +194,7 @@ function input.check(key)
 
 			elseif key == "right" then
 				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-					editor.moveViewByTile(16, 0)
+					editor.view.moveByTile(16, 0)
 				else
 					if editor.mode == "normal" then
 						editor.moveCursor(16, 0)
@@ -214,7 +214,7 @@ function input.check(key)
 
 			elseif key == "up" then
 				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-					editor.moveViewByTile(0, -16)
+					editor.view.moveByTile(0, -16)
 				else
 					if editor.mode == "normal" then
 						editor.moveCursor(0, -16)
@@ -234,7 +234,7 @@ function input.check(key)
 
 			elseif key == "down" then
 				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-					editor.moveViewByTile(0, 16)
+					editor.view.moveByTile(0, 16)
 				else
 					if editor.mode == "normal" then
 						editor.moveCursor(0, 16)
@@ -254,16 +254,30 @@ function input.check(key)
 
 			elseif key == "pageup" then
 				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-					editor.moveViewByScreen(-1, 0)
+					editor.view.moveByScreen(-1, 0)
 				else
-					editor.moveViewByScreen(0, -1)
+					editor.view.moveByScreen(0, -1)
 				end
 
 			elseif key == "pagedown" then
 				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-					editor.moveViewByScreen(1, 0)
+					editor.view.moveByScreen(1, 0)
 				else
-					editor.moveViewByScreen(0, 1)
+					editor.view.moveByScreen(0, 1)
+				end
+
+			elseif key == "home" then
+				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+					editor.view.moveToHorizontalStart()
+				else
+					editor.view.moveToVerticalStart()
+				end
+
+			elseif key == "end" then
+				if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+					editor.view.moveToHorizontalEnd()
+				else
+					editor.view.moveToVerticalEnd()
 				end
 			end
 

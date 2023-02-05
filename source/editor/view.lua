@@ -71,4 +71,63 @@ function view.alignToStartingPosition()
 	end
 end
 
+function view.moveByTile(x, y)
+	view.x = view.x + x
+	view.y = view.y + y
+
+	editor.check.levelBounds()
+	view.alignCursor()
+
+	view.update()
+end
+
+function view.moveByScreen(x, y)
+	view.x = view.x + (x * view.width)
+	view.y = view.y + (y * view.height)
+
+	editor.check.levelBounds()
+	view.alignCursor()
+
+	view.update()
+end
+
+function view.moveTo(x, y)
+	view.x = x
+	view.y = y
+
+	editor.check.levelBounds()
+
+	view.update()
+end
+
+function view.moveToVerticalStart()
+	view.moveTo(view.x, 0)
+
+	editor.cursor_y = 0
+end
+
+function view.moveToHorizontalStart()
+	view.moveTo(0, view.y)
+
+	editor.cursor_x = 0
+end
+
+function view.moveToVerticalEnd()
+	local x = view.x
+	local y = world.current_area.height - view.height
+
+	view.moveTo(x, y)
+
+	editor.cursor_y = world.current_area.height - 16
+end
+
+function view.moveToHorizontalEnd()
+	local x = world.current_area.width - view.width
+	local y = view.y
+
+	view.moveTo(x, y)
+
+	editor.cursor_x = world.current_area.width - 16
+end
+
 return view

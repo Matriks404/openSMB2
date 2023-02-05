@@ -133,23 +133,6 @@ function editor.quitToDebugMenu()
 	graphics.setBackgroundColor("blue")
 end
 
-function editor.moveViewByTile(x, y)
-	editor.view.x = editor.view.x + x
-	editor.view.y = editor.view.y + y
-
-	editor.check.levelBounds()
-	editor.view.alignCursor()
-	editor.view.update()
-end
-
-function editor.moveViewByScreen(x, y)
-	editor.view.x = editor.view.x + (x * editor.view.width)
-	editor.view.y = editor.view.y + (y * editor.view.height)
-
-	editor.check.levelBounds()
-	editor.view.alignCursor()
-	editor.view.update()
-end
 
 function editor.moveCursor(x, y)
 	editor.cursor_x = editor.cursor_x + x
