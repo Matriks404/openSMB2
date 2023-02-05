@@ -53,6 +53,10 @@ function draw.tiles()
 	end
 end
 
+function draw.areaBorder()
+
+end
+
 function draw.cursor()
 	love.graphics.draw(img.editor_16x16_cursor, editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
 end
@@ -128,6 +132,7 @@ function draw.levelEditor()
 
 	draw.boxes()
 	draw.tiles()
+	draw.areaBorder()
 
 	if editor.mode == "normal" then
 		draw.cursor()

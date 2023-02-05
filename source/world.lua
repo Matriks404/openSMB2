@@ -7,8 +7,8 @@ world.count = 8 --TODO: Use this variable.
 world.level_count = 3 --TODO: Use this variable.
 
 world.types = {}
-world.types["horizontal"] = { short_name = "HRZ" }
-world.types["vertical"] = { short_name = "VRT" }
+world.types["horizontal"] = { short_name = "HRZ", vertical_min_size = 16, horizontal_min_size = 16, horizontal_max_size = 240 }
+world.types["vertical"] = { short_name = "VRT", vertical_size = 256, horizontal_min_size = 16 }
 
 function world.reset()
 	world.current = 1
@@ -23,19 +23,33 @@ function world.getLevelDirectory(world_no, level_no, directory)
 end
 
 function world.isValidAreaWidth(type, width)
-	if type == "horizontal" then
-		return width >= 16
-	elseif type == "vertical" then
-		return width == 256
+	local type = world.types[type]
+	local valid = true
+
+	if type.vertical_min_size then
+		valid = width >= type.vertical_min_size
 	end
+
+	if type.vertical_size then
+		valid = width == type.vertical_size
+	end
+
+	return valid
 end
 
 function world.isValidAreaHeight(type, height)
-	if type == "horizontal" then
-		return height >= 16 and height <= 240
-	elseif type == "vertical" then
-		return height >= 16
+	local type = world.types[type]
+	local valid = true
+
+	if type.horizontal_min_size then
+		valid = height >= type.horizontal_min_size
 	end
+
+	if type.horizontal_max_size then
+		valid = height <= type.horizontal_max_size
+	end
+
+	return valid
 end
 
 function world.checkAreaSizeValidity(world_no, level_no, area_no)
