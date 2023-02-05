@@ -70,6 +70,7 @@ function img.load()
 		img.editor_16x16_cursor = love.graphics.newImage(editor_dir.."16x16_cursor.png")
 		img.editor_sp = love.graphics.newImage(editor_dir.."starting_point.png")
 		img.editor_sp_select = love.graphics.newImage(editor_dir.."starting_point_select.png")
+		--img.editor_border_arrow = love.graphics.newImage(editor_dir.."border_arrow.png")
 	end
 
 	-- Tilemap

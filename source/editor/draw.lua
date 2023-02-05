@@ -53,8 +53,40 @@ function draw.tiles()
 	end
 end
 
-function draw.areaBorder()
+function draw.areaBorderLine(x1, y1, x2, y2)
+	love.graphics.setColor(0.75, 0, 0, 1)
 
+	love.graphics.setLineStyle("rough")
+	love.graphics.setLineWidth(2)
+
+	love.graphics.line(x1, y1, x2, y2)
+
+	-- Restore original color
+	love.graphics.setColor(1, 1, 1, 1)
+end
+
+function draw.areaBorder()
+	local type = world.types[world.current_area.type]
+
+	if type.horizontal_size then
+		local x = type.horizontal_size - editor.view.x
+
+		if x < 0 or x >= graphics.width then
+			return
+		end
+
+		draw.areaBorderLine(x - 1, editor.view.y_offset, x - 1, graphics.height)
+	end
+
+	if type.vertical_max_size then
+		local y = editor.view.y_offset + type.vertical_max_size - editor.view.y
+
+		if y < editor.view.y_offset or y >= graphics.height then
+			return
+		end
+
+		draw.areaBorderLine(0, y - 1, graphics.width, y - 1)
+	end
 end
 
 function draw.cursor()

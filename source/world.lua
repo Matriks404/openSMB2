@@ -7,8 +7,8 @@ world.count = 8 --TODO: Use this variable.
 world.level_count = 3 --TODO: Use this variable.
 
 world.types = {}
-world.types["horizontal"] = { short_name = "HRZ", vertical_min_size = 16, horizontal_min_size = 16, horizontal_max_size = 240 }
-world.types["vertical"] = { short_name = "VRT", vertical_size = 256, horizontal_min_size = 16 }
+world.types["horizontal"] = { short_name = "HRZ", horizontal_min_size = 16, vertical_min_size = 16, vertical_max_size = 240 }
+world.types["vertical"] = { short_name = "VRT", horizontal_size = 256, vertical_min_size = 16 }
 
 function world.reset()
 	world.current = 1
@@ -26,12 +26,12 @@ function world.isValidAreaWidth(type, width)
 	local type = world.types[type]
 	local valid = true
 
-	if type.vertical_min_size then
-		valid = width >= type.vertical_min_size
+	if type.horizontal_min_size then
+		valid = width >= type.horizontal_min_size
 	end
 
-	if type.vertical_size then
-		valid = width == type.vertical_size
+	if type.horizontal_size then
+		valid = width == type.horizontal_size
 	end
 
 	return valid
@@ -41,12 +41,12 @@ function world.isValidAreaHeight(type, height)
 	local type = world.types[type]
 	local valid = true
 
-	if type.horizontal_min_size then
-		valid = height >= type.horizontal_min_size
+	if type.vertical_min_size then
+		valid = height >= type.vertical_min_size
 	end
 
-	if type.horizontal_max_size then
-		valid = height <= type.horizontal_max_size
+	if type.vertical_min_size_max_size then
+		valid = height <= type.vertical_max_size
 	end
 
 	return valid
