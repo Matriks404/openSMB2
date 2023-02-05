@@ -79,7 +79,10 @@
 		* Press `[` or `]` to switch between level areas.
 		* Press `Tab` to change editor mode (normal one or starting position movement tool)
 		* Press `C` to change editor view type (normal or detailed, where the latter is showing hexadecimal values of tiles on top of them).
-		* Press `SHIFT` + arrow keys to move the view.
+		* To move the view:
+			* Press `CTRL` + arrow keys to move the view by one tile.
+			* Press `Page up` or `Page down` to move the view by one screen up or down.
+			* Press `CTRL` + (`Page up` or `Page down`) to move the view by one screen left or right.
 		* Press `Q` to quit to the main level editor menu.
 	* When in normal editing mode (`MODE-N`):
 		* Press `T` to change area type (horizontal or vertical).
@@ -94,4 +97,4 @@
 		* Press `Z` to remove tile.
 	* When in starting position movement tool mode (`MODE-S`):
 		* Press arrow keys to move starting position pixel-by-pixel.
-		* Press `CTRL` + arrow keys to move starting position by 16 pixels each time.
+		* Press `SHIFT` + arrow keys to move starting position by 16 pixels each time.

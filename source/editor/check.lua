@@ -34,7 +34,7 @@ function check.viewBounds()
 	editor.view.update()
 end
 
-function check.cursorAreaBounds()
+function check.cursorBounds()
 	if editor.cursor_x < 0 then
 		editor.cursor_x = 0
 
@@ -50,7 +50,7 @@ function check.cursorAreaBounds()
 	end
 end
 
-function check.startingPositionAreaBounds()
+function check.startingPositionBounds()
 	if level.start_x < 0 then
 		level.start_x = 0
 	end
@@ -66,24 +66,6 @@ function check.startingPositionAreaBounds()
 	if level.start_y >= level[0].height then
 		level.start_y = level[0].height - 1
 	end
-end
-
-function check.cursorViewBounds()
-	if editor.cursor_x < editor.view.x then
-		editor.cursor_x = editor.cursor_x + 16
-
-	elseif editor.cursor_x > editor.view.x + editor.view.width - 16 then
-		editor.cursor_x = editor.cursor_x - 16
-	end
-
-	if editor.cursor_y < editor.view.y then
-		editor.cursor_y = editor.cursor_y + 16
-
-	elseif editor.cursor_y > editor.view.y + editor.view.height - 16 then
-		editor.cursor_y = editor.cursor_y - 16
-	end
-
-	editor.view.update()
 end
 
 return check

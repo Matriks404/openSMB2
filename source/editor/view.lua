@@ -34,7 +34,7 @@ function view.update()
 	end
 end
 
-function view.alignCursorToView()
+function view.alignCursor()
 	if editor.cursor_x < view.x then
 		editor.cursor_x = view.x
 

@@ -98,7 +98,7 @@ function editor.changeMode()
 	else
 		editor.mode = "normal"
 
-		editor.view.alignCursorToView()
+		editor.view.alignCursor()
 	end
 end
 
@@ -133,21 +133,32 @@ function editor.quitToDebugMenu()
 	graphics.setBackgroundColor("blue")
 end
 
-function editor.moveView(x, y)
-	editor.view.y = editor.view.y + y
+function editor.moveViewByTile(x, y)
 	editor.view.x = editor.view.x + x
+	editor.view.y = editor.view.y + y
 
 	editor.check.levelBounds()
-	editor.check.cursorViewBounds()
+	editor.view.alignCursor()
+	editor.view.update()
+end
+
+function editor.moveViewByScreen(x, y)
+	editor.view.x = editor.view.x + (x * editor.view.width)
+	editor.view.y = editor.view.y + (y * editor.view.height)
+
+	editor.check.levelBounds()
+	editor.view.alignCursor()
+	editor.view.update()
 end
 
 function editor.moveCursor(x, y)
 	editor.cursor_x = editor.cursor_x + x
 	editor.cursor_y = editor.cursor_y + y
 
-	editor.check.cursorAreaBounds()
+	editor.check.cursorBounds()
 	editor.check.viewBounds()
 end
+
 
 function editor.moveStartingPosition(x, y)
 	local level = world.current_level
@@ -155,7 +166,7 @@ function editor.moveStartingPosition(x, y)
 	level.start_x = level.start_x + x
 	level.start_y = level.start_y + y
 
-	editor.check.startingPositionAreaBounds()
+	editor.check.startingPositionBounds()
 	editor.view.alignToStartingPosition()
 
 	world.current_level.modified = true
@@ -262,8 +273,8 @@ function editor.resizeAreaToValidSize()
 		area.valid_height = true
 		area.valid_size = true
 
-		editor.check.cursorAreaBounds()
-		editor.check.startingPositionAreaBounds()
+		editor.check.cursorBounds()
+		editor.check.startingPositionBounds()
 
 		editor.view.update()
 
@@ -280,8 +291,8 @@ function editor.shrinkAreaWidth()
 
 		world.checkAreaSizeValidity(world.current, world.level, world.area)
 
-		editor.check.cursorAreaBounds()
-		editor.check.startingPositionAreaBounds()
+		editor.check.cursorBounds()
+		editor.check.startingPositionBounds()
 
 		editor.check.viewBounds()
 
@@ -320,8 +331,8 @@ function editor.shrinkAreaHeight()
 
 		world.checkAreaSizeValidity(world.current, world.level, world.area)
 
-		editor.check.cursorAreaBounds()
-		editor.check.startingPositionAreaBounds()
+		editor.check.cursorBounds()
+		editor.check.startingPositionBounds()
 
 		editor.check.viewBounds()
 
