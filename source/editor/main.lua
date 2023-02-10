@@ -139,19 +139,21 @@ function editor.addArea()
 	level[new_area] = {}
 	level[new_area].tiles = {}
 
+	for k, v in pairs(world.defaults) do
+		level[new_area][k] = v
+	end
+
+	local area = level[new_area]
+
 	for y = 0, (area.height / 16) - 1 do
-		level[new_area].tiles[y] = {}
+		area.tiles[y] = {}
 
 		for x = 0, (area.width / 16) - 1 do
-			level[new_area].tiles[y][x] = 0
+			area.tiles[y][x] = 0
 		end
 	end
 
-	for k, v in pairs(world.defaults) do
-		world.current_level[new_area][k] = v
-	end
-
-	level[new_area].modified = true
+	area.modified = true
 
 	level.area_count = level.area_count + 1
 	level.modified = true
