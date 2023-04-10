@@ -11,6 +11,8 @@ graphics.height = 240
 graphics.scale = 1
 graphics.max_scale = 1
 
+graphics.tile_size = 16
+
 function graphics.init()
 	love.graphics.setDefaultFilter("nearest")
 
@@ -95,66 +97,60 @@ function graphics.drawTile(id, x, y)
 	local ax = (id % 16) * 16
 	local ay = math.floor(id / 16) * 16
 
-	tile = love.graphics.newQuad(ax, ay, 16, 16, img.tilemap:getWidth(), img.tilemap:getHeight())
+	local tilemap_width = img.tilemap:getWidth()
+	local tilemap_height = img.tilemap:getHeight()
+
+	tile = love.graphics.newQuad(ax, ay, 16, 16, tilemap_width, tilemap_height)
 
 	love.graphics.draw(img.tilemap, tile, x, y)
 end
 
 function graphics.drawLevelTiles()
-	local imin = 0
-	local imax = 15
-
-	if state.transition_timer > 0 and state.transition_timer < 35 then
-	-- During transition draw additional row of tiles
-		if state.screen_y > 0 and state.screen_dir == - 1 then
-		-- Draw additional row of tiles on the top
-			imin = -1
-		end
-
-		if state.screen_y <= ((world.current_area.height - 192) / 16 / 12) and state.screen_dir == 1 then
-		-- Draw additional row of tiles on the bottom
-			imax = 16
-		end
-	end
+	local top_y = 0
+	local bottom_y = 15
 
 	local trans_y, tile_x, tile_y, pos_x, pos_y
 
-	for i = imin, imax - 1 do
-		for j = 0, 16 - 1 do
-			if state.transition_timer > 0 then
-			-- Draw tiles when transitioning between screens
-				if state.screen_y == 0 then
-					trans_y = math.floor(state.transition_timer / 35 * 9)
-					tile_y = trans_y + i
-					pos_y = (i * 16) - (state.transition_timer / 35 * 144) % 16
-				else
-					if state.screen_dir == 1 then
-						trans_y = math.floor(state.transition_timer / 35 * 9)
-						tile_y = (state.screen_y * 9) + trans_y + i
-						pos_y = (i * 16) - (state.transition_timer / 35 * 144) % 16
-					else
-						trans_y = 9 - math.floor(state.transition_timer / 35 * 9)
-						tile_y = ((state.screen_y - 1) * 9) + trans_y + i
-						pos_y = (i * 16) + (state.transition_timer / 35 * 144) % 16
-					end
-				end
-			else
-			-- Draw tiles on stationary screen
-				if state.screen_y == 0 then
-					tile_y = i
-				else
-					tile_y = (state.screen_y * 9) + i
-				end
-
-				pos_y = i * 16
+	if state.transition_timer > 0 then
+		if state.transition_timer < 35 then
+			-- During transition draw additional row of tiles
+			if state.screen_y > 0 and state.screen_dir == - 1 then
+			-- Draw additional row of tiles on the top
+				top_y = -1
 			end
 
-			tile_x = (state.screen_x * 16) + j
-			pos_x = j * 16
-
-			graphics.drawTile(world.current_area.tiles[tile_y][tile_x], pos_x, pos_y)
+			if state.screen_y <= ((world.current_area.height - 192) / graphics.tile_size / 12) and state.screen_dir == 1 then
+			-- Draw additional row of tiles on the bottom
+				bottom_y = 16
+			end
 		end
+
+		trans_y = state.screen_dir == 1 and math.floor(state.transition_timer / 35 * 9) or (9 - math.floor(state.transition_timer / 35 * 9))
 	end
+
+    local trans_offset = (state.transition_timer / 35 * 144) % graphics.tile_size
+
+    for i = top_y, bottom_y - 1 do
+        if state.transition_timer > 0 then
+			if state.screen_dir == 1 then
+				tile_y = (state.screen_y * 9) + trans_y + i
+				pos_y = (i * graphics.tile_size) - trans_offset
+			else
+				tile_y = ((state.screen_y - 1) * 9) + trans_y + i
+				pos_y = (i * graphics.tile_size) + trans_offset
+			end
+        else
+			tile_y = (state.screen_y * 9) + i
+			pos_y = i * graphics.tile_size
+		end
+
+        for j = 0, 16 - 1 do
+            tile_x = (state.screen_x * graphics.tile_size) + j
+            pos_x = j * graphics.tile_size
+
+            graphics.drawTile(world.current_area.tiles[tile_y][tile_x], pos_x, pos_y)
+        end
+    end
 end
 
 function graphics.drawCharacter()
