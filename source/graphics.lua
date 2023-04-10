@@ -53,25 +53,16 @@ end
 function graphics.drawText(str, x, y, color)
 	local color = color or "white"
 
-	local font_width = font[color]:getWidth()
-	local font_height = font[color]:getHeight()
-
 	local pos_x = x
 	local pos_y = y
 
-	local symbol_size = font_width / 32
-
 	for i = 0, #str - 1 do
 		local code = string.byte(str, i + 1)
+		local quad = font.symbols[color][code]
 
-		local ax = (code % 32) * symbol_size
-		local ay = math.floor(code / 32) * symbol_size
+		love.graphics.draw(font[color], quad, pos_x, pos_y, 0, 0.5)
 
-		local symbol = love.graphics.newQuad(ax, ay, symbol_size, symbol_size, font_width, font_height)
-
-		love.graphics.draw(font[color], symbol, pos_x, pos_y, 0, 0.5)
-
-		pos_x = pos_x + (symbol_size / 2)
+		pos_x = pos_x + (font.symbol_size / 2)
 	end
 end
 
