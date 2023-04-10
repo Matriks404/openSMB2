@@ -5,8 +5,6 @@ font.symbols = {}
 function font.load()
 	font.loadSymbols("white")
 	font.loadSymbols("brown")
-
-	print(font.symbols["white"][0])
 end
 
 function font.loadSymbols(color)

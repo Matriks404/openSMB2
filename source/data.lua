@@ -20,14 +20,4 @@ function data.isGoodDivisibleInteger(field, min, div)
 	return true
 end
 
-function data.tableContainsKey(t, k)
-	for _, v in pairs(t) do
-		if v == k then
-			return true
-		end
-	end
-
-	return false
-end
-
 return data
