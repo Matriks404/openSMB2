@@ -40,35 +40,38 @@ function graphics.scaleUp()
 end
 
 function graphics.setBackgroundColor(color)
-	local r = graphics.bg[color].r
-	local g = graphics.bg[color].g
-	local b = graphics.bg[color].b
+	if graphics.current_bg ~= color then
+		local color = graphics.bg[color]
+		local r, g, b = color.r, color.g, color.b
 
-	love.graphics.setBackgroundColor(r, g, b)
+		love.graphics.setBackgroundColor(r, g, b)
+	end
+
+	graphics.current_bg = color
 end
 
 function graphics.drawText(str, x, y, color)
 	local color = color or "white"
 
-	local real_x = 0
+	local font_width = font[color]:getWidth()
+	local font_height = font[color]:getHeight()
 
-	for i = 0, string.len(str) - 1 do
-		local pos_x = x + (i * 16)
+	local pos_x = x
+	local pos_y = y
 
-		if real_x == 0 then
-			real_x = pos_x
-		end
+	local symbol_size = font_width / 32
 
+	for i = 0, #str - 1 do
 		local code = string.byte(str, i + 1)
 
-		local ax = (code % 32) * 16
-		local ay = math.floor(code / 32) * 16
+		local ax = (code % 32) * symbol_size
+		local ay = math.floor(code / 32) * symbol_size
 
-		local symbol = love.graphics.newQuad(ax, ay, 16, 16, font[color]:getWidth(), font[color]:getHeight())
+		local symbol = love.graphics.newQuad(ax, ay, symbol_size, symbol_size, font_width, font_height)
 
-		love.graphics.draw(font[color], symbol, real_x, y, 0, 0.5)
+		love.graphics.draw(font[color], symbol, pos_x, pos_y, 0, 0.5)
 
-		real_x = real_x + 8
+		pos_x = pos_x + (symbol_size / 2)
 	end
 end
 
@@ -86,7 +89,7 @@ function graphics.drawCounter(n, y, add)
 
 	if add then
 		str = str..add
-		x = x - (string.len(add) * 8)
+		x = x - (#add * 8)
 	end
 
 	graphics.drawText(str, x, y)
@@ -106,10 +109,9 @@ function graphics.drawTile(id, x, y)
 end
 
 function graphics.drawLevelTiles()
-	local top_y = 0
-	local bottom_y = 15
+	local top_y, bottom_y = 0, 15
 
-	local trans_y, tile_x, tile_y, pos_x, pos_y
+	local trans_y, trans_offset, tile_x, tile_y, pos_x, pos_y
 
 	if state.transition_timer > 0 then
 		if state.transition_timer < 35 then
@@ -126,19 +128,18 @@ function graphics.drawLevelTiles()
 		end
 
 		trans_y = state.screen_dir == 1 and math.floor(state.transition_timer / 35 * 9) or (9 - math.floor(state.transition_timer / 35 * 9))
+		trans_offset = (state.transition_timer / 35 * 144) % graphics.tile_size
 	end
-
-    local trans_offset = (state.transition_timer / 35 * 144) % graphics.tile_size
 
     for i = top_y, bottom_y - 1 do
         if state.transition_timer > 0 then
 			if state.screen_dir == 1 then
 				tile_y = (state.screen_y * 9) + trans_y + i
-				pos_y = (i * graphics.tile_size) - trans_offset
 			else
 				tile_y = ((state.screen_y - 1) * 9) + trans_y + i
-				pos_y = (i * graphics.tile_size) + trans_offset
 			end
+
+			pos_y = (i * graphics.tile_size) + trans_offset * -(state.screen_dir)
         else
 			tile_y = (state.screen_y * 9) + i
 			pos_y = i * graphics.tile_size

@@ -150,7 +150,7 @@ function input.check(key)
 				editor.openLevel(world_no, level_no)
 
 			--TODO: We check if string length of keycode is 1 because we then exclude keys such as "esc" that way. Maybe there is a cleaner way to do this.
-			elseif string.len(key) == 1 and key >= "a" and key <= "k" then
+			elseif #key == 1 and key >= "a" and key <= "k" then
 				level_no = ((string.byte(key) - 97) % 3) + 1
 
 				editor.openLevel(world_no, level_no)
