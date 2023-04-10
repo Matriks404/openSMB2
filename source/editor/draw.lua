@@ -32,22 +32,37 @@ function draw.boxes()
 end
 
 function draw.tiles()
-	for i = 0, (editor.view.height / 16) - 1 do
-		for j = 0, (editor.view.width / 16) - 1 do
-			local tile_x = (editor.view.x / 16) + j
-			local tile_y = (editor.view.y / 16) + i
+	local tile_size = 16
 
-			local pos_x = j * 16
-			local pos_y = editor.view.y_offset + (i * 16)
+	local view_height_tiles = editor.view.height / tile_size
+	local view_width_tiles = editor.view.width / tile_size
+
+	local view_x_tiles = editor.view.x / tile_size
+	local view_y_tiles = editor.view.y / tile_size
+	local view_y_offset = editor.view.y_offset
+
+	local tile_values = {}
+
+	for i = 0, 15 do
+		tile_values[i] = string.upper(string.format("%x", i))
+	end
+
+	for i = 0, view_height_tiles - 1 do
+		local tile_y = view_y_tiles + i
+		local pos_y = view_y_offset + (i * tile_size)
+
+		for j = 0, view_width_tiles - 1 do
+			local tile_x = view_x_tiles + j
+			local pos_x = j * tile_size
 
 			local tile = world.current_area.tiles[tile_y][tile_x]
 
 			graphics.drawTile(tile, pos_x, pos_y)
 
 			if editor.view.name == "detailed" then
-				tile = string.upper(string.format("%x", tile))
+				local tile_value = tile_values[tile]
 
-				graphics.drawText(tile, pos_x, pos_y)
+				graphics.drawText(tile_value, pos_x, pos_y)
 			end
 		end
 	end
