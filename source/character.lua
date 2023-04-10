@@ -2,13 +2,6 @@ local character = {}
 
 character.dying_timer = 0
 
-character.current = "mario" -- Character (mario, luigi, toad, peach)
-character.continues = 2
-character.lives = 3
-character.energy = 2
-character.energy_bars = 2
-character.state = "falling" -- Hero state (falling, stationary)
-
 character.pos_x = 0
 character.pos_y = 0
 character.subpos_x = 0 -- Character position subpixels --TODO: Character x and y positions should just be multiplied by 256, we don't need that variable.
@@ -19,11 +12,12 @@ character.speed = 0
 character.accel = 0 -- Character acceleration
 
 function character.reset()
+	character.current = "mario" -- Character (mario, luigi, toad, peach)
 	character.continues = 2
 	character.lives = 3
 	character.energy = 2
 	character.energy_bars = 2
-	character.state = "falling"
+	character.state = "falling" -- Hero state (falling, stationary)
 end
 
 return character

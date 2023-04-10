@@ -10,9 +10,10 @@ editor.tile = 1
 
 editor.mode = "normal" -- Editor mode (normal, start)
 
-editor.modes = {}
-editor.modes["normal"] = { short_name = "N" }
-editor.modes["start"] = { short_name = "S" }
+editor.modes = {
+	["normal"] = { short_name = "N" },
+	["start"] = { short_name = "S" }
+}
 
 -- Editor cursor coordinates
 editor.cursor_x = 0
@@ -51,6 +52,8 @@ function editor.playLevel()
 	world.save(world.current, world.level)
 
 	if world[world.current][world.level][world.area].valid_size then
+		character.reset()
+
 		state.name = "character_select"
 		world.area = 0
 
@@ -93,11 +96,9 @@ function editor.removeArea(area)
 		level.start_y = 0
 	end
 
-	for i = world.area + 1, level.area_count - 1 do
-		level[i - 1] = level[i]
-		level[i - 1].modified = true
-
-		--level[i] = {}
+	for i = world.area, level.area_count - 2 do
+		level[i] = level[i + 1]
+		level[i].modified = true
 	end
 
 	level.area_count = level.area_count - 1

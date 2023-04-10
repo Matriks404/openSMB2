@@ -3,7 +3,7 @@ local window = {}
 window.fullscreen = false
 window.resizable = false
 
-function window.calculateMaxSize()
+function window.setInitialScale()
 	local _, _, flags = love.window.getMode()
 	local desktop_width, desktop_height = love.window.getDesktopDimensions(flags.display)
 
@@ -32,7 +32,7 @@ function window.updateFullscreen()
 end
 
 function window.setup()
-	window.calculateMaxSize()
+	window.setInitialScale()
 	window.update()
 
 	love.window.setTitle(game.title)

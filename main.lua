@@ -21,6 +21,8 @@ function love.load()
 
 	graphics.init()
 	resources.load()
+	graphics.loadWorldImages()
+
 	music.init()
 
 	music.play("title")
@@ -39,7 +41,7 @@ function love.update()
 
 	elseif state.name == "intro" then
 	-- Intro story stuff
-		if state.transition == true then
+		if state.transition then
 			state.transition_timer = state.transition_timer + 1
 
 			-- After some time after showing 2nd story page go to title screen again
@@ -59,7 +61,7 @@ function love.update()
 	-- Character select stuff
 		music.play("character_select")
 
-		if state.transition == true then
+		if state.transition then
 			state.transition_timer = state.transition_timer + 1
 
 			-- After some time after chosing character go to levelbook screen
@@ -383,11 +385,11 @@ function love.draw()
 				snd.sfx_fall:play() -- Play falling sound
 			end
 
-			for i=0, character.energy_bars - 1 do
+			for i = 1, character.energy_bars do
 			-- Draw energy bars
-				local gp = (i + 1 <= character.energy and img.gp_filled) or img.gp_empty
+				local gp = (i <= character.energy and img.gp_filled) or img.gp_empty
 
-				love.graphics.draw(gp, 12, 48 + (i * 16))
+				love.graphics.draw(gp, 12, 48 + ((i - 1) * 16))
 			end
 
 			graphics.drawCharacter() -- Draw character on screen

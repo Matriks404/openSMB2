@@ -6,9 +6,10 @@ world.count = 8 --TODO: Use this variable.
 
 world.level_count = 3 --TODO: Use this variable.
 
-world.types = {}
-world.types["horizontal"] = { short_name = "HRZ", horizontal_min_size = 16, vertical_min_size = 16, vertical_max_size = 240 }
-world.types["vertical"] = { short_name = "VRT", horizontal_size = 256, vertical_min_size = 16 }
+world.types = {
+	["horizontal"] = { short_name = "HRZ", horizontal_min_size = 16, vertical_min_size = 16, vertical_max_size = 240 },
+	["vertical"] = { short_name = "VRT", horizontal_size = 256, vertical_min_size = 16 }
+}
 
 world.defaults = { type = "horizontal", width = 160, height = 160, background = "black", music = "overworld" }
 
@@ -19,7 +20,7 @@ function world.reset()
 end
 
 function world.getLevelDirectory(world_no, level_no, directory)
-	local world_level_str = tostring(world_no).."-"..tostring(level_no)
+	local world_level_str = string.format("%d-%d", world_no, level_no)
 
 	return directory.."/"..world_level_str.."/"
 end

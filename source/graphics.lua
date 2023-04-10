@@ -1,9 +1,10 @@
 local graphics = {}
 
-graphics.bg = {}
-graphics.bg["black"] = { short_name = "BLK", r = 0, g = 0, b = 0 }
-graphics.bg["light_blue"] = { short_name = "LBL", r = 0.36, g = 0.58, b = 0.99 }
-graphics.bg["blue"] = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
+graphics.bg = {
+	["black"] = { short_name = "BLK", r = 0, g = 0, b = 0 },
+	["light_blue"] = { short_name = "LBL", r = 0.36, g = 0.58, b = 0.99 },
+	["blue"] = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
+}
 
 graphics.width = 256
 graphics.height = 240
@@ -17,6 +18,18 @@ function graphics.init()
 	love.graphics.setDefaultFilter("nearest")
 
 	graphics.setBackgroundColor("blue")
+end
+
+function graphics.loadWorldImages()
+	graphics.world_images = {
+		[1] = img.lb_world1,
+		[2] = img.lb_world2,
+		[3] = img.lb_world1,
+		[4] = img.lb_world4,
+		[5] = img.lb_world1,
+		[6] = img.lb_world2,
+		[7] = img.lb_world7
+	}
 end
 
 function graphics.scaleDown()
@@ -67,34 +80,25 @@ function graphics.drawText(str, x, y, color)
 end
 
 function graphics.drawCounter(n, y, add)
-	local width = 0
-	local d = n
-
-	while d > 0 do
-		width = width + 1
-		d = math.floor(d / 10)
-	end
-
 	local str = tostring(n)
-	local x = graphics.width - (width * 8)
 
 	if add then
 		str = str..add
-		x = x - (#add * 8)
 	end
 
-	graphics.drawText(str, x, y)
+	local x = graphics.width - string.len(str) * 8
 
+	graphics.drawText(string.format("%02d%s", n, add or ""), x, y)
 end
 
 function graphics.drawTile(id, x, y)
-	local ax = (id % 16) * 16
-	local ay = math.floor(id / 16) * 16
+	local tile_x = (id % 16) * 16
+	local tile_y = math.floor(id / 16) * 16
 
 	local tilemap_width = img.tilemap:getWidth()
 	local tilemap_height = img.tilemap:getHeight()
 
-	tile = love.graphics.newQuad(ax, ay, 16, 16, tilemap_width, tilemap_height)
+	local tile = love.graphics.newQuad(tile_x, tile_y, 16, 16, tilemap_width, tilemap_height)
 
 	love.graphics.draw(img.tilemap, tile, x, y)
 end
@@ -146,7 +150,7 @@ function graphics.drawLevelTiles()
 end
 
 function graphics.drawCharacter()
-	local offset, ax, pos_y
+	local offset, tile_x, pos_y
 	pos_x = character.pos_x
 
 	-- Calculate offset for character sprite
@@ -165,11 +169,11 @@ function graphics.drawCharacter()
 				state.char_anim_timer = 0
 			end
 
-			ax = (state.char_anim_timer >= 5 and 0) or 16
+			tile_x = (state.char_anim_timer >= 5 and 0) or 16
 
 			state.char_anim_timer = state.char_anim_timer + 1
 		else
-			ax = 0
+			tile_x = 0
 
 			state.char_anim_timer = 0
 		end
@@ -179,13 +183,13 @@ function graphics.drawCharacter()
 			state.char_anim_timer = 0
 		end
 
-		ax = (state.char_anim_timer >= 3 and 0) or 16
+		tile_x = (state.char_anim_timer >= 3 and 0) or 16
 
 		if state.transition_timer == 0 then
 			state.char_anim_timer = state.char_anim_timer + 1
 		end
 	else
-		ax = 16
+		tile_x = 16
 
 		state.char_anim_timer = 0
 	end
@@ -204,7 +208,7 @@ function graphics.drawCharacter()
 		end
 	end
 
-	local char, sprite
+	local char
 
 	-- Draw character sprite
 	if character.current == "mario" then
@@ -220,7 +224,8 @@ function graphics.drawCharacter()
 		char = img.chars_peach
 	end
 
-	sprite = love.graphics.newQuad(ax, 0, 16, 32, char:getWidth(), char:getHeight())
+	--TODO: Should we initially generate quads like we generate symbols for fonts?
+	local sprite = love.graphics.newQuad(tile_x, 0, 16, 32, char:getWidth(), char:getHeight())
 	love.graphics.draw(char, sprite, pos_x, pos_y, 0, character.side, 1, offset)
 
 	-- Draw character sprite when it's horizontally wraping
@@ -232,36 +237,33 @@ function graphics.drawCharacter()
 end
 
 function graphics.drawLevelbook()
-	love.graphics.draw(img.levelbook, 25, 32)
+	local lb_x = 25
+	local lb_y = 32
 
-	graphics.drawText("WORLD  "..tostring(world.current).."-"..tostring(world.level), 89, 48, "brown")
+	love.graphics.draw(img.levelbook, lb_x, lb_y)
 
-	if world.current < 7 then
-		world.level_count = 3
-	else
-		world.level_count = 2
-	end
+	local world_str = string.format("WORLD %d-%d", world.current, world.level)
+	local world_x = 89
+	local world_y = 48
 
-	for i = 0, world.level_count - 1 do
+	graphics.drawText(world_str, world_x, world_y, "brown")
+
+	world.level_count = (world.current < 7) and 3 or 2
+
+	local lb_indicator_x = 113
+	local lb_indicator_spacing = 16
+	local lb_indicator_y = 64
+
+	for i = 1, world.level_count do
 	-- Draw level indicators
-		local lb_indicator = (world.level == i + 1 and img.lb_current) or img.lb_other
+		local lb_indicator = (world.level == i and img.lb_current) or img.lb_other
 
-		love.graphics.draw(lb_indicator, 113 + (i * 16), 64)
+		love.graphics.draw(lb_indicator, 113 + ((i - 1) * lb_indicator_spacing), lb_indicator_y)
 	end
 end
 
 function graphics.drawWorldImage()
-	local lb_world
-
-	if world.current == 1 or world.current == 3 or world.current == 5 then
-		lb_world = img.lb_world1
-	elseif world.current == 2 or world.current == 6 then
-		lb_world = img.lb_world2
-	elseif world.current == 4 then
-		lb_world = img.lb_world4
-	elseif world.current == 7 then
-		lb_world = img.lb_world7
-	end
+	local lb_world = graphics.world_images[world.current]
 
 	love.graphics.draw(lb_world, 65, 112)
 end
