@@ -18,6 +18,15 @@
 	* On Windows: Drag game folder onto LÖVE program shortcut.
 	* On GNU/Linux and macOS: Execute `love .` in the console (you might need to change directory to game path first).
 
+# Screenshots
+
+![Title screen](/screenshots/1.png)
+![Intro story](/screenshots/2.png)
+![Character select](/screenshots/3.png)
+![Gameplay](/screenshots/4.png)
+![Debug screen](/screenshots/5.png)
+![Level editor](/screenshots/6.png)
+
 # 3rd party font
 
 This project uses modified 3rd party font called **Dogica** by **Roberto Mocci** for the launcher, the license for the font can be found [here](/3rd%20party%20licenses/dogica_license.txt).
@@ -51,15 +60,6 @@ This project uses modified 3rd party font called **Dogica** by **Roberto Mocci**
 		* `A` key - Select option
 		* `S` key - Choose option
 	* `ESC` key - Quit the game
-
-# Screenshots
-
-![Title screen](/screenshots/1.png)
-![Intro story](/screenshots/2.png)
-![Character select](/screenshots/3.png)
-![Gameplay](/screenshots/4.png)
-![Debug screen](/screenshots/5.png)
-![Level editor](/screenshots/6.png)
 
 # Debugging
 
