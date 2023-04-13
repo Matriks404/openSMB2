@@ -17,7 +17,7 @@ function character.reset()
 	character.lives = 3
 	character.energy = 2
 	character.energy_bars = 2
-	character.state = "falling" -- Hero state (falling, stationary)
+	character.state = "falling" -- Character state (falling, stationary)
 end
 
 return character

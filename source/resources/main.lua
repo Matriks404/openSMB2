@@ -5,10 +5,13 @@ story = require "source/resources/story"
 
 local resources = {}
 
-function resources.load()
-	font.load()
-	img.load()
-	snd.load()
+function resources.load(directory)
+	local directory = directory.."/resources/"
+
+	font.load(directory)
+	img.loadForGame(directory)
+	snd.load(directory)
+	story.load(directory)
 end
 
 return resources

@@ -1,10 +1,10 @@
 local filesystem = {}
 
 function filesystem.setup()
-	love.filesystem.setIdentity(game.title)
+	love.filesystem.setIdentity(app.title)
 
-	if not love.filesystem.getInfo("userlevels") then
-		love.filesystem.createDirectory("userlevels")
+	if not love.filesystem.getInfo("games") then
+		love.filesystem.createDirectory("games")
 	end
 end
 

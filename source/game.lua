@@ -1,9 +1,27 @@
-utils = require "source/utils"
-
 local game = {}
 
-game.title = "openSMB2"
-game.full_title = game.title.." v"..utils.getVersion()
+function game.load(id)
+	game.directory = launcher.games[id].directory
+	game.name = launcher.games[id].name
+	game.version = launcher.games[id].version
+	game.levelpack = launcher.games[id].default_levelpack
+	game.font1 = launcher.games[id].font1
+	game.font2 = launcher.games[id].font2
+	game.title_text = launcher.games[id].title_text
+
+	love.window.setTitle(app.title.." - "..game.name)
+
+	resources.load(game.directory)
+	graphics.loadWorldImages()
+
+	state.name = "title"
+
+	music.init()
+
+	music.play("title")
+
+	graphics.setBackgroundColor("blue")
+end
 
 function game.getRemainingLives(lives)
 	local str, letter

@@ -60,25 +60,39 @@ function input.check(key)
 		end
 	end
 
-	if state.name == "character_select" then
+	if state.name == "launcher" then
+		if key == "up" then
+			launcher.goToPrevious()
+		elseif key == "down" or key == "x" then
+			launcher.goToNext()
+		elseif key == "return" or key == "s" then
+			launcher.runGame(launcher.selection)
+		end
+	elseif state.name == "character_select" then
 	-- Character select screen
 		if key == "left" and state.transition_timer == 0 then
 		-- Select character on the left
 			state.cursor = (state.cursor > 0 and state.cursor - 1) or 3
 
-			snd.sfx_cherry:play()
+			if snd.sfx_pickup then
+				snd.sfx_pickup:play()
+			end
 
 		elseif key == "right" and state.transition_timer == 0 then
 		-- Select character on the right
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
-			snd.sfx_cherry:play()
+			if snd.sfx_pickup then
+				snd.sfx_pickup:play()
+			end
 
 		elseif key == "x" and state.transition_timer == 0 then
 		-- Choose character and enable transition which will go to levelbook after some time
 			state.transition = true
 
-			snd.sfx_cherry:play()
+			if snd.sfx_pickup then
+				snd.sfx_pickup:play()
+			end
 		end
 
 	elseif state.name == "gameplay" then

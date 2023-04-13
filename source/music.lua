@@ -12,7 +12,7 @@ end
 
 function music.play(name)
 	if not debugging.mute then
-		if music.m[name] then
+		if music.m[name].track then
 			music.m[name].track:play()
 		end
 
@@ -29,7 +29,7 @@ function music.stopAll(except)
 end
 
 function music.stop(name)
-	if not debugging.mute then
+	if not debugging.mute and music.m[name].track then
 		music.m[name].track:stop()
 	end
 end

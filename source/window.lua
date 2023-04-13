@@ -35,7 +35,7 @@ function window.setup()
 	window.setInitialScale()
 	window.update()
 
-	love.window.setTitle(game.title)
+	love.window.setTitle(app.title)
 end
 
 return window

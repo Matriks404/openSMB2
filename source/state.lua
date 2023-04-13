@@ -1,7 +1,7 @@
 local state = {}
 
--- Game state (title, intro, character_select, level_intro, gameplay, pause, death, game_over, editor, debug)
-state.name = "title"
+-- Game state (launcher, title, intro, character_select, level_intro, gameplay, pause, death, game_over, editor, debug)
+state.name = "launcher"
 
 -- Timers
 state.timer = 0

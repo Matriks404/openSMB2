@@ -17,7 +17,7 @@ graphics.tile_size = 16
 function graphics.init()
 	love.graphics.setDefaultFilter("nearest")
 
-	graphics.setBackgroundColor("blue")
+	graphics.setBackgroundColor("black")
 end
 
 function graphics.loadWorldImages()
@@ -63,17 +63,17 @@ function graphics.setBackgroundColor(color)
 	graphics.current_bg = color
 end
 
-function graphics.drawText(str, x, y, color)
-	local color = color or "white"
+function graphics.drawText(str, x, y, font_id)
+	local font_id = font_id or game.font1
 
 	local pos_x = x
 	local pos_y = y
 
 	for i = 0, #str - 1 do
 		local code = string.byte(str, i + 1)
-		local quad = font.symbols[color][code]
+		local quad = font.symbols[font_id][code]
 
-		love.graphics.draw(font[color], quad, pos_x, pos_y, 0, 0.5)
+		love.graphics.draw(font[font_id], quad, pos_x, pos_y, 0, 0.5)
 
 		pos_x = pos_x + (font.symbol_size / 2)
 	end
@@ -240,13 +240,15 @@ function graphics.drawLevelbook()
 	local lb_x = 25
 	local lb_y = 32
 
-	love.graphics.draw(img.levelbook, lb_x, lb_y)
+	if img.levelbook then
+		love.graphics.draw(img.levelbook, lb_x, lb_y)
+	end
 
 	local world_str = string.format("WORLD %d-%d", world.current, world.level)
 	local world_x = 89
 	local world_y = 48
 
-	graphics.drawText(world_str, world_x, world_y, "brown")
+	graphics.drawText(world_str, world_x, world_y, game.font2)
 
 	world.level_count = (world.current < 7) and 3 or 2
 
@@ -254,18 +256,31 @@ function graphics.drawLevelbook()
 	local lb_indicator_spacing = 16
 	local lb_indicator_y = 64
 
-	for i = 1, world.level_count do
-	-- Draw level indicators
-		local lb_indicator = (world.level == i and img.lb_current) or img.lb_other
+	local x, y
 
-		love.graphics.draw(lb_indicator, 113 + ((i - 1) * lb_indicator_spacing), lb_indicator_y)
+	-- Draw level indicators
+	for i = 1, world.level_count do
+		x = lb_indicator_x + ((i - 1) * lb_indicator_spacing)
+		y = lb_indicator_y
+
+		if world.level == i and img.lb_current then
+			if img.lb_current then
+				love.graphics.draw(img.lb_current, x, y)
+			end
+		else
+			if img.lb_other then
+				love.graphics.draw(img.lb_other, x, y)
+			end
+		end
 	end
 end
 
 function graphics.drawWorldImage()
 	local lb_world = graphics.world_images[world.current]
 
-	love.graphics.draw(lb_world, 65, 112)
+	if lb_world then
+		love.graphics.draw(lb_world, 65, 112)
+	end
 end
 
 return graphics

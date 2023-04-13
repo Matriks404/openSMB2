@@ -3,24 +3,17 @@ local story = {}
 story.lines = 0
 story.page = 1
 
-story[1] = { "WHEN  MARIO OPENED A",
-		   "DOOR AFTER  CLIMBING",
-		   "A LONG STAIR IN  HIS",
-		   "DREAM, ANOTHER WORLD",
-		   "SPREAD   BEFORE  HIM",
-		   "AND HE HEARD A VOICE",
-		   "CALL FOR HELP TO  BE",
-		   " FREED  FROM A SPELL"
-		 }
+function story.load(directory)
+	local path = directory.."story.lua"
 
-story[2] = { "AFTER  AWAKENING,   ",
-		   "MARIO  WENT TO  A   ",
-		   "CAVE  NEARBY AND  TO",
-		   "HIS  SURPRISE HE SAW",
-		   "EXACTLY  WHAT HE SAW",
-		   "IN HIS DREAM***     ",
-		   "                    ",
-		   "  PUSH START BUTTON "
-		 }
+	if love.filesystem.getInfo(path) then
+		local file = love.filesystem.read(path)
+		local contents = TSerial.unpack(file)
+
+		for i = 1, #contents do
+			story[i] = contents[i]
+		end
+	end
+end
 
 return story

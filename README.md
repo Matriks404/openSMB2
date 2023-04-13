@@ -4,29 +4,40 @@
 
 2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer (Alternatively execute `git clone git://github.com/Matriks404/openSMB2.git` command in the desired directory, if you have git installed).
 
-3. Download resources from this [link](https://drive.google.com/drive/folders/1Gqw8yUSekHwrbAnHErZbr7AdeugurBRq?usp=sharing) (select them and click `Download` button) and extract them in `resources` directory.
+3. Download gamepack(s) from this [link](https://drive.google.com/drive/folders/1cz5gJ-IXvqTIJ7fUArD30UN9Qg4sfeGX?usp=sharing) (select them and click `Download` button) and extract the `<game name>.pack` folder in the following directory:
 
-	* NOTE: Make sure to update your resources if necessary (e.g. if you update your local repository).
-	* BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
+	* On Windows: `%appdata%\LOVE\openSMB2\games\`
+	* On GNU/Linux: `~/.local/share/love/openSMB2/games/`
+	* On macoS: `/Users/user/Library/Application Support/LOVE/openSMB2/games`
+
+* NOTE: Make sure to update your resources if necessary (e.g. if you update your local repository).
+
+* BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
 
 4. Run the game!
 	* On Windows: Drag game folder onto LÖVE program shortcut.
-	* On macOS and Linux: Execute `love .` in the console (you might need to change directory to game path first).
+	* On GNU/Linux and macOS: Execute `love .` in the console (you might need to change directory to game path first).
+
+# 3rd party font
+
+This project uses modified 3rd party font called **Dogica** by **Roberto Mocci** for the launcher, the license for the font can be found [here](/3rd party licenses/dogica_license.txt).
 
 # Gameplay
 
-* Screens that work are:
+* Stuff that is working:
+	* Simple launcher for gamepacks
 	* Title screen
-	* Intro story
-	* Character select
-	* Levelbook
-	* Basic gameplay screen
-	* Game over screen
+	* Character select and level intro
+	* Pretty much non-existent gameplay
+	* Level editor (see below)
 
 * Controls:
 	* On any screen:
 		* `-` or `=` key - Scale graphics down or up (only integer scaling).
 		* `ALT+ENTER` or `F11` key - Enable or disable fullscreen mode.
+	* In launcher:
+		* `Up` or `Down` - Select gamepack.
+		* `ENTER` or `S` - Run the currently selected gamepack.
 	* `S` key on title screen - Enter character select screen.
 	* In character select screen:
 		* `Left` or `Right` key - Select character
@@ -49,7 +60,6 @@
 ![Gameplay](/screenshots/4.png)
 ![Debug screen](/screenshots/5.png)
 ![Level editor](/screenshots/6.png)
-
 
 # Debugging
 

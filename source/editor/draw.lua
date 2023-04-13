@@ -131,7 +131,7 @@ function draw.levelEditor()
 	graphics.drawText(world.current.."-"..world.level.."-"..world.area, 2, 2)
 
 	-- Draw area type indicator
-	font = (area.valid_size and "white") or "brown"
+	font = (area.valid_size and game.font1) or game.font2
 	graphics.drawText("TYPE-"..world.types[area.type].short_name, 58, 2, font)
 
 	-- Draw editing mode indicator
@@ -142,10 +142,10 @@ function draw.levelEditor()
 	graphics.drawText("M-"..music.m[area.music].short_name, 2, 18)
 
 	-- Draw width and height values
-	font = (area.valid_width and "white") or "brown"
+	font = (area.valid_width and game.font1) or game.font2
 	graphics.drawText("W-"..area.width, 58, 10, font)
 
-	font = (area.valid_height and "white") or "brown"
+	font = (area.valid_height and game.font1) or game.font2
 	graphics.drawText("H-"..area.height, 58, 18, font)
 
 	-- Draw coordinates for edit cursor or starting position

@@ -1,31 +1,22 @@
 TSerial = require "source/external/TSerial"
 
-editor = require "source/editor/main"
-resources = require "source/resources/main"
-
+app = require "source/app"
 character = require "source/character"
 debugging = require "source/debugging"
+editor = require "source/editor/main"
 filesystem = require "source/filesystem"
 game = require "source/game"
 graphics = require "source/graphics"
 input = require "source/input"
+launcher = require "source/launcher"
 music = require "source/music"
+resources = require "source/resources/main"
 state = require "source/state"
 window = require "source/window"
 world = require "source/world"
 
 function love.load()
-	window.setup()
-
-	filesystem.setup()
-
-	graphics.init()
-	resources.load()
-	graphics.loadWorldImages()
-
-	music.init()
-
-	music.play("title")
+	app.setup()
 end
 
 function love.update()
@@ -181,7 +172,7 @@ function love.update()
 			end
 
 			if character.accel < 0 then
-			-- Reseting hero acceleration to 0
+			-- Reseting character acceleration to 0
 				character.accel = 0
 			end
 
@@ -203,7 +194,7 @@ function love.update()
 				end
 
 			elseif character.speed < 0 then
-			-- Reset hero speed to 0
+			-- Reseting character speed to 0
 				character.speed = 0
 			end
 
@@ -262,17 +253,30 @@ function love.draw()
 
 	if state.name == "title" or state.name == "intro" or state.name == "debug" then
 	-- Draw border on title screen and intro
-		love.graphics.draw(img.title_border, 0, 0)
+		if img.title_border then
+			love.graphics.draw(img.title_border, 0, 0)
+		end
 
 		graphics.drawText("V"..utils.getVersion(), 2, 2)
 	end
 
-	if state.name == "title" then
-	-- Draw title screen stuff
-		love.graphics.draw(img.title_logo, 48, 48)
+	if state.name == "launcher" then
+		launcher.draw()
 
-		graphics.drawText("!\"", 193, 72)
-		graphics.drawText("#1988 NINTENDO", 72, 184)
+	elseif state.name == "title" then
+		if img.title_logo then
+			love.graphics.draw(img.title_logo, 48, 48)
+		end
+
+		if game.title_text then
+			for i = 1, #game.title_text do
+				local x = game.title_text[i][1]
+				local y = game.title_text[i][2]
+				local str = game.title_text[i][3]
+
+				graphics.drawText(str, x, y)
+			end
+		end
 
 	elseif state.name == "intro" then
 	-- Draw intro story stuff
@@ -284,13 +288,13 @@ function love.draw()
 				story.lines = story.lines + 1
 				state.text_timer = 0
 
-				if story.page == 1 and story.lines > 8 then
+				if story.page ~= #story and story.lines > 8 then
 				-- Change to 2nd story page if all lines are displayed
 					story.lines = 0
-					story.page = 2
+					story.page = story.page + 1
 					state.text_timer = 50
 
-				elseif story.page == 2 and story.lines > 8 then
+				elseif story.page == #story and story.lines > 8 then
 				-- Enable transition which will go to title screen after some time
 					story.lines = 8
 					state.transition = true
@@ -299,7 +303,7 @@ function love.draw()
 
 			state.text_timer = state.text_timer + 1
 
-			for i=0, story.lines do
+			for i = 1, story.lines do
 			-- Draw lines of text
 				graphics.drawText(tostring(story[story.page][i]), 48, 64 + ((i - 1) * 16))
 			end
@@ -307,63 +311,76 @@ function love.draw()
 
 	elseif state.name == "character_select" then
 	-- Draw character select screen stuff
-		love.graphics.draw(img.cs_border, 0, 0)
+		if img.cs_border then
+			love.graphics.draw(img.cs_border, 0, 0)
+		end
 
 		graphics.drawText("PLEASE SELECT", 72, 80)
 		graphics.drawText("PLAYER", 96, 96)
 
 		love.graphics.draw(img.cs_arrow, 72 + (state.cursor * 32), 112)
 
-		local mario, luigi, toad, peach
+		local char1, char2, char3, char4
 
-		-- Mario
+		-- Character 1
 		if state.cursor == 0 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				mario = img.cs_mario_active
+				char1 = img.cs_char1_active
 			else
-				mario = img.cs_mario_select
+				char1 = img.cs_char1_select
 			end
 		else
-			mario = img.cs_mario
+			char1 = img.cs_char1
 		end
 
-		-- Luigi
+		-- Character 2
 		if state.cursor == 1 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				luigi = img.cs_luigi_active
+				char2 = img.cs_char2_active
 			else
-				luigi = img.cs_luigi_select
+				char2 = img.cs_char2_select
 			end
 		else
-			luigi = img.cs_luigi
+			char2 = img.cs_char2
 		end
 
-		-- Toad
+		-- Character 3
 		if state.cursor == 2 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				toad = img.cs_toad_active
+				char3 = img.cs_char3_active
 			else
-				toad = img.cs_toad_select
+				char3 = img.cs_char3_select
 			end
 		else
-			toad = img.cs_toad
+			char3 = img.cs_char3
 		end
 
-		-- Peach
+		-- Character 4
 		if state.cursor == 3 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				peach = img.cs_peach_active
+				char4 = img.cs_char4_active
 			else
-				peach = img.cs_peach_select
+				char4 = img.cs_char4_select
 			end
 		else
-			peach = img.cs_peach
+			char4 = img.cs_char4
 		end
 
-		love.graphics.draw(mario, 72, 144)
-		love.graphics.draw(luigi, 104, 144)
-		love.graphics.draw(toad, 136, 144)
-		love.graphics.draw(peach, 168, 144)
+		if char1 then
+			love.graphics.draw(char1, 72, 144)
+		end
+
+		if char2 then
+			love.graphics.draw(char2, 104, 144)
+		end
+
+		if char3 then
+			love.graphics.draw(char3, 136, 144)
+		end
+
+		if char4 then
+			love.graphics.draw(char4, 168, 144)
+		end
 
 		graphics.drawText("EXTRA LIFE", 64, 208)
 		graphics.drawText(game.getRemainingLives(character.lives), 176, 208)
@@ -406,10 +423,10 @@ function love.draw()
 			state.transition_timer = 0
 
 		elseif state.transition_timer >= 15 then
-			graphics.drawText("PAUSED", 105, 120, "brown")
+			graphics.drawText("PAUSED", 105, 120, game.font2)
 		end
 
-		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 176, "brown") -- Draw extra lifes text
+		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 176, game.font2) -- Draw extra lifes text
 
 		state.transition_timer = state.transition_timer + 1
 
@@ -418,7 +435,7 @@ function love.draw()
 
 		graphics.drawLevelbook() -- Draw levelbook
 
-		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 80, "brown") -- Draw remaining lifes
+		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 80, game.font2) -- Draw remaining lifes
 
 		graphics.drawWorldImage() -- Draw world image
 
