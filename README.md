@@ -8,11 +8,9 @@
 
 	* On Windows: `%appdata%\LOVE\openSMB2\games\`
 	* On GNU/Linux: `~/.local/share/love/openSMB2/games/`
-	* On macoS: `/Users/user/Library/Application Support/LOVE/openSMB2/games`
+	* On macOS: `/Users/user/Library/Application Support/LOVE/openSMB2/games`
 
 * NOTE: Make sure to update your resources if necessary (e.g. if you update your local repository).
-
-* BEWARE! You should only download these files if you legally own them in any format (such as original NES cartridge with Super Mario Bros. 2).
 
 4. Run the game!
 	* On Windows: Drag game folder onto LÖVE program shortcut.
