@@ -4,7 +4,7 @@
 
 2. Download zip file with this project by clicking on `Clone or download` and `Download ZIP` buttons, and extract files to some folder on your computer (Alternatively execute `git clone git://github.com/Matriks404/openSMB2.git` command in the desired directory, if you have git installed).
 
-3. Download gamepack(s) from this [link](https://drive.google.com/drive/folders/1cz5gJ-IXvqTIJ7fUArD30UN9Qg4sfeGX?usp=sharing) (select them and click `Download` button) and extract the appropriate `<game name>.pack.zip` contents to the following directory:
+3. Download gamepack(s) from this [link](https://drive.google.com/drive/folders/1cz5gJ-IXvqTIJ7fUArD30UN9Qg4sfeGX?usp=sharing) (select them and click `Download` button) and extract the appropriate `<gamepack name>.pack.zip` contents to the following directory:
 
 	* On Windows: `%appdata%\LOVE\openSMB2\games\`
 	* On GNU/Linux: `~/.local/share/love/openSMB2/games/`
@@ -27,7 +27,7 @@
 
 # 3rd party font
 
-This project uses modified 3rd party font called **Dogica** by **Roberto Mocci** for the launcher, the license for the font can be found [here](/3rd%20party%20licenses/dogica_license.txt).
+This project uses modified 3rd party font called **Dogica** by **Roberto Mocci** for the launcher (in [/resources/images/font/dogica.png](/resources/images/font/dogica.png)), the license for the font can be found [here](/3rd%20party%20licenses/dogica_license.txt).
 
 # Gameplay
 

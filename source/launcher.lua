@@ -15,7 +15,7 @@ end
 function launcher.loadFont()
 	directory = "resources/images/font/"
 
-	font.loadSymbols(directory, "launcher")
+	font.loadSymbols(directory, "dogica")
 end
 
 function launcher.loadGameList()
@@ -74,15 +74,15 @@ function launcher.runGame(id)
 end
 
 function launcher.draw()
-	graphics.drawText("openSMB2 Launcher", 16, 16, "launcher")
+	graphics.drawText("openSMB2 Launcher", 16, 16, "dogica")
 
 	if next(launcher.games) == nil then
-		graphics.drawText("There are no games installed", 8, 48, "launcher")
-		graphics.drawText("in your user directory.", 8, 60, "launcher")
+		graphics.drawText("There are no games installed", 8, 48, "dogica")
+		graphics.drawText("in your user directory.", 8, 60, "dogica")
 
-		graphics.drawText("Check instructions here:", 8, 92, "launcher")
-		graphics.drawText("github.com/Matriks404/openSMB2", 8, 108, "launcher")
-		graphics.drawText("to get games installed.", 8, 124, "launcher")
+		graphics.drawText("Check instructions here:", 8, 92, "dogica")
+		graphics.drawText("github.com/Matriks404/openSMB2", 8, 108, "dogica")
+		graphics.drawText("to get games installed.", 8, 124, "dogica")
 
 		return
 	end
@@ -92,12 +92,12 @@ function launcher.draw()
 	for key in pairs(launcher.games) do
 		game_name = launcher.games[key].name
 
-		graphics.drawText(game_name, x, y, "launcher")
+		graphics.drawText(game_name, x, y, "dogica")
 
 		y = y + 16
 	end
 
-	graphics.drawText(">", 8, ((launcher.selection - 1) * 16) + 48, "launcher")
+	graphics.drawText(">", 8, ((launcher.selection - 1) * 16) + 48, "dogica")
 end
 
 return launcher
