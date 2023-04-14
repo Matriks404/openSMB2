@@ -27,7 +27,7 @@
 
 # 3rd party font
 
-This project uses modified 3rd party font called **Dogica** by **Roberto Mocci** for the launcher (in [/resources/images/font/dogica.png](/resources/images/font/dogica.png)), the license for the font can be found [here](/3rd%20party%20licenses/dogica_license.txt).
+This project uses modified 3rd party font called **Dogica** by **Roberto Mocci** for the launcher (in [`/resources/images/font/dogica.png`](/resources/images/font/dogica.png)), the license for the font can be found [here](/3rd%20party%20licenses/dogica_license.txt).
 
 # Gameplay
 
