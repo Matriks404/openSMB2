@@ -8,11 +8,16 @@ function snd.load(directory)
 end
 
 function snd.tryToLoadOptionalFile(file, source_type)
-	if love.filesystem.getInfo(file) then
-		return love.audio.newSource(file, source_type)
-	else
-		return nil
-	end
+	local f = love.audio.newSource
+
+	return resources.tryToLoadOptionalFile(f, file, source_type)
+end
+
+function snd.loadMandatoryFile(file, source_type)
+	local f = love.audio.newSource
+
+	return resources.loadMandatoryFile(f, file, source_type)
+
 end
 
 function snd.loadSFX(directory)

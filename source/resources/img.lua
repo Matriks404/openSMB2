@@ -24,15 +24,15 @@ function img.loadEditorImages(directory)
 end
 
 function img.tryToLoadOptionalImage(file)
-	if love.filesystem.getInfo(file) then
-		return love.graphics.newImage(file)
-	else
-		return nil
-	end
+	local f = love.graphics.newImage
+
+	return resources.tryToLoadOptionalFile(f, file)
 end
 
 function img.loadMandatoryImage(file)
-	return love.graphics.newImage(file)
+	local f = love.graphics.newImage
+
+	return resources.loadMandatoryFile(f, file)
 end
 
 function img.loadTitleImages(directory)

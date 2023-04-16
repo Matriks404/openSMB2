@@ -16,4 +16,16 @@ function resources.load(directory)
 	story.load(game_directory)
 end
 
+function resources.tryToLoadOptionalFile(f, file, source_type)
+	if love.filesystem.getInfo(file) then
+		return f(file, source_type)
+	else
+		return nil
+	end
+end
+
+function resources.loadMandatoryFile(f, file, source_type)
+	return f(file, source_type)
+end
+
 return resources
