@@ -6,12 +6,14 @@ story = require "source/resources/story"
 local resources = {}
 
 function resources.load(directory)
-	local directory = directory.."/resources/"
+	local app_directory = "/resources/"
+	img.loadEditorImages(app_directory)
 
-	font.load(directory)
-	img.loadForGame(directory)
-	snd.load(directory)
-	story.load(directory)
+	local game_directory = directory.."/resources/"
+	font.load(game_directory)
+	img.loadGameImages(game_directory)
+	snd.load(game_directory)
+	story.load(game_directory)
 end
 
 return resources

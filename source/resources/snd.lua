@@ -7,31 +7,22 @@ function snd.load(directory)
 	snd.loadMusic(directory)
 end
 
+function snd.tryToLoadOptionalFile(file, source_type)
+	if love.filesystem.getInfo(file) then
+		return love.audio.newSource(file, source_type)
+	else
+		return nil
+	end
+end
+
 function snd.loadSFX(directory)
 	local directory = directory.."effects/"
 
 	-- Optional
-
-	sfx_fall_file = directory.."fall.ogg"
-	sfx_pickup_file = directory.."pickup.ogg"
-	sfx_death_file = directory.."death.ogg"
-	sfx_game_over_file = directory.."gameover.ogg"
-
-	if love.filesystem.getInfo(sfx_fall_file) then
-		snd.sfx_fall= love.audio.newSource(sfx_fall_file, "static")
-	end
-
-	if love.filesystem.getInfo(sfx_pickup_file) then
-		snd.sfx_pickup = love.audio.newSource(sfx_pickup_file, "static")
-	end
-
-	if love.filesystem.getInfo(sfx_death_file) then
-		snd.sfx_death = love.audio.newSource(sfx_death_file, "static")
-	end
-
-	if love.filesystem.getInfo(sfx_game_over_file) then
-		snd.sfx_game_over = love.audio.newSource(sfx_game_over_file, "static")
-	end
+	snd.sfx_fall = snd.tryToLoadOptionalFile(directory.."fall.ogg", "static")
+	snd.sfx_pickup = snd.tryToLoadOptionalFile(directory.."pickup.ogg", "static")
+	snd.sfx_death = snd.tryToLoadOptionalFile(directory.."death.ogg", "static")
+	snd.sfx_game_over = snd.tryToLoadOptionalFile(directory.."gameover.ogg", "static")
 end
 
 function snd.loadMusic(directory)
@@ -45,25 +36,11 @@ function snd.loadMusic(directory)
 	music_underworld_file = directory.."underworld.ogg"
 	music_boss_file = directory.."boss.ogg"
 
-	if love.filesystem.getInfo(music_title_file) then
-		snd.music_title = love.audio.newSource(music_title_file, "stream")
-	end
-
-	if love.filesystem.getInfo(music_char_select_file) then
-		snd.music_char_select = love.audio.newSource(music_char_select_file, "stream")
-	end
-
-	if love.filesystem.getInfo(music_overworld_file) then
-		snd.music_overworld = love.audio.newSource(music_overworld_file, "stream")
-	end
-
-	if love.filesystem.getInfo(music_underworld_file) then
-		snd.music_underworld = love.audio.newSource(music_underworld_file, "stream")
-	end
-
-	if love.filesystem.getInfo(music_boss_file) then
-		snd.music_boss = love.audio.newSource(music_boss_file, "stream")
-	end
+	snd.music_title = snd.tryToLoadOptionalFile(directory.."title.ogg", "stream")
+	snd.music_char_select= snd.tryToLoadOptionalFile(directory.."charselect.ogg", "stream")
+	snd.music_overworld = snd.tryToLoadOptionalFile(directory.."overworld.ogg", "stream")
+	snd.music_underworld = snd.tryToLoadOptionalFile(directory.."underworld.ogg", "stream")
+	snd.music_boss = snd.tryToLoadOptionalFile(directory.."boss.ogg", "stream")
 end
 
 return snd
