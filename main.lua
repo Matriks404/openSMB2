@@ -41,8 +41,8 @@ function love.update()
 				state.timer = 0
 				state.text_timer = 0
 
-				story.lines = 0
-				story.page = 1
+				game_resources.story.lines = 0
+				game_resources.story.page = 1
 
 				state.transitionClear()
 			end
@@ -285,27 +285,28 @@ function love.draw()
 
 			if state.text_timer > 65 then
 			-- Based on timer add new line of text
-				story.lines = story.lines + 1
+				game_resources.story.lines = game_resources.story.lines + 1
 				state.text_timer = 0
 
-				if story.page ~= #story and story.lines > 8 then
+				if game_resources.story.page ~= #game_resources.story and game_resources.story.lines > 8 then
 				-- Change to 2nd story page if all lines are displayed
-					story.lines = 0
-					story.page = story.page + 1
+					game_resources.story.lines = 0
+					game_resources.story.page = game_resources.story.page + 1
 					state.text_timer = 50
 
-				elseif story.page == #story and story.lines > 8 then
+				elseif game_resources.story.page == #game_resources.story and game_resources.story.lines > 8 then
 				-- Enable transition which will go to title screen after some time
-					story.lines = 8
+					game_resources.story.lines = 8
 					state.transition = true
 				end
 			end
 
 			state.text_timer = state.text_timer + 1
 
-			for i = 1, story.lines do
+			for i = 1, game_resources.story.lines do
+				local page = game_resources.story.page
 			-- Draw lines of text
-				graphics.drawText(tostring(story[story.page][i]), 48, 64 + ((i - 1) * 16))
+				graphics.drawText(tostring(game_resources.story[page][i]), 48, 64 + ((i - 1) * 16))
 			end
 		end
 
