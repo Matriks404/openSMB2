@@ -257,7 +257,7 @@ function love.draw()
 			love.graphics.draw(game_resources.images.title_border, 0, 0)
 		end
 
-		graphics.drawText("V"..utils.getVersion(), 2, 2)
+		graphics.drawText("V"..app.getVersion(), 2, 2)
 	end
 
 	if state.name == "launcher" then
