@@ -1,25 +1,25 @@
 local game = {}
 
 function game.load(id)
-	game.directory = launcher.games[id].directory
-	game.name = launcher.games[id].name
-	game.version = launcher.games[id].version
-	game.levelpack = launcher.games[id].default_levelpack
-	game.font1 = launcher.games[id].font1
-	game.font2 = launcher.games[id].font2
-	game.title_text = launcher.games[id].title_text
+	local gamepack = launcher.gamepacks[id]
+
+	game.directory = gamepack.directory
+	game.name = gamepack.name
+	game.version = gamepack.version
+	game.levelpack = gamepack.default_levelpack
+	game.font1 = gamepack.font1
+	game.font2 = gamepack.font2
+	game.title_text = gamepack.title_text
 
 	love.window.setTitle(app.title.." - "..game.name)
 
-	resources.load(game.directory)
+	game_resources.load(game.directory)
 	graphics.loadWorldImages()
 
+	editor.loadImages()
+
 	state.name = "title"
-
-	music.init()
-
-	music.play("title")
-
+	game_resources.music.play("title")
 	graphics.setBackgroundColor("blue")
 end
 

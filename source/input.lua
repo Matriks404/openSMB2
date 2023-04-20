@@ -48,14 +48,14 @@ function input.check(key)
 				debugging.enabled = false
 				debugging.mute = false
 
-				music.play("title")
+				game_resources.music.play("title")
 			else
 				state.name = "debug"
 				state.timer = 0
 
 				debugging.enabled = true
 
-				music.stopAll()
+				game_resources.music.stopAll()
 			end
 		end
 	end
@@ -74,24 +74,24 @@ function input.check(key)
 		-- Select character on the left
 			state.cursor = (state.cursor > 0 and state.cursor - 1) or 3
 
-			if snd.sfx_pickup then
-				snd.sfx_pickup:play()
+			if game_resources.sound.sfx_pickup then
+				game_resources.sound.sfx_pickup:play()
 			end
 
 		elseif key == "right" and state.transition_timer == 0 then
 		-- Select character on the right
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
-			if snd.sfx_pickup then
-				snd.sfx_pickup:play()
+			if game_resources.sound.sfx_pickup then
+				game_resources.sound.sfx_pickup:play()
 			end
 
 		elseif key == "x" and state.transition_timer == 0 then
 		-- Choose character and enable transition which will go to levelbook after some time
 			state.transition = true
 
-			if snd.sfx_pickup then
-				snd.sfx_pickup:play()
+			if game_resources.sound.sfx_pickup then
+				game_resources.sound.sfx_pickup:play()
 			end
 		end
 

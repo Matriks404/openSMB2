@@ -6,11 +6,11 @@ debugging = require "source/debugging"
 editor = require "source/editor/main"
 filesystem = require "source/filesystem"
 game = require "source/game"
+game_resources = require "source/game_resources/main"
 graphics = require "source/graphics"
 input = require "source/input"
 launcher = require "source/launcher"
-music = require "source/music"
-resources = require "source/resources/main"
+resources = require "source/resources"
 state = require "source/state"
 window = require "source/window"
 world = require "source/world"
@@ -50,7 +50,7 @@ function love.update()
 
 	elseif state.name == "character_select" then
 	-- Character select stuff
-		music.play("character_select")
+		game_resources.music.play("character_select")
 
 		if state.transition then
 			state.transition_timer = state.transition_timer + 1
@@ -60,7 +60,7 @@ function love.update()
 				state.name = "level_intro"
 				state.timer = 0
 
-				music.stopAll()
+				game_resources.music.stopAll()
 				state.transitionClear()
 
 				-- Chosen character is one that was selected previously by cursor
@@ -210,7 +210,7 @@ function love.update()
 				character.energy = 0
 
 				music.stopAll()
-				snd.sfx_death:play()
+				game_resources.sound.sfx_death:play()
 			end
 
 			if character.dying_timer == 84 then
@@ -233,7 +233,7 @@ function love.update()
 					state.name = "death"
 				else
 				-- No more lifes, go to game over screen
-					snd.sfx_game_over:play()
+					game_resources.sound.sfx_game_over:play()
 
 					state.cursor = (character.continues > 0 and 0) or 1
 
@@ -253,8 +253,8 @@ function love.draw()
 
 	if state.name == "title" or state.name == "intro" or state.name == "debug" then
 	-- Draw border on title screen and intro
-		if img.title_border then
-			love.graphics.draw(img.title_border, 0, 0)
+		if game_resources.images.title_border then
+			love.graphics.draw(game_resources.images.title_border, 0, 0)
 		end
 
 		graphics.drawText("V"..utils.getVersion(), 2, 2)
@@ -264,8 +264,8 @@ function love.draw()
 		launcher.draw()
 
 	elseif state.name == "title" then
-		if img.title_logo then
-			love.graphics.draw(img.title_logo, 48, 48)
+		if game_resources.images.title_logo then
+			love.graphics.draw(game_resources.images.title_logo, 48, 48)
 		end
 
 		if game.title_text then
@@ -311,59 +311,59 @@ function love.draw()
 
 	elseif state.name == "character_select" then
 	-- Draw character select screen stuff
-		if img.cs_border then
-			love.graphics.draw(img.cs_border, 0, 0)
+		if game_resources.images.cs_border then
+			love.graphics.draw(game_resources.images.cs_border, 0, 0)
 		end
 
 		graphics.drawText("PLEASE SELECT", 72, 80)
 		graphics.drawText("PLAYER", 96, 96)
 
-		love.graphics.draw(img.cs_arrow, 72 + (state.cursor * 32), 112)
+		love.graphics.draw(game_resources.images.cs_arrow, 72 + (state.cursor * 32), 112)
 
 		local char1, char2, char3, char4
 
 		-- Character 1
 		if state.cursor == 0 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				char1 = img.cs_char1_active
+				char1 = game_resources.images.cs_char1_active
 			else
-				char1 = img.cs_char1_select
+				char1 = game_resources.images.cs_char1_select
 			end
 		else
-			char1 = img.cs_char1
+			char1 = game_resources.images.cs_char1
 		end
 
 		-- Character 2
 		if state.cursor == 1 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				char2 = img.cs_char2_active
+				char2 = game_resources.images.cs_char2_active
 			else
-				char2 = img.cs_char2_select
+				char2 = game_resources.images.cs_char2_select
 			end
 		else
-			char2 = img.cs_char2
+			char2 = game_resources.images.cs_char2
 		end
 
 		-- Character 3
 		if state.cursor == 2 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				char3 = img.cs_char3_active
+				char3 = game_resources.images.cs_char3_active
 			else
-				char3 = img.cs_char3_select
+				char3 = game_resources.images.cs_char3_select
 			end
 		else
-			char3 = img.cs_char3
+			char3 = game_resources.images.cs_char3
 		end
 
 		-- Character 4
 		if state.cursor == 3 then
 			if state.transition_timer < 3 or state.transition_timer > 68 then
-				char4 = img.cs_char4_active
+				char4 = game_resources.images.cs_char4_active
 			else
-				char4 = img.cs_char4_select
+				char4 = game_resources.images.cs_char4_select
 			end
 		else
-			char4 = img.cs_char4
+			char4 = game_resources.images.cs_char4
 		end
 
 		if char1 then
@@ -399,12 +399,12 @@ function love.draw()
 		if state.timer > 146 then
 		-- Draw everything else
 			if state.timer == 147 then
-				snd.sfx_fall:play() -- Play falling sound
+				game_resources.sound.sfx_fall:play() -- Play falling sound
 			end
 
 			for i = 1, character.energy_bars do
 			-- Draw energy bars
-				local gp = (i <= character.energy and img.gp_filled) or img.gp_empty
+				local gp = (i <= character.energy and game_resources.images.gp_filled) or game_resources.images.gp_empty
 
 				love.graphics.draw(gp, 12, 48 + ((i - 1) * 16))
 			end
@@ -459,7 +459,7 @@ function love.draw()
 
 			graphics.drawText("RETRY", 96, 104)
 
-			love.graphics.draw(img.indicator, 81, 89 + state.cursor * 16)
+			love.graphics.draw(game_resources.images.indicator, 81, 89 + state.cursor * 16)
 		end
 
 	elseif state.name == "level_editor" then

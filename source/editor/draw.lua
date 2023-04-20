@@ -26,7 +26,7 @@ end
 function draw.boxes()
 	for i = 0, editor.view.height - 16, 16 do
 		for j = 0, editor.view.width - 16, 16 do
-			love.graphics.draw(img.editor_16x16_empty, j, editor.view.y_offset + i)
+			love.graphics.draw(game_resources.imageseditor_16x16_empty, j, editor.view.y_offset + i)
 		end
 	end
 end
@@ -96,15 +96,15 @@ function draw.areaBorder()
 end
 
 function draw.cursor()
-	love.graphics.draw(img.editor_16x16_cursor, editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
+	love.graphics.draw(game_resources.imageseditor_16x16_cursor, editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
 end
 
 function draw.startingPosition()
 	if editor.mode == "normal" then
-		sp = img.editor_sp
+		sp = game_resources.imageseditor_sp
 
 	elseif editor.mode == "start" then
-		sp = img.editor_sp_select
+		sp = game_resources.imageseditor_sp_select
 	end
 
 	local x = world.current_level.start_x - editor.view.x

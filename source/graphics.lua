@@ -22,13 +22,13 @@ end
 
 function graphics.loadWorldImages()
 	graphics.world_images = {
-		[1] = img.lb_world1,
-		[2] = img.lb_world2,
-		[3] = img.lb_world1,
-		[4] = img.lb_world4,
-		[5] = img.lb_world1,
-		[6] = img.lb_world2,
-		[7] = img.lb_world7
+		[1] = game_resources.images.lb_world1,
+		[2] = game_resources.images.lb_world2,
+		[3] = game_resources.images.lb_world1,
+		[4] = game_resources.images.lb_world4,
+		[5] = game_resources.images.lb_world1,
+		[6] = game_resources.images.lb_world2,
+		[7] = game_resources.images.lb_world7
 	}
 end
 
@@ -95,12 +95,12 @@ function graphics.drawTile(id, x, y)
 	local tile_x = (id % 16) * 16
 	local tile_y = math.floor(id / 16) * 16
 
-	local tilemap_width = img.tilemap:getWidth()
-	local tilemap_height = img.tilemap:getHeight()
+	local tilemap_width = game_resources.images.tilemap:getWidth()
+	local tilemap_height = game_resources.images.tilemap:getHeight()
 
 	local tile = love.graphics.newQuad(tile_x, tile_y, 16, 16, tilemap_width, tilemap_height)
 
-	love.graphics.draw(img.tilemap, tile, x, y)
+	love.graphics.draw(game_resources.images.tilemap, tile, x, y)
 end
 
 function graphics.drawLevelTiles()
@@ -212,16 +212,16 @@ function graphics.drawCharacter()
 
 	-- Draw character sprite
 	if character.current == "mario" then
-		char = img.chars_mario
+		char = game_resources.images.chars_mario
 
 	elseif character.current == "luigi" then
-		char = img.chars_luigi
+		char = game_resources.images.chars_luigi
 
 	elseif character.current == "toad" then
-		char = img.chars_toad
+		char = game_resources.images.chars_toad
 
 	elseif character.current == "peach" then
-		char = img.chars_peach
+		char = game_resources.images.chars_peach
 	end
 
 	--TODO: Should we initially generate quads like we generate symbols for fonts?
@@ -240,8 +240,8 @@ function graphics.drawLevelbook()
 	local lb_x = 25
 	local lb_y = 32
 
-	if img.levelbook then
-		love.graphics.draw(img.levelbook, lb_x, lb_y)
+	if game_resources.images.levelbook then
+		love.graphics.draw(game_resources.images.levelbook, lb_x, lb_y)
 	end
 
 	local world_str = string.format("WORLD %d-%d", world.current, world.level)
@@ -263,13 +263,13 @@ function graphics.drawLevelbook()
 		x = lb_indicator_x + ((i - 1) * lb_indicator_spacing)
 		y = lb_indicator_y
 
-		if world.level == i and img.lb_current then
-			if img.lb_current then
-				love.graphics.draw(img.lb_current, x, y)
+		if world.level == i and game_resources.images.lb_current then
+			if game_resources.images.lb_current then
+				love.graphics.draw(game_resources.images.lb_current, x, y)
 			end
 		else
-			if img.lb_other then
-				love.graphics.draw(img.lb_other, x, y)
+			if game_resources.images.lb_other then
+				love.graphics.draw(game_resources.images.lb_other, x, y)
 			end
 		end
 	end

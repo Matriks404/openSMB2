@@ -65,10 +65,10 @@ function world.checkAreaSizeValidity(world_no, level_no, area_no)
 end
 
 function world.isGoodLevel(directory)
-	print("Level correctness check for level in `"..directory.."` directory")
+	print("Validity check for level in '"..directory.."' directory")
 
 	if not love.filesystem.getInfo(directory) then
-		print("\tNo level directory!")
+		print("\tError: No level directory!")
 
 		return false
 	end
@@ -76,7 +76,7 @@ function world.isGoodLevel(directory)
 	local level_settings_file = directory.."settings.lua"
 
 	if not love.filesystem.getInfo(level_settings_file) then
-		print("\tNo level settings file!")
+		print("\tError: No level settings file!")
 
 		return false
 	end
@@ -85,7 +85,7 @@ function world.isGoodLevel(directory)
 	local level_settings = TSerial.unpack(level_settings_data)
 
 	if not level_settings then
-		print("\tInvalid level settings file!")
+		print("\tError: Invalid level settings file!")
 		return false
 	end
 
@@ -94,19 +94,19 @@ function world.isGoodLevel(directory)
 	local start_y = level_settings[3]
 
 	if not data.isGoodInteger(area_count, 1) then
-		print("\tInvalid area count: "..area_count)
+		print("\tError: Invalid area count: "..area_count)
 
 		return false
 	end
 
 	if not data.isGoodInteger(start_x, 0) then
-		print("\tInvalid starting X position: "..start_x)
+		print("\tError: Invalid starting X position: "..start_x)
 
 		return false
 	end
 
 	if not data.isGoodInteger(start_y, 0) then
-		print("\tInvalid starting Y position: "..start_y)
+		print("\tError: Invalid starting Y position: "..start_y)
 
 		return false
 	end
@@ -115,7 +115,7 @@ function world.isGoodLevel(directory)
 		local index = 4 + i
 
 		if not level_settings[index] then
-			print("\tNo settings for expected area "..i)
+			print("\tError: No settings for expected area "..i)
 
 			return false
 		end
@@ -129,19 +129,19 @@ function world.isGoodLevel(directory)
 		local music_track = area_settings[5]
 
 		if not type then
-			print("\tType is not defined for area "..i)
+			print("\tError: Type is not defined for area "..i)
 
 			return false
 		end
 
 		if not world.types[type] then
-			print("\tType '"..type.."' is not valid for area "..i)
+			print("\tError: Type '"..type.."' is not valid for area "..i)
 
 			return false
 		end
 
 		if not data.isGoodDivisibleInteger(width, 16, 16) or not world.isValidAreaWidth(type, width) then
-			print("\tArea width "..width.." is not valid for area "..i)
+			print("\tError: Area width "..width.." is not valid for area "..i)
 
 			return false
 		end
@@ -149,13 +149,13 @@ function world.isGoodLevel(directory)
 		if i == 0 and start_x >= width then
 			local max = width - 1
 
-			print("\tStarting X position "..start_x.." is bigger than maximum "..max.." for area "..i)
+			print("\tError: Starting X position "..start_x.." is bigger than maximum "..max.." for area "..i)
 
 			return false
 		end
 
 		if not data.isGoodDivisibleInteger(height, 16, 16) or not world.isValidAreaHeight(type, height) then
-			print("\tArea height "..height.." is not valid for area "..i)
+			print("\tError: Area height "..height.." is not valid for area "..i)
 
 			return false
 		end
@@ -163,31 +163,31 @@ function world.isGoodLevel(directory)
 		if i == 0 and start_y >= height then
 			local max = height - 1
 
-			print("\tStarting Y position "..start_y.." is bigger than maximum "..max.." for area "..i)
+			print("\tError: Starting Y position "..start_y.." is bigger than maximum "..max.." for area "..i)
 
 			return false
 		end
 
 		if not background then
-			print("\tBackground is not defined for area "..i)
+			print("\tError: Background is not defined for area "..i)
 
 			return false
 		end
 
 		if not graphics.bg[background] then
-			print("\tBackground '"..background.."' is not valid for area "..i)
+			print("\tError: Background '"..background.."' is not valid for area "..i)
 
 			return false
 		end
 
 		if not music then
-			print("\tMusic is not defined for area "..i)
+			print("\tError: Music is not defined for area "..i)
 
 			return false
 		end
 
 		if not music.m[music_track] then
-			print("\tMusic '"..music_track.."' is not valid for area "..i)
+			print("\tError: Music '"..music_track.."' is not valid for area "..i)
 
 			return false
 		end
@@ -195,7 +195,7 @@ function world.isGoodLevel(directory)
 		local area_file_info = love.filesystem.getInfo(directory..i)
 
 		if not area_file_info then
-			print("\tNo file for area "..i)
+			print("\tError: No file for area "..i)
 
 			return false
 		end
@@ -204,13 +204,13 @@ function world.isGoodLevel(directory)
 		local expected_size = (width / 16) * (height / 16)
 
 		if size ~= expected_size then
-			print("\tInvalid file size for area "..i..", expected: "..expected_size.." B, got: "..size.." B")
+			print("\tError: Invalid file size for area "..i..", expected: "..expected_size.." B, got: "..size.." B")
 
 			return false
 		end
 	end
 
-	print("\tEverything is OK!")
+	print("\tInfo: Everything is OK!")
 	return true
 end
 
@@ -281,7 +281,7 @@ function world.load(world_no, level_no, area_no)
 		return
 	end
 
-	print("\nLoading level from `"..level_directory.."` directory")
+	print("\nLoading level from '"..level_directory.."'' directory")
 
 	world.loadLevel(world_no, level_no, level_directory)
 

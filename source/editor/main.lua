@@ -1,5 +1,7 @@
 local editor = {}
 
+editor.img = {}
+
 editor.check = require "source/editor/check"
 editor.draw = require "source/editor/draw"
 editor.view = require "source/editor/view"
@@ -18,6 +20,17 @@ editor.modes = {
 -- Editor cursor coordinates
 editor.cursor_x = 0
 editor.cursor_y = 0
+
+function editor.loadImages()
+	local directory = "resources/images/leveleditor/"
+
+	-- Mandatory, but expected
+	editor.img["16x16_empty"] = resources.loadImage(directory.."16x16.png")
+	editor.img["16x16_cursor"] = resources.loadImage(directory.."16x16_cursor.png")
+	editor.img["sp"] = resources.loadImage(directory.."starting_point.png")
+	editor.img["sp_select"] = resources.loadImage(directory.."starting_point_select.png")
+	--editor.img["border_arrow"] = resources.loadImage(directory.."border_arrow.png")
+end
 
 function editor.reset()
 	editor.option = "select"
