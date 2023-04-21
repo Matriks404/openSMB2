@@ -67,7 +67,14 @@ function launcher.getGamePack(directory)
 	end
 
 	local settings_file = love.filesystem.read(settings_file_path)
-	local settings = TSerial.unpack(settings_file)
+	local success, settings = pcall(TSerial.unpack, settings_file)
+
+	if not success then
+		print("\tError: Gamepack settings file is invalid!")
+
+		return gamepack
+	end
+
 	gamepack.name = settings[1]
 
 	if not gamepack.name or gamepack.name == "" then
