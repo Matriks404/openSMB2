@@ -270,9 +270,9 @@ function love.draw()
 
 		if game.title_text then
 			for i = 1, #game.title_text do
-				local x = game.title_text[i][1]
-				local y = game.title_text[i][2]
-				local str = game.title_text[i][3]
+				local x = game.title_text[i]["x"]
+				local y = game.title_text[i]["y"]
+				local str = game.title_text[i]["string"]
 
 				graphics.drawText(str, x, y)
 			end

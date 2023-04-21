@@ -75,19 +75,19 @@ function launcher.getGamePack(directory)
 		return gamepack
 	end
 
-	gamepack.name = settings[1]
+	gamepack.name = settings["name"]
 
 	if not gamepack.name or gamepack.name == "" then
 		print("\tWarning: Gamepack name is not specified.")
 	end
 
-	gamepack.version = settings[2]
+	gamepack.version = settings["version"]
 
 	if not gamepack.version or gamepack.version == "" then
 		print("\tWarning: Gamepack version is not specified.")
 	end
 
-	gamepack.manifest_version = settings[3]
+	gamepack.manifest_version = settings["manifest_version"]
 
 	if gamepack.manifest_version ~= "0" then
 		print("\tError: Invalid gamepack manifest version.")
@@ -95,7 +95,7 @@ function launcher.getGamePack(directory)
 		return gamepack
 	end
 
-	gamepack.default_levelpack = settings[4]
+	gamepack.default_levelpack = settings["default_levelpack"]
 
 	if not gamepack.default_levelpack or gamepack.default_levelpack == "" or not utils.stringEndsWith(gamepack.default_levelpack, ".lp") then
 		print("\tError: Invalid default levelpack directory name!")
@@ -111,7 +111,7 @@ function launcher.getGamePack(directory)
 		return gamepack
 	end
 
-	gamepack.font1 = settings[5][1]
+	gamepack.font1 = settings["fonts"][1]
 
 	if not gamepack.font1 or gamepack.font1 == "" then
 		print("\tError: Invalid primary font name!")
@@ -127,7 +127,7 @@ function launcher.getGamePack(directory)
 		return gamepack
 	end
 
-	gamepack.font2 = settings[5][2]
+	gamepack.font2 = settings["fonts"][2]
 
 	if gamepack.font2 and gamepack.font2 ~= "" then
 		local font2_file = directory.."/resources/images/font/"..gamepack.font2..".png"
@@ -137,7 +137,7 @@ function launcher.getGamePack(directory)
 		end
 	end
 
-	gamepack.title_text = settings[6]
+	gamepack.title_text = settings["title_text"]
 
 	if not launcher.validGamePackResources(directory.."/resources/") then
 		print("\tError: Invalid game pack resources!")
