@@ -55,16 +55,16 @@ function check.startingPositionBounds()
 		level.start_x = 0
 	end
 
-	if level.start_x >= level[0].width then
-		level.start_x = level[0].width - 1
+	if level.start_x >= level[1].width then
+		level.start_x = level[1].width - 1
 	end
 
 	if level.start_y < 0 then
 		level.start_y = 0
 	end
 
-	if level.start_y >= level[0].height then
-		level.start_y = level[0].height - 1
+	if level.start_y >= level[1].height then
+		level.start_y = level[1].height - 1
 	end
 end
 

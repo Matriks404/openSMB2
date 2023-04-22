@@ -68,7 +68,7 @@ function editor.playLevel()
 		character.reset()
 
 		state.name = "character_select"
-		world.area = 0
+		world.area = 1
 
 		window.resizable = false
 		window.update()
@@ -78,7 +78,9 @@ function editor.playLevel()
 end
 
 function editor.removeArea(area)
-	if level.area_count == 1 then
+	local level = world.current_level
+
+	if #level == 1 then
 		local msgbox_name = "Removing area "..world.area
 		local msgbox_msg = "You can't remove the last area from the level!"
 
@@ -97,8 +99,6 @@ function editor.removeArea(area)
 		return
 	end
 
-	local level = world.current_level
-
 	print("Removing area "..world.area)
 
 	level[world.area] = {}
@@ -109,17 +109,16 @@ function editor.removeArea(area)
 		level.start_y = 0
 	end
 
-	for i = world.area, level.area_count - 2 do
+	for i = world.area, #level - 1 do
 		level[i] = level[i + 1]
 		level[i].modified = true
 	end
 
-	level.area_count = level.area_count - 1
-
-	if world.area >= level.area_count then
+	if world.area >= #level then
 		world.area = world.area - 1
 	end
 
+	level[#level] = nil
 	level.modified = true
 
 	editor.goToArea(world.current, world.level, world.area)
@@ -145,7 +144,7 @@ function editor.addArea()
 
 	print("Adding new area "..new_area)
 
-	for i = level.area_count - 1, new_area, -1 do
+	for i = #level, new_area, -1 do
 		level[i + 1] = level[i]
 		level[i + 1].modified = true
 	end
@@ -168,8 +167,6 @@ function editor.addArea()
 	end
 
 	area.modified = true
-
-	level.area_count = level.area_count + 1
 	level.modified = true
 
 	editor.goToArea(world.current, world.level, new_area)
@@ -188,27 +185,31 @@ function editor.goToArea(world_no, level_no, area_no)
 end
 
 function editor.goToPreviousArea()
-	if world.area > 0 then
-		world.area = world.area - 1
-	else
-		world.area = world.current_level.area_count - 1
-	end
+	if #world.current_level > 1 then
+		if world.area > 1 then
+			world.area = world.area - 1
+		else
+			world.area = #world.current_level
+		end
 
-	editor.goToArea(world.current, world.level, world.area)
+		editor.goToArea(world.current, world.level, world.area)
+	end
 end
 
 function editor.goToNextArea()
-	if world.area < world.current_level.area_count - 1 then
-		world.area = world.area + 1
-	else
-		world.area = 0
-	end
+	if #world.current_level > 1 then
+		if world.area < #world.current_level then
+			world.area = world.area + 1
+		else
+			world.area = 1
+		end
 
-	editor.goToArea(world.current, world.level, world.area)
+		editor.goToArea(world.current, world.level, world.area)
+	end
 end
 
 function editor.changeMode()
-	if world.area == 0 and editor.mode == "normal" then
+	if world.area == 1 and editor.mode == "normal" then
 		editor.mode = "start"
 	else
 		editor.mode = "normal"
@@ -238,7 +239,7 @@ function editor.quit()
 
 	graphics.setBackgroundColor("black")
 
-	music.stopAll()
+	game_resources.music.stopAll()
 end
 
 function editor.quitToDebugMenu()
@@ -306,7 +307,7 @@ function editor.updateMusic()
 		world.current_area.music = "overworld"
 	end
 
-	music.play(world.current_area.music)
+	game_resources.music.play(world.current_area.music)
 
 	world.current_level.modified = true
 end

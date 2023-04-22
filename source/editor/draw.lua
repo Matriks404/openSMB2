@@ -26,7 +26,7 @@ end
 function draw.boxes()
 	for i = 0, editor.view.height - 16, 16 do
 		for j = 0, editor.view.width - 16, 16 do
-			love.graphics.draw(game_resources.imageseditor_16x16_empty, j, editor.view.y_offset + i)
+			love.graphics.draw(editor.img["16x16_empty"], j, editor.view.y_offset + i)
 		end
 	end
 end
@@ -96,15 +96,15 @@ function draw.areaBorder()
 end
 
 function draw.cursor()
-	love.graphics.draw(game_resources.imageseditor_16x16_cursor, editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
+	love.graphics.draw(editor.img["16x16_cursor"], editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
 end
 
 function draw.startingPosition()
 	if editor.mode == "normal" then
-		sp = game_resources.imageseditor_sp
+		sp = editor.img["sp"]
 
 	elseif editor.mode == "start" then
-		sp = game_resources.imageseditor_sp_select
+		sp = editor.img["sp_select"]
 	end
 
 	local x = world.current_level.start_x - editor.view.x
@@ -139,7 +139,7 @@ function draw.levelEditor()
 
 	-- Draw background and music indicators
 	graphics.drawText("B-"..graphics.bg[area.background].short_name, 2, 10)
-	graphics.drawText("M-"..music.m[area.music].short_name, 2, 18)
+	graphics.drawText("M-"..game_resources.music.m[area.music].short_name, 2, 18)
 
 	-- Draw width and height values
 	font = (area.valid_width and game.font1) or game.font2
@@ -176,7 +176,7 @@ function draw.levelEditor()
 		draw.cursor()
 	end
 
-	if world.area == 0 then
+	if world.area == 1 then
 		draw.startingPosition()
 	end
 end

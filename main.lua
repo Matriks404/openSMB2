@@ -64,10 +64,10 @@ function love.update()
 				state.transitionClear()
 
 				-- Chosen character is one that was selected previously by cursor
-				if state.cursor == 0 then     character.current = "mario"
-				elseif state.cursor == 1 then character.current = "luigi"
-				elseif state.cursor == 2 then character.current = "toad"
-				elseif state.cursor == 3 then character.current = "peach"
+				if state.cursor == 0 then     character.current = "char1"
+				elseif state.cursor == 1 then character.current = "char2"
+				elseif state.cursor == 2 then character.current = "char3"
+				elseif state.cursor == 3 then character.current = "char4"
 				end
 			end
 		end
@@ -199,7 +199,7 @@ function love.update()
 			end
 
 			-- Character falling (slower for Luigi) --TEMPORARY
-			if character.current == "luigi" then
+			if character.current == "char2" then
 				character.pos_y = character.pos_y + 2.5
 			else
 				character.pos_y = character.pos_y + 3
@@ -209,8 +209,11 @@ function love.update()
 			-- Deplate energy and play death sound
 				character.energy = 0
 
-				music.stopAll()
-				game_resources.sound.sfx_death:play()
+				game_resources.music.stopAll()
+
+				if game_resources.sound.sfx_death then
+					game_resources.sound.sfx_death:play()
+				end
 			end
 
 			if character.dying_timer == 84 then
@@ -233,7 +236,9 @@ function love.update()
 					state.name = "death"
 				else
 				-- No more lifes, go to game over screen
-					game_resources.sound.sfx_game_over:play()
+					if game_resources.sound.sfx_game_over then
+						game_resources.sound.sfx_game_over:play()
+					end
 
 					state.cursor = (character.continues > 0 and 0) or 1
 
@@ -399,15 +404,17 @@ function love.draw()
 
 		if state.timer > 146 then
 		-- Draw everything else
-			if state.timer == 147 then
+			if state.timer == 147 and game_resources.sound.sfx_fall then
 				game_resources.sound.sfx_fall:play() -- Play falling sound
 			end
 
-			for i = 1, character.energy_bars do
-			-- Draw energy bars
-				local gp = (i <= character.energy and game_resources.images.gp_filled) or game_resources.images.gp_empty
+			if game_resources.images.gp_empty and game_resources.images.gp_filled then
+				for i = 1, character.energy_bars do
+				-- Draw energy bars
+					local gp = (i <= character.energy and game_resources.images.gp_filled) or game_resources.images.gp_empty
 
-				love.graphics.draw(gp, 12, 48 + ((i - 1) * 16))
+					love.graphics.draw(gp, 12, 48 + ((i - 1) * 16))
+				end
 			end
 
 			graphics.drawCharacter() -- Draw character on screen
@@ -445,7 +452,7 @@ function love.draw()
 			state.name = "gameplay"
 			state.timer = 0
 
-			music.play(world.current_area.music)
+			game_resources.music.play(world.current_area.music)
 		end
 
 	elseif state.name == "game_over" then

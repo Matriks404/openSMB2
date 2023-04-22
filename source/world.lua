@@ -16,13 +16,14 @@ world.defaults = { type = "horizontal", width = 160, height = 160, background = 
 function world.reset()
 	world.current = 1
 	world.level = 1
-	world.area = 0
+	world.area = 1
 end
 
 function world.getLevelDirectory(world_no, level_no, directory)
 	local world_level_str = string.format("%d-%d", world_no, level_no)
 
-	return directory.."/"..world_level_str.."/"
+	--TODO: This is a hack, reimplement stuff with levelpacks code.
+	return game.directory.."/"..directory.."/"..world_level_str.."/"
 end
 
 function world.isValidAreaWidth(type, width)
@@ -89,15 +90,8 @@ function world.isGoodLevel(directory)
 		return false
 	end
 
-	local area_count = level_settings[1]
-	local start_x = level_settings[2]
-	local start_y = level_settings[3]
-
-	if not data.isGoodInteger(area_count, 1) then
-		print("\tError: Invalid area count: "..area_count)
-
-		return false
-	end
+	local start_x = level_settings.start.x
+	local start_y = level_settings.start.y
 
 	if not data.isGoodInteger(start_x, 0) then
 		print("\tError: Invalid starting X position: "..start_x)
@@ -111,22 +105,16 @@ function world.isGoodLevel(directory)
 		return false
 	end
 
-	for i = 0, area_count - 1 do
-		local index = 4 + i
+	local areas = level_settings.areas
 
-		if not level_settings[index] then
-			print("\tError: No settings for expected area "..i)
+	for i = 1, #areas do
+		local area_settings = areas[i]
 
-			return false
-		end
-
-		local area_settings = level_settings[index]
-
-		local type = area_settings[1]
-		local width = area_settings[2]
-		local height = area_settings[3]
-		local background = area_settings[4]
-		local music_track = area_settings[5]
+		local type = area_settings.type
+		local width = area_settings.width
+		local height = area_settings.height
+		local background = area_settings.background
+		local music_track = area_settings.music
 
 		if not type then
 			print("\tError: Type is not defined for area "..i)
@@ -180,13 +168,13 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		if not music then
+		if not music_track then
 			print("\tError: Music is not defined for area "..i)
 
 			return false
 		end
 
-		if not music.m[music_track] then
+		if not game_resources.music.m[music_track] then
 			print("\tError: Music '"..music_track.."' is not valid for area "..i)
 
 			return false
@@ -238,11 +226,11 @@ function world.enter(world_no, level_no, area_no)
 		return
 	end
 
-	local area_no = area_no or 0
+	local area_no = area_no or 1
 
 	world.update(world_no, level_no, area_no)
 
-	music.play(world[world_no][level_no][area_no].music)
+	game_resources.music.play(world[world_no][level_no][area_no].music)
 
 	-- Check level background and set it
 	graphics.setBackgroundColor(world.current_area.background)
@@ -257,7 +245,7 @@ function world.isLevelModified(world_no, level_no)
 		return true
 	end
 
-	for area = 0, level.area_count - 1 do
+	for area = 1, #level do
 		if level[area].modified then
 			return true
 		end
@@ -292,7 +280,7 @@ function world.load(world_no, level_no, area_no)
 	else
 		print("Loading all areas from level "..world_no.."-"..level_no)
 
-		for area = 0, world[world_no][level_no].area_count - 1 do
+		for area = 1, #world[world_no][level_no] do
 			world.loadArea(world_no, level_no, area, level_directory)
 		end
 	end
@@ -301,7 +289,7 @@ end
 function world.save(world_no, level_no)
 	local level = world[world_no][level_no]
 
-	for area = 0, level.area_count - 1 do
+	for area = 1, #level do
 		world.checkAreaSizeValidity(world_no, level_no, area)
 
 		if not level[area].valid_size then
@@ -325,7 +313,7 @@ function world.save(world_no, level_no)
 	world.saveLevel(world_no, level_no, level_directory)
 
 	-- Remove unneeded areas
-	local file_no = level.area_count
+	local file_no = #level + 1
 
 	while (true) do
 		local area = level_directory.."/"..file_no
@@ -339,7 +327,7 @@ function world.save(world_no, level_no)
 		file_no = file_no + 1
 	end
 
-	for area = 0, level.area_count - 1 do
+	for area = 1, #level do
 		if level[area].modified or not love.filesystem.getInfo(level_directory..tostring(area)) then
 			print("Saving area "..area)
 
@@ -357,21 +345,13 @@ function world.loadLevel(world_no, level_no, level_directory)
 	local level_settings_file = love.filesystem.read(level_directory.."settings.lua")
 	local level_settings = TSerial.unpack(level_settings_file)
 
-	level.area_count = level_settings[1]
-	level.start_x = level_settings[2]
-	level.start_y = level_settings[3]
+	level.start_x = level_settings.start.x
+	level.start_y = level_settings.start.y
 
-	for i = 0, level.area_count - 1 do
-		local area_settings = level_settings[4 + i]
+	local areas = level_settings.areas
 
-		level[i] = {}
-		area = world[world_no][level_no][i]
-
-		area.type = area_settings[1]
-		area.width = area_settings[2]
-		area.height = area_settings[3]
-		area.background = area_settings[4]
-		area.music = area_settings[5]
+	for i = 1, #areas do
+		level[i] = areas[i]
 	end
 end
 
@@ -404,15 +384,31 @@ function world.saveLevel(world_no, level_no, level_directory)
 	level = world[world_no][level_no]
 
 	local level_settings_file = level_directory.."settings.lua"
-	local data = { level.area_count, level.start_x, level.start_y}
 
-	for i = 0, level.area_count - 1 do
+	local area_data = {}
+
+	for i = 1, #level do
 		area = level[i]
-		table.insert(data, {area.type, area.width, area.height, area.background, area.music })
+
+		table.insert(area_data, {
+			type = area.type,
+			width = area.width,
+			height = area.height,
+			background = area.background,
+			music = area.music
+		})
 	end
 
-	data = TSerial.pack(data, false, true)
+	local data = {
+		start = {
+			x = level.start_x,
+			y = level.start_y
+		},
 
+		areas = area_data
+	}
+
+	data = TSerial.pack(data, false, true)
 	love.filesystem.write(level_settings_file, data)
 end
 

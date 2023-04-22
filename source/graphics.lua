@@ -177,7 +177,7 @@ function graphics.drawCharacter()
 
 			state.char_anim_timer = 0
 		end
-	elseif character.current == "luigi" and character.state == "falling" then
+	elseif character.current == "char2" and character.state == "falling" then
 	-- Calculate sprite if character is Luigi and falling
 		if state.char_anim_timer >= 6 then
 			state.char_anim_timer = 0
@@ -211,17 +211,17 @@ function graphics.drawCharacter()
 	local char
 
 	-- Draw character sprite
-	if character.current == "mario" then
-		char = game_resources.images.chars_mario
+	if character.current == "char1" then
+		char = game_resources.images.char1
 
-	elseif character.current == "luigi" then
-		char = game_resources.images.chars_luigi
+	elseif character.current == "char2" then
+		char = game_resources.images.char2
 
-	elseif character.current == "toad" then
-		char = game_resources.images.chars_toad
+	elseif character.current == "char3" then
+		char = game_resources.images.char3
 
-	elseif character.current == "peach" then
-		char = game_resources.images.chars_peach
+	elseif character.current == "char4" then
+		char = game_resources.images.char4
 	end
 
 	--TODO: Should we initially generate quads like we generate symbols for fonts?

@@ -6,7 +6,7 @@ function game.load(id)
 	game.directory = gamepack.directory
 	game.name = gamepack.name
 	game.version = gamepack.version
-	game.levelpack = gamepack.default_levelpack
+	--game.levelpack = gamepack.default_levelpack --TODO: Implement levelpacks.
 	game.font1 = gamepack.font1
 	game.font2 = gamepack.font2
 	game.title_text = gamepack.title_text
@@ -19,6 +19,8 @@ function game.load(id)
 	editor.loadImages()
 
 	state.name = "title"
+	state.timer = 0
+
 	game_resources.music.play("title")
 	graphics.setBackgroundColor("blue")
 end

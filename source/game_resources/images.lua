@@ -63,9 +63,9 @@ function images.loadCharacters(directory)
 
 	-- Mandatory
 	images.char1 = resources.loadImage(directory.."char1.png", true)
-	images.char2 = resources.loadImage(directory.."char1.png", true)
-	images.char3 = resources.loadImage(directory.."char1.png", true)
-	images.char4 = resources.loadImage(directory.."char1.png", true)
+	images.char2 = resources.loadImage(directory.."char2.png", true)
+	images.char3 = resources.loadImage(directory.."char3.png", true)
+	images.char4 = resources.loadImage(directory.."char4.png", true)
 end
 
 function images.loadGameplay(directory)

@@ -12,7 +12,7 @@ character.speed = 0
 character.accel = 0 -- Character acceleration
 
 function character.reset()
-	character.current = "mario" -- Character (mario, luigi, toad, peach)
+	character.current = "char1" -- Character (char1, char2, char3, char4)
 	character.continues = 2
 	character.lives = 3
 	character.energy = 2

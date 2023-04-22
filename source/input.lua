@@ -109,7 +109,7 @@ function input.check(key)
 		-- Die!
 			character.dying_timer = 84
 
-			music.stopAll()
+			game_resources.music.stopAll()
 		end
 
 	elseif state.name == "pause" then
@@ -143,7 +143,7 @@ function input.check(key)
 				state.timer = 0
 				state.name = "title"
 
-				music.play("title")
+				game_resources.music.play("title")
 			end
 		end
 
