@@ -15,7 +15,7 @@ launcher.selection = 1
 launcher.gamepacks = {}
 
 function launcher.load()
-	launcher.loadFont()
+	launcher.loadFonts()
 	launcher.loadImages()
 
 	launcher.loadGamePackList()
@@ -23,10 +23,11 @@ function launcher.load()
 	state.name = "launcher"
 end
 
-function launcher.loadFont()
+function launcher.loadFonts()
 	directory = "resources/images/font/"
 
 	font.loadSymbols(directory, "dogica")
+	font.loadSymbols(directory, "dogica_bold")
 end
 
 function launcher.loadImages()
@@ -193,32 +194,36 @@ function launcher.goToNext()
 end
 
 function launcher.runGame(id)
-	if launcher.gamepacks[id].valid then
-		game.load(id)
-	else
-		love.window.showMessageBox("Error", "Selected gamepack is not valid! Check the console for details.")
+	if #launcher.gamepacks >=1 then
+		if launcher.gamepacks[id].valid then
+			game.load(id)
+		else
+			love.window.showMessageBox("Error", "Selected gamepack is not valid! Check the console for details.")
+		end
 	end
 end
 
 function launcher.draw()
-	graphics.drawText("openSMB2 Launcher", 16, 16, "dogica")
+	graphics.drawText("openSMB2 Launcher", 56, 16, "dogica_bold")
 
 	if next(launcher.gamepacks) == nil then
-		graphics.drawText("There are no games installed", 8, 48, "dogica")
-		graphics.drawText("in your user directory.", 8, 60, "dogica")
+		graphics.drawText("There are no games installed", 8, 56, "dogica_bold")
+		graphics.drawText("in your user directory.", 8, 68, "dogica_bold")
 
-		graphics.drawText("Check instructions here:", 8, 92, "dogica")
-		graphics.drawText("github.com/Matriks404/openSMB2", 8, 108, "dogica")
-		graphics.drawText("to get games installed.", 8, 124, "dogica")
+		graphics.drawText("Check instructions on", 8, 100, "dogica_bold")
+		graphics.drawText("github.com/Matriks404/openSMB2", 8, 112, "dogica_bold")
+		graphics.drawText("to get games installed.", 8, 124, "dogica_bold")
 
 		return
 	end
 
-	graphics.drawText(">", 8, ((launcher.selection - 1) * 16) + 48, "dogica")
-
-	local x, y = 24, 48
+	local x, y = 24, 56
 
 	for key in pairs(launcher.gamepacks) do
+		if key == launcher.selection then
+			graphics.drawText(">", 8, y, "dogica_bold")
+		end
+
 		local game_name = launcher.gamepacks[key].name
 
 		if not game_name or game_name == "" then
@@ -227,14 +232,27 @@ function launcher.draw()
 			game_name = string.sub(game_name, 1, 21).."..."
 		end
 
-		graphics.drawText(game_name, x, y, "dogica")
+		graphics.drawText(game_name, x, y, "dogica_bold")
 
 		local valid = launcher.gamepacks[key].valid
 		local img = (valid and launcher.img["gp_good"]) or launcher.img["gp_bad"]
 
-		love.graphics.draw(img, x + 200, y)
+		love.graphics.draw(img, x + 208, y)
 
-		y = y + 16
+		local gamepack_directory_name = string.sub(launcher.gamepacks[key].directory, 7)
+		local gamepack_version = launcher.gamepacks[key].version
+
+		local bottom_string
+
+		if #gamepack_directory_name + #gamepack_version >= 21 then
+			bottom_string = string.sub(gamepack_directory_name, 1, 14).."... (v"..gamepack_version..")"
+		else
+			bottom_string = gamepack_directory_name.." (v"..gamepack_version..")"
+		end
+
+		graphics.drawText(bottom_string, x, y + 12, "dogica")
+
+		y = y + 32
 	end
 
 end
