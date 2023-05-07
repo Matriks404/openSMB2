@@ -1,8 +1,5 @@
 local state = {}
 
--- Game state (launcher, title, intro, character_select, level_intro, gameplay, pause, death, game_over, editor, debug)
-state.name = "launcher"
-
 -- Timers
 state.timer = 0
 state.backup_timer = 0
@@ -18,14 +15,36 @@ state.cursor = 0 -- Menu cursor
 state.screen_x = 0
 state.screen_y = 0
 
---TODO
-function state.set(name)
-	-- ...
-end
+state.s = {
+	["launcher"] = { bg = "black", music = nil },
+	["title"] = { bg = "blue", music = "title" },
+	["intro"] = { bg = "blue", music = "title" },
+	["character_select"] = { bg = "black", music = "character_select" },
+	["level_intro"] = { bg = "black", music = nil },
+	["gameplay"] = { bg = "OVERRIDE", music = "OVERRIDE" },
+	["pause"] = { bg = "black", music = "OVERRIDE" },
+	["death"] = { bg = "black", music = nil },
+	["game_over"] = { bg = "black", music = nil },
+	["level_editor"] = { bg = "black", music = nil },
+}
 
-function state.resetGame()
-	world.reset()
-	character.reset()
+function state.set(name)
+	state.name = name
+	state.timer = 0
+
+	local s = state.s[name]
+
+	if s.bg ~= "OVERRIDE" then
+		graphics.setBackgroundColor(s.bg)
+	end
+
+	if s.music then
+		if s.music and s.music ~= "OVERRIDE" then
+			game_resources.music.play(s.music)
+		end
+	else
+		game_resources.music.stopAll()
+	end
 end
 
 function state.verticalScreenTransition()

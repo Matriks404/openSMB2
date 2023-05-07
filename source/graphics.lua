@@ -16,8 +16,6 @@ graphics.tile_size = 16
 
 function graphics.init()
 	love.graphics.setDefaultFilter("nearest")
-
-	graphics.setBackgroundColor("black")
 end
 
 function graphics.loadWorldImages()
@@ -53,14 +51,20 @@ function graphics.scaleUp()
 end
 
 function graphics.setBackgroundColor(color)
-	if graphics.current_bg ~= color then
-		local color = graphics.bg[color]
-		local r, g, b = color.r, color.g, color.b
+	if graphics.bg[color] then
+		if graphics.current_bg ~= color then
+			local color = graphics.bg[color]
+			local r, g, b = color.r, color.g, color.b
 
-		love.graphics.setBackgroundColor(r, g, b)
+			love.graphics.setBackgroundColor(r, g, b)
+		end
+
+		graphics.current_bg = color
+	else
+		love.graphics.setBackgroundColor(0, 0, 0)
+
+		graphics.current_bg = "black"
 	end
-
-	graphics.current_bg = color
 end
 
 function graphics.drawText(str, x, y, font_id)

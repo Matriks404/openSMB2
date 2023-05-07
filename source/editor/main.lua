@@ -67,13 +67,11 @@ function editor.playLevel()
 	if world[world.current][world.level][world.area].valid_size then
 		character.reset()
 
-		state.name = "character_select"
+		state.set("character_select")
 		world.area = 1
 
 		window.resizable = false
 		window.update()
-
-		graphics.setBackgroundColor("black")
 	end
 end
 
@@ -238,15 +236,11 @@ function editor.quit()
 	window.update()
 
 	graphics.setBackgroundColor("black")
-
 	game_resources.music.stopAll()
 end
 
-function editor.quitToDebugMenu()
-	state.name = "debug"
-	state.timer = 0
-
-	graphics.setBackgroundColor("blue")
+function editor.quitToTitleScreen()
+	state.set("title")
 end
 
 

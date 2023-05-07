@@ -20,7 +20,7 @@ function launcher.load()
 
 	launcher.loadGamePackList()
 
-	state.name = "launcher"
+	state.set("launcher")
 end
 
 function launcher.loadFonts()

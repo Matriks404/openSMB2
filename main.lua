@@ -23,22 +23,18 @@ function love.update()
 	state.timer = state.timer + 1
 
 	if state.name == "title" then
-	-- Title screen stuff
 		-- After some time go to intro story
 		if state.timer == 500 then
-			state.name = "intro"
-			state.timer = 0
+			state.set("intro")
 		end
 
 	elseif state.name == "intro" then
-	-- Intro story stuff
 		if state.transition then
 			state.transition_timer = state.transition_timer + 1
 
 			-- After some time after showing 2nd story page go to title screen again
 			if state.transition_timer == 442 then
-				state.name = "title"
-				state.timer = 0
+				state.set("title")
 				state.text_timer = 0
 
 				game_resources.story.lines = 0
@@ -49,18 +45,12 @@ function love.update()
 		end
 
 	elseif state.name == "character_select" then
-	-- Character select stuff
-		game_resources.music.play("character_select")
-
 		if state.transition then
 			state.transition_timer = state.transition_timer + 1
 
 			-- After some time after chosing character go to levelbook screen
 			if state.transition_timer == 136 then
-				state.name = "level_intro"
-				state.timer = 0
-
-				game_resources.music.stopAll()
+				state.set("level_intro")
 				state.transitionClear()
 
 				-- Chosen character is one that was selected previously by cursor
@@ -73,10 +63,8 @@ function love.update()
 		end
 
 	elseif state.name == "level_intro" then
-	-- Levelbook stuff
 		if state.timer == 94 then
-			state.name = "gameplay"
-			state.timer = 0
+			state.set("gameplay")
 
 			world.enter(world.current, world.level, world.area)
 
@@ -88,7 +76,6 @@ function love.update()
 		end
 
 	elseif state.name == "gameplay" then
-	-- Gameplay stuff
 		if state.screen_y == 0 and character.pos_y > 192 then
 		-- When on first screen, switching vertical screen downwards
 			state.screen_dir = 1
@@ -218,7 +205,6 @@ function love.update()
 
 			if character.dying_timer == 84 then
 			-- Die!
-				state.timer = 0
 				character.dying_timer = 0
 
 				character.lives = character.lives - 1 -- Decrement a life
@@ -233,7 +219,7 @@ function love.update()
 					character.pos_y = world.current_level.start_y
 					character.side = 1
 
-					state.name = "death"
+					state.set("death")
 				else
 				-- No more lifes, go to game over screen
 					if game_resources.sound.sfx_game_over then
@@ -242,7 +228,7 @@ function love.update()
 
 					state.cursor = (character.continues > 0 and 0) or 1
 
-					state.name = "game_over"
+					state.set("game_over")
 				end
 			end
 		end
@@ -284,7 +270,6 @@ function love.draw()
 		end
 
 	elseif state.name == "intro" then
-	-- Draw intro story stuff
 		if state.timer > 34 then
 			graphics.drawText("STORY", 112, 40)
 
@@ -316,7 +301,6 @@ function love.draw()
 		end
 
 	elseif state.name == "character_select" then
-	-- Draw character select screen stuff
 		if game_resources.images.cs_border then
 			love.graphics.draw(game_resources.images.cs_border, 0, 0)
 		end
@@ -397,8 +381,6 @@ function love.draw()
 		graphics.drawWorldImage() -- Draw world image
 
 	elseif state.name == "gameplay" then
-	-- Draw gameplay stuff
-
 		if state.timer > 144 then graphics.drawLevelTiles() -- Draw level tiles
 		end
 
@@ -423,7 +405,6 @@ function love.draw()
 		end
 
 	elseif state.name == "pause" then
-	-- Draw pause screen stuff
 		graphics.drawLevelbook() -- Draw levelbook
 
 		-- Draw flickering pause text
@@ -439,24 +420,18 @@ function love.draw()
 		state.transition_timer = state.transition_timer + 1
 
 	elseif state.name == "death" then
-	-- Draw dying screen stuff
-
 		graphics.drawLevelbook() -- Draw levelbook
-
 		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 80, game.font2) -- Draw remaining lifes
-
 		graphics.drawWorldImage() -- Draw world image
 
 		if state.timer >= 120 then
 		-- Go to gameplay once again!
-			state.name = "gameplay"
-			state.timer = 0
+			state.set("gameplay")
 
 			game_resources.music.play(world.current_area.music)
 		end
 
 	elseif state.name == "game_over" then
-	-- Draw game over screen stuff
 		if state.timer < 192 then
 			graphics.drawText("GAME  OVER", 88, 112)
 		else
@@ -472,9 +447,10 @@ function love.draw()
 
 	elseif state.name == "level_editor" then
 		editor.draw.main()
+	end
 
+	--[[
 	elseif state.name == "debug" then
-	-- Draw debug screen stuff
 		graphics.drawText("OPENSMB2 DEBUG MODE", 48, 56)
 		graphics.drawText("F-TOGGLE FPS COUNTER", 48, 80)
 		graphics.drawText("R-TOGGLE FRAME COUNTER", 48, 96)
@@ -496,6 +472,7 @@ function love.draw()
 			graphics.drawText("MUTED", 168, 176)
 		end
 	end
+	]]--
 
 	if debugging.enabled then
 		if debugging.fps then

@@ -18,11 +18,12 @@ function game.load(id)
 
 	editor.loadImages()
 
-	state.name = "title"
-	state.timer = 0
+	state.set("title")
+end
 
-	game_resources.music.play("title")
-	graphics.setBackgroundColor("blue")
+function game.reset()
+	world.reset()
+	character.reset()
 end
 
 function game.getRemainingLives(lives)

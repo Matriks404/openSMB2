@@ -47,7 +47,9 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* In launcher:
 		* `Up` or `Down` - Select gamepack.
 		* `ENTER` or `S` - Run the currently selected gamepack.
-	* `S` key on title screen - Enter character select screen.
+	* On the title screen:
+		* `S` - Enter character select screen.
+		* `CTRL+L` - Enter level editor (see below)
 	* In character select screen:
 		* `Left` or `Right` key - Select character
 		* `X` key - Choose character
@@ -61,6 +63,7 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 		* `S` key - Choose option
 	* `ESC` key - Quit the game
 
+<!---
 # Debugging
 
 * Press `CTRL+D` on title screen to enable debug mode and enter debug screen. Here you can:
@@ -73,12 +76,13 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 * Also during gameplay (when debug mode is enabled) you can:
 	* Press `A` to ascend.
 	* Press `D` to die.
+-->
 
 # Level editor
 
 * In the level editor main menu:
 	* Press one of the keys that will enter editing of some level.
-	* Press `Q` to quit to the debug screen.
+	* Press `Q` to quit to the title screen.
 
 * In the level editor proper:
 	* In any mode:

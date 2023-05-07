@@ -1,5 +1,7 @@
 local music = {}
 
+music.m = {}
+
 function music.play(name)
 	if not debugging.mute then
 		if music.m[name].track then

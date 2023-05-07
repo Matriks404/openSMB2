@@ -1,7 +1,6 @@
 local input = {}
 
 function input.check(key)
-	-- Quit if user pressed ESC key
 	if key == "escape" then
 		love.event.quit()
 
@@ -27,39 +26,6 @@ function input.check(key)
 		end
 	end
 
-	-- Title screen, intro story or debug screen
-	if state.name == "title" or state.name == "intro" or state.name == "debug" then
-		if key == "s" then
-		-- Go to character screen
-			state.name = "character_select"
-			state.timer = 0
-
-			state.transitionClear()
-			state.resetGame()
-
-			graphics.setBackgroundColor("black")
-
-		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "d" then
-		-- Go to debug screen or title screen (depending on origin screen)
-			if debugging.enabled then
-				state.name = "title"
-				state.timer = 0
-
-				debugging.enabled = false
-				debugging.mute = false
-
-				game_resources.music.play("title")
-			else
-				state.name = "debug"
-				state.timer = 0
-
-				debugging.enabled = true
-
-				game_resources.music.stopAll()
-			end
-		end
-	end
-
 	if state.name == "launcher" then
 		if key == "up" then
 			launcher.goToPrevious()
@@ -68,26 +34,56 @@ function input.check(key)
 		elseif key == "return" or key == "s" then
 			launcher.runGame(launcher.selection)
 		end
+
+	elseif state.name == "title" or state.name == "intro" then
+		if key == "s" then
+			state.set("character_select")
+
+			state.transitionClear()
+			game.reset()
+
+		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "l" then
+			state.set("level_editor")
+
+			debugging.frames = false
+			editor.option = "select"
+		end
+
+		--[[
+		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "d" then
+		-- Go to debug screen or title screen (depending on origin screen)
+			if debugging.enabled then
+				state.set("title")
+
+				debugging.enabled = false
+				debugging.mute = false
+			else
+				state.set("debug")
+
+				debugging.enabled = true
+			end
+		end
+		]]--
+
 	elseif state.name == "character_select" then
-	-- Character select screen
-		if key == "left" and state.transition_timer == 0 then
 		-- Select character on the left
+		if key == "left" and state.transition_timer == 0 then
 			state.cursor = (state.cursor > 0 and state.cursor - 1) or 3
 
 			if game_resources.sound.sfx_pickup then
 				game_resources.sound.sfx_pickup:play()
 			end
 
-		elseif key == "right" and state.transition_timer == 0 then
 		-- Select character on the right
+		elseif key == "right" and state.transition_timer == 0 then
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
 			if game_resources.sound.sfx_pickup then
 				game_resources.sound.sfx_pickup:play()
 			end
 
-		elseif key == "x" and state.transition_timer == 0 then
 		-- Choose character and enable transition which will go to levelbook after some time
+		elseif key == "x" and state.transition_timer == 0 then
 			state.transition = true
 
 			if game_resources.sound.sfx_pickup then
@@ -96,36 +92,29 @@ function input.check(key)
 		end
 
 	elseif state.name == "gameplay" then
-	-- Gameplay screen
 		if key == "s" and state.timer > 146 and state.transition_timer == 0 then
-		-- Go to pause screen
-			state.name = "pause"
-
 			state.backup_timer = state.timer
-			state.timer = 0
+
+			state.set("pause")
 		end
 
-		if debugging.enabled and key == "d" then
 		-- Die!
+		if debugging.enabled and key == "d" then
 			character.dying_timer = 84
 
 			game_resources.music.stopAll()
 		end
 
 	elseif state.name == "pause" then
-	-- Pause screen
 		if key == "s" then
-		-- Go back to gameplay
-			state.name = "gameplay"
-
-			state.timer = state.backup_timer -- Backup gameplay timer
+			state.set("gameplay")
+			state.timer = state.backup_timer
 			state.transition_timer = 0
 		end
 
 	elseif state.name == "game_over" then
-	-- Game over screen
-		if key == "a" and character.continues > 0 then
 		-- Select option
+		if key == "a" and character.continues > 0 then
 			state.cursor = (state.cursor == 0 and 1) or 0
 		end
 
@@ -135,15 +124,10 @@ function input.check(key)
 				character.lives = 3
 				character.energy = 2
 
-				state.name = "character_select"
+				state.set("character_select")
 			else
-				graphics.setBackgroundColor("blue")
-
+				state.set("title")
 				state.cursor = 0
-				state.timer = 0
-				state.name = "title"
-
-				game_resources.music.play("title")
 			end
 		end
 
@@ -170,7 +154,7 @@ function input.check(key)
 				editor.openLevel(world_no, level_no)
 
 			elseif key == "q" then
-				editor.quitToDebugMenu()
+				editor.quitToTitleScreen()
 			end
 
 		elseif editor.option == "edit" then
@@ -356,7 +340,9 @@ function input.check(key)
 				end
 			end
 		end
+	end
 
+	--[[
 	elseif state.name == "debug" then
 	-- Debug screen
 		if key == "f" then
@@ -373,15 +359,14 @@ function input.check(key)
 
 		elseif key == "l" then
 		-- Go to level editor
-			state.name = "level_editor"
-			state.timer = 0
+			state.set("level_editor")
 
 			debugging.frames = false
 			editor.option = "select"
 
 			graphics.setBackgroundColor("black")
 		end
-	end
+	end]]--
 end
 
 return input
