@@ -1,7 +1,6 @@
 local state = {}
 
--- Timers
-state.timer = 0
+-- Additional timers
 state.backup_timer = 0
 state.text_timer = 0
 state.transition_timer = 0
@@ -21,8 +20,8 @@ state.s = {
 	["intro"] = { bg = "blue", music = "title" },
 	["character_select"] = { bg = "black", music = "character_select" },
 	["level_intro"] = { bg = "black", music = nil },
-	["gameplay"] = { bg = "OVERRIDE", music = "OVERRIDE" },
-	["pause"] = { bg = "black", music = "OVERRIDE" },
+	["gameplay"] = { bg = "LEVEL_SPECIFIC", music = "LEVEL_SPECIFIC" },
+	["pause"] = { bg = "black", music = "LEVEL_SPECIFIC" },
 	["death"] = { bg = "black", music = nil },
 	["game_over"] = { bg = "black", music = nil },
 	["level_editor"] = { bg = "black", music = nil },
@@ -34,17 +33,11 @@ function state.set(name)
 
 	local s = state.s[name]
 
-	if s.bg ~= "OVERRIDE" then
+	if s.bg ~= "LEVEL_SPECIFIC" then
 		graphics.setBackgroundColor(s.bg)
 	end
 
-	if s.music then
-		if s.music and s.music ~= "OVERRIDE" then
-			game_resources.music.play(s.music)
-		end
-	else
-		game_resources.music.stopAll()
-	end
+	game_resources.music.playCurrent()
 end
 
 function state.verticalScreenTransition()

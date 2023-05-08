@@ -198,8 +198,8 @@ function love.update()
 
 				game_resources.music.stopAll()
 
-				if game_resources.sound.sfx_death then
-					game_resources.sound.sfx_death:play()
+				if game_resources.sound.death then
+					game_resources.sound.play("death")
 				end
 			end
 
@@ -222,8 +222,8 @@ function love.update()
 					state.set("death")
 				else
 				-- No more lifes, go to game over screen
-					if game_resources.sound.sfx_game_over then
-						game_resources.sound.sfx_game_over:play()
+					if game_resources.sound.game_over then
+						game_resources.sound.play("game_over")
 					end
 
 					state.cursor = (character.continues > 0 and 0) or 1
@@ -247,8 +247,6 @@ function love.draw()
 		if game_resources.images.title_border then
 			love.graphics.draw(game_resources.images.title_border, 0, 0)
 		end
-
-		graphics.drawText("V"..app.getVersion(), 2, 2)
 	end
 
 	if state.name == "launcher" then
@@ -386,8 +384,8 @@ function love.draw()
 
 		if state.timer > 146 then
 		-- Draw everything else
-			if state.timer == 147 and game_resources.sound.sfx_fall then
-				game_resources.sound.sfx_fall:play() -- Play falling sound
+			if state.timer == 147 and game_resources.sound.fall then
+				game_resources.sound.play("fall")
 			end
 
 			if game_resources.images.gp_empty and game_resources.images.gp_filled then
@@ -449,38 +447,5 @@ function love.draw()
 		editor.draw.main()
 	end
 
-	--[[
-	elseif state.name == "debug" then
-		graphics.drawText("OPENSMB2 DEBUG MODE", 48, 56)
-		graphics.drawText("F-TOGGLE FPS COUNTER", 48, 80)
-		graphics.drawText("R-TOGGLE FRAME COUNTER", 48, 96)
-		graphics.drawText("M-TOGGLE MUSIC MUTE", 48, 112)
-		graphics.drawText("L-ENTER LEVEL EDITOR", 48, 128)
-		graphics.drawText("S-START GAME RIGHT NOW", 48, 144)
-
-		graphics.drawText("ENABLED FLAGS", 64, 160)
-
-		if debugging.fps then
-			graphics.drawText("FPS", 64, 176)
-		end
-
-		if debugging.frames then
-			graphics.drawText("FRAMES", 104, 176)
-		end
-
-		if debugging.mute then
-			graphics.drawText("MUTED", 168, 176)
-		end
-	end
-	]]--
-
-	if debugging.enabled then
-		if debugging.fps then
-			graphics.drawCounter(love.timer.getFPS(), 2, " FPS")
-		end
-
-		if debugging.frames then
-			graphics.drawCounter(state.timer, 12)
-		end
-	end
+	debugging.drawInfo()
 end

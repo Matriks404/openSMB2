@@ -48,6 +48,8 @@ function editor.openLevel()
 		editor.option = "edit"
 
 		editor.view.update()
+
+		debugging.info = false
 	end
 end
 

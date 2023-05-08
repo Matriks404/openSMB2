@@ -11,6 +11,7 @@ function game_resources.load(directory)
 	font.load(game_directory)
 
 	game_resources.images.load(game_directory)
+	game_resources.music.load(game_directory)
 	game_resources.sound.load(game_directory)
 	game_resources.story.load(game_directory)
 end

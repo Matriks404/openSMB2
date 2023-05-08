@@ -24,6 +24,13 @@ function input.check(key)
 		else
 			graphics.scaleUp()
 		end
+
+	elseif key == "m" then
+		app.switchMuteState()
+	end
+
+	if state.name ~= "level_editor" and editor.option ~= "edit" and key == "f3" then
+		debugging.switchInfo()
 	end
 
 	if state.name == "launcher" then
@@ -49,45 +56,29 @@ function input.check(key)
 			editor.option = "select"
 		end
 
-		--[[
-		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "d" then
-		-- Go to debug screen or title screen (depending on origin screen)
-			if debugging.enabled then
-				state.set("title")
-
-				debugging.enabled = false
-				debugging.mute = false
-			else
-				state.set("debug")
-
-				debugging.enabled = true
-			end
-		end
-		]]--
-
 	elseif state.name == "character_select" then
 		-- Select character on the left
 		if key == "left" and state.transition_timer == 0 then
 			state.cursor = (state.cursor > 0 and state.cursor - 1) or 3
 
-			if game_resources.sound.sfx_pickup then
-				game_resources.sound.sfx_pickup:play()
+			if game_resources.sound.pickup then
+				game_resources.sound.play("pickup")
 			end
 
 		-- Select character on the right
 		elseif key == "right" and state.transition_timer == 0 then
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
-			if game_resources.sound.sfx_pickup then
-				game_resources.sound.sfx_pickup:play()
+			if game_resources.sound.pickup then
+				game_resources.sound.play("pickup")
 			end
 
 		-- Choose character and enable transition which will go to levelbook after some time
 		elseif key == "x" and state.transition_timer == 0 then
 			state.transition = true
 
-			if game_resources.sound.sfx_pickup then
-				game_resources.sound.sfx_pickup:play()
+			if game_resources.sound.pickup then
+				game_resources.sound.play("pickup")
 			end
 		end
 
@@ -342,31 +333,7 @@ function input.check(key)
 		end
 	end
 
-	--[[
-	elseif state.name == "debug" then
-	-- Debug screen
-		if key == "f" then
-		-- Show FPS counter or not
-			debugging.fps = not debugging.fps
-
-		elseif key == "r" then
-		-- Show frames counter or not
-			debugging.frames = not debugging.frames
-
-		-- Mute music or not
-		elseif key == "m" then
-			debugging.mute = not debugging.mute
-
-		elseif key == "l" then
-		-- Go to level editor
-			state.set("level_editor")
-
-			debugging.frames = false
-			editor.option = "select"
-
-			graphics.setBackgroundColor("black")
-		end
-	end]]--
+	debugging.checkInput(key)
 end
 
 return input

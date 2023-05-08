@@ -70,6 +70,14 @@ end
 function graphics.drawText(str, x, y, font_id)
 	local font_id = font_id or game.font1
 
+	if not font_id then
+		if state.name == "launcher" then
+			font_id = "dogica"
+		else
+			font_id = game.font1
+		end
+	end
+
 	local pos_x = x
 	local pos_y = y
 
@@ -81,18 +89,6 @@ function graphics.drawText(str, x, y, font_id)
 
 		pos_x = pos_x + (font.symbol_size / 2)
 	end
-end
-
-function graphics.drawCounter(n, y, add)
-	local str = tostring(n)
-
-	if add then
-		str = str..add
-	end
-
-	local x = graphics.width - string.len(str) * 8
-
-	graphics.drawText(string.format("%02d%s", n, add or ""), x, y)
 end
 
 function graphics.drawTile(id, x, y)
