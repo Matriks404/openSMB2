@@ -4,6 +4,7 @@ editor.img = {}
 
 editor.check = require "source/editor/check"
 editor.draw = require "source/editor/draw"
+editor.input = require "source/editor/input"
 editor.view = require "source/editor/view"
 
 -- Level editor variables
