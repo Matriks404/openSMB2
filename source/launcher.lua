@@ -20,14 +20,19 @@ function launcher.load()
 
 	launcher.loadGamePackList()
 
+	launcher.setupStates()
 	state.set("launcher")
 end
 
 function launcher.loadFonts()
 	directory = "resources/images/font/"
 
-	font.loadSymbols(directory, "dogica")
-	font.loadSymbols(directory, "dogica_bold")
+	launcher.font_normal = "dogica"
+	launcher.font_bold = "dogica_bold"
+
+	font.loadSymbols(directory, launcher.font_normal)
+	font.loadSymbols(directory, launcher.font_bold)
+
 end
 
 function launcher.loadImages()
@@ -35,6 +40,10 @@ function launcher.loadImages()
 
 	launcher.img["gp_good"] = resources.loadImage(directory.."gamepack_good.png")
 	launcher.img["gp_bad"] = resources.loadImage(directory.."gamepack_bad.png")
+end
+
+function launcher.setupStates()
+	state.setupState("launcher", "black", launcher.font_bold, nil)
 end
 
 function launcher.validGamePackResources(directory)
@@ -204,15 +213,15 @@ function launcher.runGame(id)
 end
 
 function launcher.draw()
-	graphics.drawText("openSMB2 Launcher", 56, 16, "dogica_bold")
+	graphics.drawText("openSMB2 Launcher", 56, 16)
 
 	if next(launcher.gamepacks) == nil then
-		graphics.drawText("There are no games installed", 8, 56, "dogica_bold")
-		graphics.drawText("in your user directory.", 8, 68, "dogica_bold")
+		graphics.drawText("There are no games installed", 8, 56)
+		graphics.drawText("in your user directory.", 8, 68)
 
-		graphics.drawText("Check instructions on", 8, 100, "dogica_bold")
-		graphics.drawText("github.com/Matriks404/openSMB2", 8, 112, "dogica_bold")
-		graphics.drawText("to get games installed.", 8, 124, "dogica_bold")
+		graphics.drawText("Check instructions on", 8, 100)
+		graphics.drawText("github.com/Matriks404/openSMB2", 8, 112)
+		graphics.drawText("to get games installed.", 8, 124)
 
 		return
 	end
@@ -221,7 +230,7 @@ function launcher.draw()
 
 	for key in pairs(launcher.gamepacks) do
 		if key == launcher.selection then
-			graphics.drawText(">", 8, y, "dogica_bold")
+			graphics.drawText(">", 8, y)
 		end
 
 		local game_name = launcher.gamepacks[key].name
@@ -232,7 +241,7 @@ function launcher.draw()
 			game_name = string.sub(game_name, 1, 21).."..."
 		end
 
-		graphics.drawText(game_name, x, y, "dogica_bold")
+		graphics.drawText(game_name, x, y)
 
 		local valid = launcher.gamepacks[key].valid
 		local img = (valid and launcher.img["gp_good"]) or launcher.img["gp_bad"]
@@ -250,7 +259,7 @@ function launcher.draw()
 			bottom_string = gamepack_directory_name.." (v"..gamepack_version..")"
 		end
 
-		graphics.drawText(bottom_string, x, y + 12, "dogica")
+		graphics.drawText(bottom_string, x, y + 12, launcher.font_normal)
 
 		y = y + 32
 	end

@@ -68,15 +68,8 @@ function graphics.setBackgroundColor(color)
 end
 
 function graphics.drawText(str, x, y, font_id)
-	local font_id = font_id or game.font1
-
-	if not font_id then
-		if state.name == "launcher" then
-			font_id = "dogica"
-		else
-			font_id = game.font1
-		end
-	end
+	local s = state.s[state.name]
+	local font_id = font_id or s.font
 
 	local pos_x = x
 	local pos_y = y
@@ -248,7 +241,7 @@ function graphics.drawLevelbook()
 	local world_x = 89
 	local world_y = 48
 
-	graphics.drawText(world_str, world_x, world_y, game.font2)
+	graphics.drawText(world_str, world_x, world_y)
 
 	world.level_count = (world.current < 7) and 3 or 2
 

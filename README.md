@@ -34,17 +34,21 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 # Gameplay
 
 * Stuff that is working:
-	* Simple launcher for gamepacks
+	* Simple launcher
 	* Title screen
 	* Character select and level intro
 	* Pretty much non-existent gameplay
 	* Level editor (see below)
 
 * Controls:
-	* On any screen:
+	* At any time:
 		* `-` or `=` key - Scale graphics down or up (only integer scaling).
 		* `ALT+ENTER` or `F11` key - Enable or disable fullscreen mode.
-	* In launcher:
+		* `CTRL+F` - Enable FPS counter.
+		* `CTRL+M` - Mute the game.
+		* `F3` - Enable debugging info (that displays game version, FPS counter and other stuff).
+		* `ESC` - Quit the game.
+ 	* In launcher:
 		* `Up` or `Down` - Select gamepack.
 		* `ENTER` or `S` - Run the currently selected gamepack.
 	* On the title screen:
@@ -61,22 +65,6 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* On game over screen:
 		* `A` key - Select option
 		* `S` key - Choose option
-	* `ESC` key - Quit the game
-
-<!---
-# Debugging
-
-* Press `CTRL+D` on title screen to enable debug mode and enter debug screen. Here you can:
-	* Toggle FPS counter.
-	* Toggle Frames counter.
-	* Toggle Mute option.
-	* Enter level editor (see below).
-	* Start game in debug mode which allows above options to work.
-
-* Also during gameplay (when debug mode is enabled) you can:
-	* Press `A` to ascend.
-	* Press `D` to die.
--->
 
 # Level editor
 

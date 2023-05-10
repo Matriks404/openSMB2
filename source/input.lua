@@ -25,11 +25,11 @@ function input.check(key)
 			graphics.scaleUp()
 		end
 
-	elseif key == "m" then
+	elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "m" then
 		app.switchMuteState()
 	end
 
-	if state.name ~= "level_editor" and editor.option ~= "edit" and key == "f3" then
+	if not (state.name == "level_editor" and editor.option == "edit") and key == "f3" then
 		debugging.switchInfo()
 	end
 
@@ -52,7 +52,6 @@ function input.check(key)
 		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "l" then
 			state.set("level_editor")
 
-			debugging.frames = false
 			editor.option = "select"
 		end
 

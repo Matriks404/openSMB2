@@ -167,7 +167,7 @@ function input.check(key)
 			elseif key == "b" then
 				editor.updateBackground()
 
-			elseif key == "m" then
+			elseif not love.keyboard.isDown("lctrl") and not love.keyboard.isDown("rctrl") and key == "m" then
 				editor.updateMusic()
 
 			elseif key == "r" then

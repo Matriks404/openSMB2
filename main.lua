@@ -257,6 +257,7 @@ function love.draw()
 			love.graphics.draw(game_resources.images.title_logo, 48, 48)
 		end
 
+		-- Draw custom title screen text.
 		if game.title_text then
 			for i = 1, #game.title_text do
 				local x = game.title_text[i]["x"]
@@ -410,16 +411,16 @@ function love.draw()
 			state.transition_timer = 0
 
 		elseif state.transition_timer >= 15 then
-			graphics.drawText("PAUSED", 105, 120, game.font2)
+			graphics.drawText("PAUSED", 105, 120)
 		end
 
-		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 176, game.font2) -- Draw extra lifes text
+		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 176) -- Draw extra lifes text
 
 		state.transition_timer = state.transition_timer + 1
 
 	elseif state.name == "death" then
 		graphics.drawLevelbook() -- Draw levelbook
-		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 80, game.font2) -- Draw remaining lifes
+		graphics.drawText("EXTRA LIFE*** "..game.getRemainingLives(character.lives), 65, 80) -- Draw remaining lifes
 		graphics.drawWorldImage() -- Draw world image
 
 		if state.timer >= 120 then

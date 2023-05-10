@@ -14,18 +14,11 @@ state.cursor = 0 -- Menu cursor
 state.screen_x = 0
 state.screen_y = 0
 
-state.s = {
-	["launcher"] = { bg = "black", music = nil },
-	["title"] = { bg = "blue", music = "title" },
-	["intro"] = { bg = "blue", music = "title" },
-	["character_select"] = { bg = "black", music = "character_select" },
-	["level_intro"] = { bg = "black", music = nil },
-	["gameplay"] = { bg = "LEVEL_SPECIFIC", music = "LEVEL_SPECIFIC" },
-	["pause"] = { bg = "black", music = "LEVEL_SPECIFIC" },
-	["death"] = { bg = "black", music = nil },
-	["game_over"] = { bg = "black", music = nil },
-	["level_editor"] = { bg = "black", music = nil },
-}
+state.s = {}
+
+function state.setupState(name, bg, font, music)
+	state.s[name] = { bg = bg, font = font, music = music }
+end
 
 function state.set(name)
 	state.name = name

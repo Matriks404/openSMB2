@@ -18,12 +18,25 @@ function game.load(id)
 
 	editor.loadImages()
 
+	game.setupStates()
 	state.set("title")
 end
 
 function game.reset()
 	world.reset()
 	character.reset()
+end
+
+function game.setupStates()
+	state.setupState("title", "blue", game.font1, "title")
+	state.setupState("intro", "blue", game.font1, "title")
+	state.setupState("character_select", "black", game.font1, "character_select")
+	state.setupState("level_intro", "black", game.font2, nil)
+	state.setupState("gameplay", "LEVEL_SPECIFIC", game.font1, "LEVEL_SPECIFIC")
+	state.setupState("pause", "black", game.font2, "LEVEL_SPECIFIC")
+	state.setupState("death", "black", game.font2, nil)
+	state.setupState("game_over", "black", game.font1, nil)
+	state.setupState("level_editor", "black", game.font1, nil)
 end
 
 function game.getRemainingLives(lives)

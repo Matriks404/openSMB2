@@ -10,7 +10,6 @@ function app.setup()
 
 	window.setup()
 	graphics.init()
-
 	filesystem.setup()
 	launcher.load()
 end

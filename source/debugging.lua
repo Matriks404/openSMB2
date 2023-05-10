@@ -14,8 +14,12 @@ function debugging.switchInfo()
 	debugging.fps = debugging.info
 end
 
+function debugging.getFont()
+	return game.font1 or launcher.font_normal
+end
+
 function debugging.drawMutedText()
-	graphics.drawText("MUTED", 215, 231)
+	graphics.drawText("MUTED", 215, 231, debugging.getFont())
 end
 
 function debugging.drawCounter(n, y, add)
@@ -27,7 +31,7 @@ function debugging.drawCounter(n, y, add)
 
 	local x = (graphics.width - string.len(str) * 8) - 1
 
-	graphics.drawText(string.format("%02d%s", n, add or ""), x, y)
+	graphics.drawText(string.format("%02d%s", n, add or ""), x, y, debugging.getFont())
 end
 
 function debugging.drawCounters()
@@ -44,7 +48,7 @@ end
 
 function debugging.drawVersionText()
 	if debugging.info then
-		graphics.drawText("V"..app.getVersion(), 2, 2)
+		graphics.drawText("V"..app.getVersion(), 2, 2, debugging.getFont())
 	end
 end
 
@@ -59,12 +63,8 @@ function debugging.drawInfo()
 end
 
 function debugging.checkInput(key)
-	if key == "f" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-			if debugging.info then
-				debugging.frames = not debugging.frames
-			end
-		else
+	if not debugging.info then
+		if (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "f" then
 			debugging.fps = not debugging.fps
 		end
 	end
