@@ -22,10 +22,7 @@
 
 ![Launcher](/screenshots/1.png)
 ![Title screen](/screenshots/2.png)
-![Character select](/screenshots/3.png)
-![Gameplay](/screenshots/4.png)
-![Debug screen](/screenshots/5.png)
-![Level editor](/screenshots/6.png)
+![Level editor](/screenshots/3.png)
 
 # 3rd party font
 
