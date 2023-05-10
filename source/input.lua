@@ -100,6 +100,9 @@ function input.check(key)
 			state.set("gameplay")
 			state.timer = state.backup_timer
 			state.transition_timer = 0
+
+			-- This is a bit hacky, but whatever.
+			graphics.setBackgroundColor(world.current_area.background)
 		end
 
 	elseif state.name == "game_over" then

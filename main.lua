@@ -380,7 +380,8 @@ function love.draw()
 		graphics.drawWorldImage() -- Draw world image
 
 	elseif state.name == "gameplay" then
-		if state.timer > 144 then graphics.drawLevelTiles() -- Draw level tiles
+		if state.timer > 144 then
+			graphics.drawLevelTiles() -- Draw level tiles
 		end
 
 		if state.timer > 146 then
