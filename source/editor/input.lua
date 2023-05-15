@@ -52,7 +52,7 @@ function input.checkForEditor(key)
 		editor.quit()
 
 	elseif key == "left" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveByTile(-16, 0)
 		else
 			if editor.mode == "normal" then
@@ -61,7 +61,7 @@ function input.checkForEditor(key)
 			elseif editor.mode == "start" then
 				local x
 
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+				if love.keyboard.isDown("lshift", "rshift") then
 					x = -16
 				else
 					x = -1
@@ -72,7 +72,7 @@ function input.checkForEditor(key)
 		end
 
 	elseif key == "right" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveByTile(16, 0)
 		else
 			if editor.mode == "normal" then
@@ -81,7 +81,7 @@ function input.checkForEditor(key)
 			elseif editor.mode == "start" then
 				local x
 
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+				if love.keyboard.isDown("lshift", "rshift") then
 					x = 16
 				else
 					x = 1
@@ -92,7 +92,7 @@ function input.checkForEditor(key)
 		end
 
 	elseif key == "up" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveByTile(0, -16)
 		else
 			if editor.mode == "normal" then
@@ -101,7 +101,7 @@ function input.checkForEditor(key)
 			elseif editor.mode == "start" then
 				local y
 
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+				if love.keyboard.isDown("lshift", "rshift") then
 					y = -16
 				else
 					y = -1
@@ -112,7 +112,7 @@ function input.checkForEditor(key)
 		end
 
 	elseif key == "down" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveByTile(0, 16)
 		else
 			if editor.mode == "normal" then
@@ -121,7 +121,7 @@ function input.checkForEditor(key)
 			elseif editor.mode == "start" then
 				local y
 
-				if love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift") then
+				if love.keyboard.isDown("lshift", "rshift") then
 					y = 16
 				else
 					y = 1
@@ -132,28 +132,28 @@ function input.checkForEditor(key)
 		end
 
 	elseif key == "pageup" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveByScreen(-1, 0)
 		else
 			editor.view.moveByScreen(0, -1)
 		end
 
 	elseif key == "pagedown" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveByScreen(1, 0)
 		else
 			editor.view.moveByScreen(0, 1)
 		end
 
 	elseif key == "home" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveToHorizontalStart()
 		else
 			editor.view.moveToVerticalStart()
 		end
 
 	elseif key == "end" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			editor.view.moveToHorizontalEnd()
 		else
 			editor.view.moveToVerticalEnd()
@@ -167,7 +167,7 @@ function input.checkForEditor(key)
 		elseif key == "b" then
 			editor.updateBackground()
 
-		elseif not love.keyboard.isDown("lctrl") and not love.keyboard.isDown("rctrl") and key == "m" then
+		elseif not love.keyboard.isDown("lctrl", "rctrl") and key == "m" then
 			editor.updateMusic()
 
 		elseif key == "r" then

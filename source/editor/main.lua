@@ -50,8 +50,6 @@ function editor.openLevel()
 		state.name = "level_editor"
 
 		editor.view.update()
-
-		debugging.info = false
 	end
 end
 

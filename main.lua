@@ -102,7 +102,7 @@ function love.update()
 		end
 
 		if state.timer > 146 and state.transition_timer == 0 then
-			if debugging.enabled and love.keyboard.isDown("a") then
+			if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
 			-- Ascending
 				character.pos_y = character.pos_y - 6
 			end

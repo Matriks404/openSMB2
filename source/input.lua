@@ -4,11 +4,11 @@ function input.check(key)
 	if key == "escape" then
 		love.event.quit()
 
-	elseif ((love.keyboard.isDown("lalt") or love.keyboard.isDown("ralt")) and key == "return") or key == "f11" then
+	elseif (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
 		window.updateFullscreen()
 
 	elseif key == "-" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			if state.name == "level_editor" and editor.mode == "normal" then
 				editor.removeArea()
 			end
@@ -17,7 +17,7 @@ function input.check(key)
 		end
 
 	elseif key == "=" then
-		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+		if love.keyboard.isDown("lctrl", "rctrl") then
 			if state.name == "level_editor" and editor.mode == "normal" then
 				editor.addArea()
 			end
@@ -25,11 +25,17 @@ function input.check(key)
 			graphics.scaleUp()
 		end
 
-	elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "m" then
+	elseif love.keyboard.isDown("lctrl", "rctrl") and key == "m" then
 		app.switchMuteState()
 	end
 
-	if not state.name == "level_editor" and key == "f3" then
+	if state.name == "launcher" or state.name == "title" or state.name == "intro" then
+		if love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
+			debugging.switch()
+		end
+	end
+
+	if not debugging.enabled and state.name ~= "level_editor" and key == "f3" then
 		debugging.switchInfo()
 	end
 
@@ -38,7 +44,7 @@ function input.check(key)
 			launcher.goToPrevious()
 		elseif key == "down" or key == "x" then
 			launcher.goToNext()
-		elseif key == "return" or key == "s" then
+		elseif (not love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "s" then
 			launcher.runGame(launcher.selection)
 		end
 
@@ -49,7 +55,7 @@ function input.check(key)
 			state.transitionClear()
 			game.reset()
 
-		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "l" then
+		elseif love.keyboard.isDown("lctrl", "rctrl") and key == "l" then
 			state.set("level_editor_menu")
 		end
 
@@ -87,7 +93,7 @@ function input.check(key)
 		end
 
 		-- Die!
-		if debugging.enabled and key == "d" then
+		if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
 			character.dying_timer = 84
 
 			game_resources.music.stopAll()

@@ -99,3 +99,14 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* When in starting position movement tool mode (`MODE-S`):
 		* Press arrow keys to move starting position pixel-by-pixel.
 		* Press `SHIFT` + arrow keys to move starting position by 16 pixels each time.
+
+# Debug mode
+
+You can enable debug mode by pressing `CTRL+D` in the launcher or on the title screen.
+
+When enabled, the usual debugging info (which is usually displayed when you press `F3` key) will be permanently shown unless you disable this mode.
+
+You will also gain access to these additional debugging features inside the game:
+
+* Press `CTRL+A` to ascend the player character.
+* Press `CTRL+D` for the character to die.

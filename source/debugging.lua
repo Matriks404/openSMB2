@@ -3,10 +3,13 @@ local debugging = {}
 debugging.enabled = false
 debugging.info = false
 debugging.fps = false
-debugging.frames = true
 
 function debugging.switch()
 	debugging.enabled = not debugging.enabled
+
+	if not debugging.info then
+		debugging.switchInfo()
+	end
 end
 
 function debugging.switchInfo()
@@ -39,16 +42,18 @@ function debugging.drawCounters()
 		debugging.drawCounter(love.timer.getFPS(), 2, " FPS")
 	end
 
-	if debugging.info then
-		if debugging.frames then
-			debugging.drawCounter(state.timer, 12)
-		end
+	if state.name ~= "level_editor" and debugging.info then
+		debugging.drawCounter(state.timer, 12)
 	end
 end
 
-function debugging.drawVersionText()
+function debugging.drawTopLeftInfo()
 	if debugging.info then
 		graphics.drawText("V"..app.getVersion(), 2, 2, debugging.getFont())
+	end
+
+	if debugging.enabled then
+		graphics.drawText("DEBUG", 2, 12, debugging.getFont())
 	end
 end
 
@@ -57,14 +62,16 @@ function debugging.drawInfo()
 		debugging.drawMutedText()
 	end
 
-	debugging.drawCounters()
-	debugging.drawVersionText()
+	if state.name ~= "level_editor" then
+		debugging.drawTopLeftInfo()
+	end
 
+	debugging.drawCounters()
 end
 
 function debugging.checkInput(key)
 	if not debugging.info then
-		if (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "f" then
+		if love.keyboard.isDown("lctrl", "rctrl") and key == "f" then
 			debugging.fps = not debugging.fps
 		end
 	end
