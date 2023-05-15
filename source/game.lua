@@ -36,7 +36,8 @@ function game.setupStates()
 	state.setupState("pause", "black", game.font2, "LEVEL_SPECIFIC")
 	state.setupState("death", "black", game.font2, nil)
 	state.setupState("game_over", "black", game.font1, nil)
-	state.setupState("level_editor", "black", game.font1, nil)
+	state.setupState("level_editor_menu", "black", game.font1, nil)
+	state.setupState("level_editor", "LEVEL_SPECIFIC", game.font1, "LEVEL_SPECIFIC")
 end
 
 function game.getRemainingLives(lives)

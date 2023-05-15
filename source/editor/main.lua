@@ -8,9 +8,7 @@ editor.input = require "source/editor/input"
 editor.view = require "source/editor/view"
 
 -- Level editor variables
-editor.option = "select" -- Editor option (select, edit)
 editor.tile = 1
-
 editor.mode = "normal" -- Editor mode (normal, start)
 
 editor.modes = {
@@ -34,19 +32,22 @@ function editor.loadImages()
 end
 
 function editor.reset()
-	editor.option = "select"
+	state.name = "level_editor_menu"
+
 	editor.mode = "normal"
 	editor.tile = 1
 end
 
 function editor.openLevel()
+	state.name = "level_editor"
+
 	world.enter(world_no, level_no)
 
 	if world[world_no][level_no] then
 		window.resizable = true
 		window.update()
 
-		editor.option = "edit"
+		state.name = "level_editor"
 
 		editor.view.update()
 

@@ -1,14 +1,6 @@
 local draw = {}
 
-function draw.main()
-	if editor.option == "select" then
-		draw.selectMenu()
-	elseif editor.option == "edit" then
-		draw.levelEditor()
-	end
-end
-
-function draw.selectMenu()
+function draw.menu()
 	graphics.drawText("LEVEL EDITOR", 24, 32)
 
 	graphics.drawText(" 1 - 1-1  4 - 2-1  7 - 3-1", 24, 64)
@@ -21,6 +13,66 @@ function draw.selectMenu()
 
 	graphics.drawText(" J - 7-1                  ", 24, 192)
 	graphics.drawText(" K - 7-2          Q - QUIT", 24, 208)
+end
+
+function draw.editor()
+	local level = world.current_level
+	local area = world.current_area
+
+	local font
+
+	-- Draw world, level and area indicators
+	graphics.drawText(world.current.."-"..world.level.."-"..world.area, 2, 2)
+
+	-- Draw area type indicator
+	font = (area.valid_size and game.font1) or game.font2
+	graphics.drawText("TYPE-"..world.types[area.type].short_name, 58, 2, font)
+
+	-- Draw editing mode indicator
+	graphics.drawText("MODE-"..editor.modes[editor.mode].short_name, 138, 2)
+
+	-- Draw background and music indicators
+	graphics.drawText("B-"..graphics.bg[area.background].short_name, 2, 10)
+	graphics.drawText("M-"..game_resources.music.m[area.music].short_name, 2, 18)
+
+	-- Draw width and height values
+	font = (area.valid_width and game.font1) or game.font2
+	graphics.drawText("W-"..area.width, 58, 10, font)
+
+	font = (area.valid_height and game.font1) or game.font2
+	graphics.drawText("H-"..area.height, 58, 18, font)
+
+	-- Draw coordinates for edit cursor or starting position
+	local x, y
+
+	if editor.mode == "normal" then
+		x = editor.cursor_x
+		y = editor.cursor_y
+
+	elseif editor.mode == "start" then
+		x = level.start_x
+		y = level.start_y
+	end
+
+	graphics.drawText("X-"..x, 114, 10)
+	graphics.drawText("Y-"..y, 114, 18)
+
+	-- Draw currently selected tile
+	local tile = string.upper(string.format("%x", editor.tile))
+	graphics.drawText("TILE-"..tile, 178, 18)
+	graphics.drawTile(editor.tile, 238, 12)
+
+	draw.boxes()
+	draw.tiles()
+	draw.areaBorder()
+
+	if editor.mode == "normal" then
+		draw.cursor()
+	end
+
+	if world.area == 1 then
+		draw.startingPosition()
+	end
 end
 
 function draw.boxes()
@@ -119,66 +171,6 @@ function draw.startingPosition()
 	end
 
 	love.graphics.draw(sp, x, y)
-end
-
-function draw.levelEditor()
-	local level = world.current_level
-	local area = world.current_area
-
-	local font
-
-	-- Draw world, level and area indicators
-	graphics.drawText(world.current.."-"..world.level.."-"..world.area, 2, 2)
-
-	-- Draw area type indicator
-	font = (area.valid_size and game.font1) or game.font2
-	graphics.drawText("TYPE-"..world.types[area.type].short_name, 58, 2, font)
-
-	-- Draw editing mode indicator
-	graphics.drawText("MODE-"..editor.modes[editor.mode].short_name, 138, 2)
-
-	-- Draw background and music indicators
-	graphics.drawText("B-"..graphics.bg[area.background].short_name, 2, 10)
-	graphics.drawText("M-"..game_resources.music.m[area.music].short_name, 2, 18)
-
-	-- Draw width and height values
-	font = (area.valid_width and game.font1) or game.font2
-	graphics.drawText("W-"..area.width, 58, 10, font)
-
-	font = (area.valid_height and game.font1) or game.font2
-	graphics.drawText("H-"..area.height, 58, 18, font)
-
-	-- Draw coordinates for edit cursor or starting position
-	local x, y
-
-	if editor.mode == "normal" then
-		x = editor.cursor_x
-		y = editor.cursor_y
-
-	elseif editor.mode == "start" then
-		x = level.start_x
-		y = level.start_y
-	end
-
-	graphics.drawText("X-"..x, 114, 10)
-	graphics.drawText("Y-"..y, 114, 18)
-
-	-- Draw currently selected tile
-	local tile = string.upper(string.format("%x", editor.tile))
-	graphics.drawText("TILE-"..tile, 178, 18)
-	graphics.drawTile(editor.tile, 238, 12)
-
-	draw.boxes()
-	draw.tiles()
-	draw.areaBorder()
-
-	if editor.mode == "normal" then
-		draw.cursor()
-	end
-
-	if world.area == 1 then
-		draw.startingPosition()
-	end
 end
 
 return draw

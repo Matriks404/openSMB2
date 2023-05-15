@@ -428,7 +428,7 @@ function love.draw()
 		-- Go to gameplay once again!
 			state.set("gameplay")
 
-			game_resources.music.play(world.current_area.music)
+			world.enter(world.current, world.level, world.area)
 		end
 
 	elseif state.name == "game_over" then
@@ -445,8 +445,11 @@ function love.draw()
 			love.graphics.draw(game_resources.images.indicator, 81, 89 + state.cursor * 16)
 		end
 
+	elseif state.name == "level_editor_menu" then
+		editor.draw.menu()
+
 	elseif state.name == "level_editor" then
-		editor.draw.main()
+		editor.draw.editor()
 	end
 
 	debugging.drawInfo()

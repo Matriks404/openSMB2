@@ -9,7 +9,7 @@ function input.check(key)
 
 	elseif key == "-" then
 		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-			if state.name == "level_editor" and editor.option == "edit" and editor.mode == "normal" then
+			if state.name == "level_editor" and editor.mode == "normal" then
 				editor.removeArea()
 			end
 		else
@@ -18,7 +18,7 @@ function input.check(key)
 
 	elseif key == "=" then
 		if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-			if state.name == "level_editor" and editor.option == "edit" and editor.mode == "normal" then
+			if state.name == "level_editor" and editor.mode == "normal" then
 				editor.addArea()
 			end
 		else
@@ -29,7 +29,7 @@ function input.check(key)
 		app.switchMuteState()
 	end
 
-	if not (state.name == "level_editor" and editor.option == "edit") and key == "f3" then
+	if not state.name == "level_editor" and key == "f3" then
 		debugging.switchInfo()
 	end
 
@@ -50,9 +50,7 @@ function input.check(key)
 			game.reset()
 
 		elseif (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) and key == "l" then
-			state.set("level_editor")
-
-			editor.option = "select"
+			state.set("level_editor_menu")
 		end
 
 	elseif state.name == "character_select" then
@@ -124,8 +122,11 @@ function input.check(key)
 			end
 		end
 
+	elseif state.name == "level_editor_menu" then
+		editor.input.checkForMenu(key)
+
 	elseif state.name == "level_editor" then
-		editor.input.check(key)
+		editor.input.checkForEditor(key)
 	end
 
 	debugging.checkInput(key)
