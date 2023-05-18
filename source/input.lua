@@ -29,7 +29,7 @@ function input.check(key)
 		app.switchMuteState()
 	end
 
-	if state.name == "launcher" or state.name == "title" or state.name == "intro" then
+	if state.name == "launcher" or state.name == "title" then
 		if love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
 			debugging.switch()
 		end
@@ -48,7 +48,7 @@ function input.check(key)
 			launcher.runGame(launcher.selection)
 		end
 
-	elseif state.name == "title" or state.name == "intro" then
+	elseif state.name == "title" then
 		if key == "s" then
 			state.set("character_select")
 

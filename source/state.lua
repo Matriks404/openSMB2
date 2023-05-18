@@ -1,6 +1,9 @@
 local state = {}
 
--- Additional timers
+state.delta = 0
+state.tick_rate = 1 / 59.286
+
+state.timer = 0
 state.backup_timer = 0
 state.text_timer = 0
 state.transition_timer = 0
