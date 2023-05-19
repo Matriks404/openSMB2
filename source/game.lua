@@ -184,7 +184,7 @@ function game.update()
 			-- Deplate energy and play death sound
 				character.energy = 0
 
-				game_resources.music.stopAll()
+				game_resources.music.stop()
 
 				if game_resources.sound.death then
 					game_resources.sound.play("death")

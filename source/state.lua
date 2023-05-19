@@ -33,7 +33,13 @@ function state.set(name)
 		graphics.setBackgroundColor(s.bg)
 	end
 
-	game_resources.music.playCurrent()
+	if s.music ~= "LEVEL_SPECIFIC" then
+		game_resources.music.setCurrent(s.music)
+
+		if not app.muted then
+			game_resources.music.play()
+		end
+	end
 end
 
 function state.verticalScreenTransition()

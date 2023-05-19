@@ -27,43 +27,41 @@ function music.load(directory)
 	}
 end
 
-function music.playCurrent()
-	local s = state.s[state.name]
-
-	if s.music and not app.muted then
-		if s.music == "LEVEL_SPECIFIC" then
-			music.play(music.current) --TODO: This is not really clear that it plays level specific track. This should probably be reworked.
-		else
-			music.play(s.music)
-		end
-	else
-		music.stopAll()
-	end
+function music.restart()
+	music.stop()
+	music.playCurrent()
 end
 
-function music.play(name)
+function music.setCurrent(name)
+	music.old = music.current
 	music.current = name
+end
 
-	if not app.muted then
-		if music.m[name].track then
-			music.m[name].track:play()
-		end
+function music.play()
+	if music.old then
+		music.stop(music.old)
+	end
 
-		music.stopAll(name) -- Stop all music except the current track.
+	if not music.current then
+		music.stop()
+	end
+
+	if music.m[music.current] and music.m[music.current].track then
+		music.m[music.current].track:play()
 	end
 end
 
 function music.stop(name)
-	if music.m[name].track then
-		music.m[name].track:stop()
-	end
-end
-
-function music.stopAll(except)
-	for k in pairs(music.m) do
-		if k ~= except then
-			music.stop(k)
+	if not name then
+		if music.current then
+			name = music.current
+		else
+			return
 		end
+	end
+
+	if music.m[name] and music.m[name].track and music.m[name].track:isPlaying() then
+		music.m[name].track:stop()
 	end
 end
 

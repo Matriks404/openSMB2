@@ -230,7 +230,11 @@ function world.enter(world_no, level_no, area_no)
 
 	world.update(world_no, level_no, area_no)
 
-	game_resources.music.play(world[world_no][level_no][area_no].music)
+	game_resources.music.setCurrent(world[world_no][level_no][area_no].music)
+
+	if not app.muted then
+		game_resources.music.play()
+	end
 
 	-- Check level background and set it
 	graphics.setBackgroundColor(world.current_area.background)

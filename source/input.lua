@@ -96,7 +96,7 @@ function input.check(key)
 		if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
 			character.dying_timer = 84
 
-			game_resources.music.stopAll()
+			game_resources.music.stop()
 		end
 
 	elseif state.name == "pause" then

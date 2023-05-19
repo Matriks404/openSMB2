@@ -8,8 +8,7 @@ function title.reset()
 
 	state.transitionClear()
 
-	game_resources.music.stopAll()
-	game_resources.music.playCurrent()
+	game_resources.music.restart()
 end
 
 function title.update()

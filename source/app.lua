@@ -17,7 +17,16 @@ end
 function app.switchMuteState()
 	app.muted = not app.muted
 
-	game_resources.music.playCurrent()
+	if app.muted then
+		love.audio.setVolume(0)
+
+		game_resources.music.old = nil
+		game_resources.music.stop()
+	else
+		love.audio.setVolume(1)
+
+		game_resources.music.play()
+	end
 end
 
 function app.getVersion()
