@@ -3,6 +3,9 @@ local launcher = {}
 launcher.img = {}
 
 launcher.mandatory_files = {
+	"story.lua",
+	"images/indicator.png",
+	"images/tilemap.png",
 	"images/charselect/arrow.png",
 	"images/gameplay/characters/char1.png",
 	"images/gameplay/characters/char2.png",
@@ -52,7 +55,7 @@ function launcher.validGamePackResources(directory)
 		local file = directory..path
 
 		if not love.filesystem.getInfo(file) then
-			print("\tError: File: '"..path.."' doesn't exist!")
+			print("\tError: File '"..path.."' doesn't exist!")
 
 			return false
 		end

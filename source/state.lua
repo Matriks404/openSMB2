@@ -19,8 +19,8 @@ state.screen_y = 0
 
 state.s = {}
 
-function state.setupState(name, bg, font, music)
-	state.s[name] = { bg = bg, font = font, music = music }
+function state.setupState(name, background, font, music)
+	state.s[name] = { background = background, font = font, music = music }
 end
 
 function state.set(name)
@@ -29,8 +29,8 @@ function state.set(name)
 
 	local s = state.s[name]
 
-	if s.bg ~= "LEVEL_SPECIFIC" then
-		graphics.setBackgroundColor(s.bg)
+	if s.background ~= "LEVEL_SPECIFIC" then
+		graphics.setBackgroundColor(s.background)
 	end
 
 	if s.music ~= "LEVEL_SPECIFIC" then

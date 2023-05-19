@@ -2,14 +2,16 @@ local character = {}
 
 character.dying_timer = 0
 
+-- Character position
 character.pos_x = 0
 character.pos_y = 0
 character.subpos_x = 0 -- Character position subpixels --TODO: Character x and y positions should just be multiplied by 256, we don't need that variable.
 
+-- Character orientation and movement
 character.side = 1 -- On which side character is looking at (-1 - Left, 1 - Right)
 character.movement_dir = 1 -- In which direction character is moving (-1 - Left, 1 - Right)
 character.speed = 0
-character.accel = 0 -- Character acceleration
+character.accel = 0
 
 function character.reset()
 	character.current = "char1" -- Character (char1, char2, char3, char4)

@@ -30,7 +30,9 @@ function app.switchMuteState()
 end
 
 function app.getVersion()
-	return love.filesystem.read("version")
+	local success, version = pcall(love.filesystem.read, "version")
+
+	return (success and version) or "UNKNOWN"
 end
 
 return app

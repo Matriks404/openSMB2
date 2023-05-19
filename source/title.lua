@@ -26,14 +26,17 @@ function title.update()
 end
 
 function title.updateIntro()
+	local max_lines_per_page = 8
+	local max_pages = #game_resources.story
+
 	if state.text_timer == 65 then
 		game_resources.story.lines = game_resources.story.lines + 1
 		state.text_timer = 0
 
-		if game_resources.story.lines > 8 then
-			if game_resources.story.page == #game_resources.story then
+		if game_resources.story.lines > max_lines_per_page then
+			if game_resources.story.page == max_pages then
 			-- Enable transition which will go to title screen after some time
-				game_resources.story.lines = 8
+				game_resources.story.lines = max_lines_per_page
 				state.transition = true
 
 			else
@@ -62,9 +65,9 @@ function title.draw()
 		-- Draw custom title screen text.
 		if game.title_text then
 			for i = 1, #game.title_text do
-				local x = game.title_text[i]["x"]
-				local y = game.title_text[i]["y"]
-				local str = game.title_text[i]["string"]
+				local x = game.title_text[i].x
+				local y = game.title_text[i].y
+				local str = game.title_text[i].string
 
 				graphics.drawText(str, x, y)
 			end
@@ -73,10 +76,12 @@ function title.draw()
 	elseif state.timer >= 553 then
 		graphics.drawText("STORY", 112, 40)
 
+		local page = game_resources.story.page
+		local story_text = game_resources.story[page]
+
 		for i = 1, game_resources.story.lines do
-			local page = game_resources.story.page
 		-- Draw lines of text
-			graphics.drawText(tostring(game_resources.story[page][i]), 48, 64 + ((i - 1) * 16))
+			graphics.drawText(tostring(story_text[i]), 48, 64 + ((i - 1) * 16))
 		end
 	end
 end

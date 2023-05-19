@@ -8,8 +8,8 @@ function images.load(directory)
 	images.loadGameplay(directory)
 
 	-- Mandatory
-	images.tilemap = resources.loadImage(directory.."tilemap.png", true)
 	images.indicator = resources.loadImage(directory.."indicator.png", true)
+	images.tilemap = resources.loadImage(directory.."tilemap.png", true)
 end
 
 function images.loadTitle(directory)

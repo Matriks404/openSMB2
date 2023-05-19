@@ -1,5 +1,7 @@
+-- External libraries
 TSerial = require "source/external/TSerial"
 
+-- Modules
 app = require "source/app"
 character = require "source/character"
 debugging = require "source/debugging"
@@ -16,6 +18,7 @@ title = require "source/title"
 window = require "source/window"
 world = require "source/world"
 
+-- Love2D callbacks
 function love.load()
 	app.setup()
 end
