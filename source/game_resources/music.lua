@@ -29,7 +29,7 @@ end
 
 function music.restart()
 	music.stop()
-	music.playCurrent()
+	music.play()
 end
 
 function music.setCurrent(name)
