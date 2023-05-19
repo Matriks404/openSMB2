@@ -44,10 +44,14 @@ function music.play()
 
 	if not music.current then
 		music.stop()
+
+		return
 	end
 
-	if music.m[music.current] and music.m[music.current].track then
-		music.m[music.current].track:play()
+	local m = music.m[music.current]
+
+	if m and m.track then
+		m.track:play()
 	end
 end
 
@@ -60,8 +64,10 @@ function music.stop(name)
 		end
 	end
 
-	if music.m[name] and music.m[name].track and music.m[name].track:isPlaying() then
-		music.m[name].track:stop()
+	local m = music.m[name]
+
+	if m and m.track and m.track:isPlaying() then
+		m.track:stop()
 	end
 end
 
