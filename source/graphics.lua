@@ -237,7 +237,7 @@ function graphics.drawLevelbook()
 		love.graphics.draw(game_resources.images.levelbook, lb_x, lb_y)
 	end
 
-	local world_str = string.format("WORLD %d-%d", world.current, world.level)
+	local world_str = string.format("WORLD  %d-%d", world.current, world.level)
 	local world_x = 89
 	local world_y = 48
 
