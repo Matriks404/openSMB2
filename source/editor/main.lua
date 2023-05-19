@@ -32,8 +32,6 @@ function editor.loadImages()
 end
 
 function editor.reset()
-	state.name = "level_editor_menu"
-
 	editor.mode = "normal"
 	editor.tile = 1
 end
@@ -227,6 +225,7 @@ function editor.changeView()
 end
 
 function editor.quit()
+	state.set("level_editor_menu")
 	if world.isLevelModified(world.current, world.level) then
 		world[world_no][level_no] = nil
 	end
@@ -236,9 +235,6 @@ function editor.quit()
 
 	window.resizable = false
 	window.update()
-
-	graphics.setBackgroundColor("black")
-	game_resources.music.stop()
 end
 
 function editor.quitToTitleScreen()
