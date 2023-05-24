@@ -1,6 +1,6 @@
 local story = {}
 
-story.lines = 0
+story.line = 1
 story.page = 1
 
 function story.load(directory)

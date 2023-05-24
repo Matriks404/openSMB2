@@ -6,7 +6,7 @@ function title.reset()
 	state.resetTimer()
 
 	state.text_timer = 0
-	game_resources.story.lines = 0
+	game_resources.story.line = 1
 	game_resources.story.page = 1
 
 	state.transitionClear()
@@ -35,22 +35,30 @@ function title.update()
 end
 
 function title.updateIntro()
-	local max_lines_per_page = 8
 	local max_pages = #game_resources.story
 
 	if state.text_timer == 65 then
-		game_resources.story.lines = game_resources.story.lines + 1
 		state.text_timer = 0
 
-		if game_resources.story.lines > max_lines_per_page then
+		game_resources.story.line = game_resources.story.line + 1
+
+		local story_text = game_resources.story
+		local max_lines = #story_text[story_text.page]
+
+		--TODO: We probably should allow more, maybe even with scrolling text if it's too long?
+		if max_lines > 8 then
+			max_lines = 8
+		end
+
+		if game_resources.story.line > max_lines then
 			if game_resources.story.page == max_pages then
 			-- Enable transition which will go to title screen after some time
-				game_resources.story.lines = max_lines_per_page
+				game_resources.story.line = max_lines
 				state.transition = true
 
 			else
 			-- Change to the next story page if all lines are displayed
-				game_resources.story.lines = 0
+				game_resources.story.line = 0
 				game_resources.story.page = game_resources.story.page + 1
 				state.text_timer = 2
 			end
@@ -88,7 +96,7 @@ function title.draw()
 		local page = game_resources.story.page
 		local story_text = game_resources.story[page]
 
-		for i = 1, game_resources.story.lines do
+		for i = 1, game_resources.story.line do
 		-- Draw lines of text
 			graphics.drawText(tostring(story_text[i]), 48, 64 + ((i - 1) * 16))
 		end
