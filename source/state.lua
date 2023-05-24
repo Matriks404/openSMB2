@@ -23,9 +23,14 @@ function state.setupState(name, background, font, music)
 	state.s[name] = { background = background, font = font, music = music }
 end
 
+function state.resetTimer()
+	state.timer = 0
+end
+
 function state.set(name)
 	state.name = name
-	state.timer = 0
+
+	state.resetTimer()
 
 	local s = state.s[name]
 

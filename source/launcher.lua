@@ -3,7 +3,6 @@ local launcher = {}
 launcher.img = {}
 
 launcher.mandatory_files = {
-	"story.lua",
 	"images/indicator.png",
 	"images/tilemap.png",
 	"images/charselect/arrow.png",

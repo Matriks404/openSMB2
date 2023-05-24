@@ -1,7 +1,10 @@
 local title = {}
 
+title.show_intro = true
+
 function title.reset()
-	state.timer = 0
+	state.resetTimer()
+
 	state.text_timer = 0
 	game_resources.story.lines = 0
 	game_resources.story.page = 1
@@ -12,6 +15,12 @@ function title.reset()
 end
 
 function title.update()
+	title.show_intro = #game_resources.story > 0
+
+	if not title.show_intro then
+		return
+	end
+
 	if state.transition then
 		state.transition_timer = state.transition_timer + 1
 
@@ -57,7 +66,7 @@ function title.draw()
 		love.graphics.draw(game_resources.images.title_border, 0, 0)
 	end
 
-	if state.timer <= 500 then
+	if not title.show_intro or state.timer <= 500 then
 		if game_resources.images.title_logo then
 			love.graphics.draw(game_resources.images.title_logo, 48, 48)
 		end
