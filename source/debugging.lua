@@ -27,6 +27,12 @@ function debugging.switchInfo()
 	debugging.fps = debugging.info
 end
 
+function debugging.advanceTimer()
+	state.timer = state.timer + 1
+
+	game.update()
+end
+
 function debugging.getFont()
 	return game.font1 or launcher.font_normal
 end
@@ -42,9 +48,10 @@ function debugging.drawCounter(n, y, add)
 		str = str..add
 	end
 
-	local x = (graphics.width - string.len(str) * 8) - 1
+	local str_width = string.len(str) * 8
+	local x = (graphics.width - str_width) - 1
 
-	graphics.drawText(string.format("%02d%s", n, add or ""), x, y, debugging.getFont())
+	graphics.drawText(string.format("%d%s", n, add or ""), x, y, debugging.getFont())
 end
 
 function debugging.drawCounters()
@@ -66,7 +73,7 @@ function debugging.drawTopLeftInfo()
 		graphics.drawText("DEBUG", 2, 12, debugging.getFont())
 
 		if debugging.pause then
-			graphics.drawText("PAUSED", 2, 22, debugging.getFont())
+			graphics.drawText("PAUSE", 2, 22, debugging.getFont())
 		end
 	end
 end
@@ -99,6 +106,12 @@ function debugging.checkInput(key)
 	else
 		if state.name ~= "level_editor" and key == "f3" then
 			debugging.switchInfo()
+		end
+	end
+
+	if debugging.pause then
+		if key == "space" then
+			debugging.advanceTimer()
 		end
 	end
 

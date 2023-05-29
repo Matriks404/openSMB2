@@ -108,6 +108,8 @@ When enabled, the usual debugging info (which is usually displayed when you pres
 
 You will also gain access to these additional debugging features inside the game:
 
-* Press `Pause Break` to pause the application by not advancing ticks. Note that enabling this will result in most input not being checked, except for keys that modify graphical settings such as fullscreen/windowed mode or game size, as well as the mute state.
+* Press `Pause Break` to pause the application by not advancing ticks.
+	* Note that enabling this will result in most input not being checked, except for keys that modify graphical settings such as fullscreen/windowed mode or game size, as well as the mute state.
+	* When in paused state press `Space` to advance single timer tick.
 * Press `CTRL+A` to ascend the player character.
 * Press `CTRL+D` for the character to die.

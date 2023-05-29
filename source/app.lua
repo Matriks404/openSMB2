@@ -19,8 +19,8 @@ function app.update(dt)
 		state.delta = state.delta + dt
 
 		while state.delta >= state.tick_rate do
-			state.timer = state.timer + 1
 			state.delta = state.delta - state.tick_rate
+			state.timer = state.timer + 1
 
 			game.update()
 		end
