@@ -225,9 +225,7 @@ end
 
 --TODO: Refactor this!
 function game.draw()
-	if state.name == "launcher" then
-		launcher.draw()
-	elseif state.name == "title" then
+	if state.name == "title" then
 		title.draw()
 
 	elseif state.name == "character_select" then
@@ -382,8 +380,6 @@ function game.draw()
 	elseif state.name == "level_editor" then
 		editor.draw.editor()
 	end
-
-	debugging.drawInfo()
 end
 
 function game.setupStates()

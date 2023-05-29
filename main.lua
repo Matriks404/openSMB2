@@ -24,14 +24,7 @@ function love.load()
 end
 
 function love.update(dt)
-	state.delta = state.delta + dt
-
-	while state.delta >= state.tick_rate do
-		state.timer = state.timer + 1
-		state.delta = state.delta - state.tick_rate
-
-		game.update()
-	end
+	app.update(dt)
 end
 
 function love.keyreleased(key)
@@ -39,7 +32,5 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-	love.graphics.scale(graphics.scale)
-
-	game.draw()
+	app.draw()
 end

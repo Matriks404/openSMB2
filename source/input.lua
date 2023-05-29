@@ -1,5 +1,6 @@
 local input = {}
 
+-- TODO: Refactor this?
 function input.check(key)
 	if key == "escape" then
 		love.event.quit()
@@ -29,14 +30,11 @@ function input.check(key)
 		app.switchMuteState()
 	end
 
-	if state.name == "launcher" or state.name == "title" then
-		if love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
-			debugging.switch()
-		end
-	end
+	debugging.checkInput(key)
 
-	if not debugging.enabled and state.name ~= "level_editor" and key == "f3" then
-		debugging.switchInfo()
+	-- Return prematurely if the application is paused. We don't need to check input anymore.
+	if debugging.pause then
+		return
 	end
 
 	if state.name == "launcher" then
@@ -48,6 +46,8 @@ function input.check(key)
 			launcher.runGame(launcher.selection)
 		end
 
+		return
+
 	elseif state.name == "title" then
 		if key == "s" then
 			state.set("character_select")
@@ -58,6 +58,8 @@ function input.check(key)
 		elseif love.keyboard.isDown("lctrl", "rctrl") and key == "l" then
 			state.set("level_editor_menu")
 		end
+
+		return
 
 	elseif state.name == "character_select" then
 		-- Select character on the left
@@ -85,6 +87,8 @@ function input.check(key)
 			end
 		end
 
+		return
+
 	elseif state.name == "gameplay" then
 		if key == "s" and state.timer > 146 and state.transition_timer == 0 then
 			state.backup_timer = state.timer
@@ -99,6 +103,8 @@ function input.check(key)
 			game_resources.music.stop()
 		end
 
+		return
+
 	elseif state.name == "pause" then
 		if key == "s" then
 			state.set("gameplay")
@@ -108,6 +114,8 @@ function input.check(key)
 			-- This is a bit hacky, but whatever.
 			graphics.setBackgroundColor(world.current_area.background)
 		end
+
+		return
 
 	elseif state.name == "game_over" then
 		-- Select option
@@ -128,14 +136,18 @@ function input.check(key)
 			end
 		end
 
+		return
+
 	elseif state.name == "level_editor_menu" then
 		editor.input.checkForMenu(key)
 
+		return
+
 	elseif state.name == "level_editor" then
 		editor.input.checkForEditor(key)
-	end
 
-	debugging.checkInput(key)
+		return
+	end
 end
 
 return input

@@ -14,6 +14,31 @@ function app.setup()
 	launcher.load()
 end
 
+function app.update(dt)
+	if state.name ~= "launcher" and not debugging.pause then
+		state.delta = state.delta + dt
+
+		while state.delta >= state.tick_rate do
+			state.timer = state.timer + 1
+			state.delta = state.delta - state.tick_rate
+
+			game.update()
+		end
+	end
+end
+
+function app.draw()
+	love.graphics.scale(graphics.scale)
+
+	if state.name == "launcher" then
+		launcher.draw()
+	else
+		game.draw()
+	end
+
+	debugging.drawInfo()
+end
+
 function app.switchMuteState()
 	app.muted = not app.muted
 
