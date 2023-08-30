@@ -3,13 +3,13 @@ local launcher = {}
 launcher.img = {}
 
 launcher.mandatory_files = {
-	"images/indicator.png",
-	"images/tilemap.png",
-	"images/charselect/arrow.png",
-	"images/gameplay/characters/char1.png",
-	"images/gameplay/characters/char2.png",
-	"images/gameplay/characters/char3.png",
-	"images/gameplay/characters/char4.png"
+	"images/indicator.t3x",
+	"images/tilemap.t3x",
+	"images/charselect/arrow.t3x",
+	"images/gameplay/characters/char1.t3x",
+	"images/gameplay/characters/char2.t3x",
+	"images/gameplay/characters/char3.t3x",
+	"images/gameplay/characters/char4.t3x"
 }
 
 launcher.selection = 1
@@ -40,8 +40,8 @@ end
 function launcher.loadImages()
 	local directory = "resources/images/launcher/"
 
-	launcher.img["gp_good"] = resources.loadImage(directory.."gamepack_good.png")
-	launcher.img["gp_bad"] = resources.loadImage(directory.."gamepack_bad.png")
+	launcher.img["gp_good"] = resources.loadImage(directory.."gamepack_good.t3x")
+	launcher.img["gp_bad"] = resources.loadImage(directory.."gamepack_bad.t3x")
 end
 
 function launcher.setupStates()
@@ -135,7 +135,7 @@ function launcher.getGamePack(directory)
 		return gamepack
 	end
 
-	local font1_file = directory.."/resources/images/font/"..gamepack.font1..".png"
+	local font1_file = directory.."/resources/images/font/"..gamepack.font1..".t3x"
 
 	if not love.filesystem.getInfo(font1_file) then
 		print("\tError: Primary font: "..gamepack.font1.." doesn't exist!")
@@ -146,7 +146,7 @@ function launcher.getGamePack(directory)
 	gamepack.font2 = settings.fonts.secondary
 
 	if gamepack.font2 and gamepack.font2 ~= "" then
-		local font2_file = directory.."/resources/images/font/"..gamepack.font2..".png"
+		local font2_file = directory.."/resources/images/font/"..gamepack.font2..".t3x"
 
 		if not love.filesystem.getInfo(font2_file) then
 			print("\tWarning: Secondary font: "..gamepack.font2.." doesn't exist! Engine will use the primary one.")
@@ -209,7 +209,8 @@ function launcher.runGame(id)
 		if launcher.gamepacks[id].valid then
 			game.load(id)
 		else
-			love.window.showMessageBox("Error", "Selected gamepack is not valid! Check the console for details.")
+			--TODO: Do something else.
+			--love.window.showMessageBox("Error", "Selected gamepack is not valid! Check the console for details.")
 		end
 	end
 end

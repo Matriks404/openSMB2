@@ -1,11 +1,9 @@
 local input = {}
 
 -- TODO: Refactor this?
-function input.check(key)
-	if key == "escape" then
-		love.event.quit()
-
-	elseif (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
+function input.check(button)
+	--[[
+	if (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
 		window.updateFullscreen()
 
 	elseif key == "-" then
@@ -25,12 +23,13 @@ function input.check(key)
 		else
 			graphics.scaleUp()
 		end
+	--]]
 
-	elseif love.keyboard.isDown("lctrl", "rctrl") and key == "m" then
+	if state.name ~= "level_editor" and button == "rightshoulder" then
 		app.switchMuteState()
 	end
 
-	debugging.checkInput(key)
+	debugging.checkInput(button)
 
 	-- Return prematurely if the application is paused. We don't need to check input anymore.
 	if debugging.pause then
@@ -38,24 +37,24 @@ function input.check(key)
 	end
 
 	if state.name == "launcher" then
-		if key == "up" then
+		if button == "dpup" then
 			launcher.goToPrevious()
-		elseif key == "down" or key == "x" then
+		elseif button == "dpdown" then
 			launcher.goToNext()
-		elseif (not love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "s" then
+		elseif button == "a" or button == "start" then
 			launcher.runGame(launcher.selection)
 		end
 
 		return
 
 	elseif state.name == "title" then
-		if key == "s" then
+		if button == "start" then
 			state.set("character_select")
 
 			state.transitionClear()
 			game.reset()
 
-		elseif love.keyboard.isDown("lctrl", "rctrl") and key == "l" then
+		elseif button == "y" then
 			state.set("level_editor_menu")
 		end
 
@@ -63,7 +62,7 @@ function input.check(key)
 
 	elseif state.name == "character_select" then
 		-- Select character on the left
-		if key == "left" and state.transition_timer == 0 then
+		if button == "dpleft" and state.transition_timer == 0 then
 			state.cursor = (state.cursor > 0 and state.cursor - 1) or 3
 
 			if game_resources.sound.pickup then
@@ -71,7 +70,7 @@ function input.check(key)
 			end
 
 		-- Select character on the right
-		elseif key == "right" and state.transition_timer == 0 then
+		elseif button == "dpright" and state.transition_timer == 0 then
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
 			if game_resources.sound.pickup then
@@ -79,7 +78,7 @@ function input.check(key)
 			end
 
 		-- Choose character and enable transition which will go to levelbook after some time
-		elseif key == "x" and state.transition_timer == 0 then
+		elseif button == "a" and state.transition_timer == 0 then
 			state.transition = true
 
 			if game_resources.sound.pickup then
@@ -90,14 +89,14 @@ function input.check(key)
 		return
 
 	elseif state.name == "gameplay" then
-		if key == "s" and state.timer > 146 and state.transition_timer == 0 then
+		if button == "start" and state.timer > 146 and state.transition_timer == 0 then
 			state.backup_timer = state.timer
 
 			state.set("pause")
 		end
 
 		-- Die!
-		if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
+		if debugging.enabled and button == "back" then
 			character.dying_timer = 84
 
 			game_resources.music.stop()
@@ -106,7 +105,7 @@ function input.check(key)
 		return
 
 	elseif state.name == "pause" then
-		if key == "s" then
+		if button == "start" then
 			state.set("gameplay")
 			state.timer = state.backup_timer
 			state.transition_timer = 0
@@ -119,11 +118,11 @@ function input.check(key)
 
 	elseif state.name == "game_over" then
 		-- Select option
-		if key == "a" and character.continues > 0 then
+		if (button == "dpup" or button == "dpdown") and character.continues > 0 then
 			state.cursor = (state.cursor == 0 and 1) or 0
 		end
 
-		if key == "s" then
+		if button == "start" then
 			if state.cursor == 0 then
 				character.continues = character.continues - 1
 				character.lives = 3
@@ -139,12 +138,12 @@ function input.check(key)
 		return
 
 	elseif state.name == "level_editor_menu" then
-		editor.input.checkForMenu(key)
+		editor.input.checkForMenu(button)
 
 		return
 
 	elseif state.name == "level_editor" then
-		editor.input.checkForEditor(key)
+		editor.input.checkForEditor(button)
 
 		return
 	end

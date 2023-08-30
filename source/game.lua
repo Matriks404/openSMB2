@@ -11,7 +11,7 @@ function game.load(id)
 	game.font2 = gamepack.font2
 	game.title_text = gamepack.title_text
 
-	love.window.setTitle(app.title.." - "..game.name)
+	--love.window.setTitle(app.title.." - "..game.name)
 
 	game_resources.load(game.directory)
 	graphics.loadWorldImages()
@@ -90,12 +90,17 @@ function game.update()
 		end
 
 		if state.timer > 146 and state.transition_timer == 0 then
+			--TODO: Fix this!
+			--[[
 			if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
 			-- Ascending
 				character.pos_y = character.pos_y - 6
 			end
+			]]--
 
 			-- Left/Right movement
+			--TODO: Fix this!
+			--[[
 			if love.keyboard.isDown("left") then
 				character.side = -1
 
@@ -139,8 +144,9 @@ function game.update()
 						character.speed = 4 * character.accel
 					end
 				end
+			]]--
 
-			elseif character.speed > 0 then
+			if character.speed > 0 then
 			-- Reduce speed after time
 				character.speed = character.speed - 4
 				character.accel = character.accel - 1

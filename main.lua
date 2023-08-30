@@ -27,10 +27,12 @@ function love.update(dt)
 	app.update(dt)
 end
 
-function love.keyreleased(key)
-	input.check(key)
+function love.gamepadpressed(joystick, button)
+	input.check(button)
 end
 
-function love.draw()
-	app.draw()
+function love.draw(screen)
+	if screen ~= "bottom" then
+		app.draw()
+	end
 end

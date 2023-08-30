@@ -90,9 +90,9 @@ function debugging.drawInfo()
 	debugging.drawCounters()
 end
 
-function debugging.checkInput(key)
+function debugging.checkInput(button)
 	if state.name == "launcher" or state.name == "title" then
-		if love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
+		if button == "back" then
 			debugging.switch()
 
 			return
@@ -100,24 +100,18 @@ function debugging.checkInput(key)
 	end
 
 	if debugging.enabled then
-		if key == "pause" then
+		if button == "y" then
 			debugging.switchPause()
 		end
 	else
-		if state.name ~= "level_editor" and key == "f3" then
+		if button == "leftshoulder" then
 			debugging.switchInfo()
 		end
 	end
 
 	if debugging.pause then
-		if key == "space" then
+		if button == "x" then
 			debugging.advanceTimer()
-		end
-	end
-
-	if not debugging.info then
-		if love.keyboard.isDown("lctrl", "rctrl") and key == "f" then
-			debugging.fps = not debugging.fps
 		end
 	end
 end

@@ -7,7 +7,7 @@ function font.load(directory)
 
 	font.loadSymbols(directory, game.font1)
 
-	if game.font2 and love.filesystem.getInfo(directory..game.font2..".png") then
+	if game.font2 and love.filesystem.getInfo(directory..game.font2..".t3x") then
 		font.loadSymbols(directory, game.font2)
 	else
 		game.font2 = game.font1
@@ -15,7 +15,7 @@ function font.load(directory)
 end
 
 function font.loadSymbols(directory, name)
-	font[name] = love.graphics.newImage(directory..name..".png")
+	font[name] = love.graphics.newImage(directory..name..".t3x")
 
 	local font_width = font[name]:getWidth()
 	local font_height = font[name]:getHeight()

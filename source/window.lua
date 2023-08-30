@@ -4,14 +4,16 @@ window.fullscreen = false
 window.resizable = false
 
 function window.setInitialScale()
-	local _, _, flags = love.window.getMode()
-	local desktop_width, desktop_height = love.window.getDesktopDimensions(flags.display)
+	--local _, _, flags = love.window.getMode()
+	--local desktop_width, desktop_height = love.window.getDesktopDimensions(flags.display)
 
-	local max_width_scale = math.floor(love.window.fromPixels(desktop_width) / graphics.width)
-	local max_height_scale = math.floor(love.window.fromPixels(desktop_height) / graphics.height)
+	--local max_width_scale = math.floor(love.window.fromPixels(desktop_width) / graphics.width)
+	--local max_height_scale = math.floor(love.window.fromPixels(desktop_height) / graphics.height)
 
-	graphics.max_scale = math.min(max_width_scale, max_height_scale)
-	graphics.scale = graphics.max_scale - 1
+	--graphics.max_scale = math.min(max_width_scale, max_height_scale)
+	--graphics.scale = graphics.max_scale - 1
+	graphics.max_scale = 1
+	graphics.scale = 1
 end
 
 function window.update()
@@ -33,9 +35,9 @@ end
 
 function window.setup()
 	window.setInitialScale()
-	window.update()
+	--window.update()
 
-	love.window.setTitle(app.title)
+	--love.window.setTitle(app.title)
 end
 
 return window

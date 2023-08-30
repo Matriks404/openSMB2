@@ -268,7 +268,7 @@ function world.load(world_no, level_no, area_no)
 		level_directory = base_level_dir
 	else
 		--TODO: This is just a placeholder, do something about that.
-		love.window.showMessageBox("Error", "No valid level found! Check the console for details.", "error")
+		--love.window.showMessageBox("Error", "No valid level found! Check the console for details.", "error")
 
 		return
 	end
@@ -296,6 +296,7 @@ function world.save(world_no, level_no)
 	for area = 1, #level do
 		world.checkAreaSizeValidity(world_no, level_no, area)
 
+		--[[
 		if not level[area].valid_size then
 			local msg = "Invalid size for area "..area.."!"..
 			"\nPlease make sure that the area size is valid for specified area type."..
@@ -305,6 +306,7 @@ function world.save(world_no, level_no)
 
 			return
 		end
+		]]--
 	end
 
 	local level_directory = world.getLevelDirectory(world_no, level_no, "userlevels")
@@ -339,7 +341,7 @@ function world.save(world_no, level_no)
 		end
 	end
 
-	love.window.showMessageBox("Info", "Level was saved to "..level_directory, "info")
+	--love.window.showMessageBox("Info", "Level was saved to "..level_directory, "info")
 end
 
 function world.loadLevel(world_no, level_no, level_directory)

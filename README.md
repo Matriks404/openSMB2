@@ -1,22 +1,23 @@
+# NOTE
+
+This is a proof of concept branch for the prototype Nintendo 3DS version of the project. Use instructions below to install it.
+
+This is also not officially supported, do not post new issues when on this branch. Pull requests are welcome.
+
 # Running
 
-1. Install LÖVE Engine on your computer.
+1. Install LÖVE Potion 2.4.1 (not newer ones) on your console (from [here](https://github.com/lovebrew/lovepotion/releases))
 
 2. Download zip file with this project by clicking on the green button called `Code`, then `Download ZIP`, and extract files to some folder on your computer (Alternatively execute `git clone git://github.com/Matriks404/openSMB2.git` command in the desired directory, if you have git installed).
 
-3. Download gamepack(s) from either:
-	* [openSMB2-ExampleGamepack](https://github.com/Matriks404/openSMB2-ExampleGamepack) project for an example openSMB2 game;
+3. Copy these files to your 3DS microSD card (to directory `/3ds/game/`).
 
-	* [This Google Drive link](https://drive.google.com/drive/folders/1cz5gJ-IXvqTIJ7fUArD30UN9Qg4sfeGX?usp=sharing) (select them and click `Download` button) and extract the appropriate `<gamepack name>.pack.zip` contents to the following directory:
-		* On Windows: `%appdata%\LOVE\openSMB2\games\`
-		* On GNU/Linux: `~/.local/share/love/openSMB2/games/`
-		* On macOS: `/Users/user/Library/Application Support/LOVE/openSMB2/games`
+4. Download gamepack(s) from:
+	* [This Google Drive link](https://drive.google.com/drive/folders/1cz5gJ-IXvqTIJ7fUArD30UN9Qg4sfeGX?usp=sharing) (select them and click `Download` button) and extract the appropriate `<gamepack name>.3ds.pack.zip` contents to the `/3ds/save/openSMB2/games/` directory on microSD card (that goes to your 3DS).
 
 * NOTE: Make sure to update your resources if necessary (e.g. if you update your local repository).
 
-4. Run the game!
-	* On Windows: Drag game folder onto LÖVE program shortcut.
-	* On GNU/Linux and macOS: Execute `love .` in the console (you might need to change directory to game path first).
+5. Run LÖVE Potion using the Homebrew Launcher.
 
 # Screenshots
 
@@ -37,79 +38,57 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* Pretty much non-existent gameplay
 	* Level editor (see below)
 
-* Controls:
+* Controls (NOTE: Let me know if something is wrong here):
 	* At any time:
-		* `-` or `=` key - Scale graphics down or up (only integer scaling).
-		* `ALT+ENTER` or `F11` key - Enable or disable fullscreen mode.
-		* `CTRL+F` - Enable FPS counter.
-		* `CTRL+M` - Mute the game.
-		* `F3` - Enable debugging info (that displays game version, FPS counter and other stuff).
-		* `ESC` - Quit the game.
+		* Right shoulder button - Mute the game.
+		* Left shoulder button - Enable debugging info (that displays game version, FPS counter and other stuff).
  	* In launcher:
-		* `Up` or `Down` - Select gamepack.
-		* `ENTER` or `S` - Run the currently selected gamepack.
+		* Up or down buttons - Select gamepack.
+		* `START` or `A` button - Run the currently selected gamepack.
 	* On the title screen:
-		* `S` - Enter character select screen.
-		* `CTRL+L` - Enter level editor (see below)
+		* `START` button - Enter character select screen.
+		* `Y` button - Enter level editor (see below)
 	* In character select screen:
-		* `Left` or `Right` key - Select character
-		* `X` key - Choose character
+		* Left or right buttons - Select character
+		* `A` button - Choose character
 	* During gameplay:
-		* `Left` or `Right` key - Move left or right
-		* `Z` key - Run
-		* `S` key - Pause
-	* `S` key on pause screen - Unpause
+		* Left or right buttons - Move left or right
+		* `B` button - Run
+		* `START` button - Pause
+	* `START` button on pause screen - Unpause
 	* On game over screen:
-		* `A` key - Select option
-		* `S` key - Choose option
+		* Up or down keys - Select option
+		* `START` button - Choose option
 
 # Level editor
 
 * In the level editor main menu:
-	* Press one of the keys that will enter editing of some level.
-	* Press `Q` to quit to the title screen.
+	* Press `A` to enter editing of the level 1-1 (this is temporary).
+	* Press `SELECT` to quit to the title screen.
 
 * In the level editor proper:
 	* In any mode:
-		* Resize the window to have more screen space for editing purposes.
-		* Press `L` to load the level (useful if you replace the files and need to reload the level in the editor).
-		* Press `V` to save the level.
-		* Press `P` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
-		* Press `[` or `]` to switch between level areas.
-		* Press `Tab` to change editor mode (normal one or starting position movement tool)
-		* Press `C` to change editor view type (normal or detailed, where the latter is showing hexadecimal values of tiles on top of them).
-		* To move the view:
-			* Press `CTRL` + arrow keys to move the view by one tile.
-			* Press `Page up` or `Page down` to move the view by one screen up or down.
-			* Press `CTRL` + (`Page up` or `Page down`) to move the view by one screen left or right.
-			* Press `Home` or `End` to jump view to the vertical start or end.
-			* Press `CTRL` + (`Home` or `End`) to jump view to the horizontal start or end.
-		* Press `Q` to quit to the main level editor menu.
+		* Press `START` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
+		* Press left shoulder button to switch between level areas.
+		* Press right shoulder button to change editor mode (normal one or starting position movement tool)
+		* Press `SELECT` to quit to the main level editor menu.
 	* When in normal editing mode (`MODE-N`):
-		* Press `T` to change area type (horizontal or vertical).
-		* Press `B` to change background color.
-		* Press `M` to change music.
-		* Press `R` to resize the area to valid size (that is height of maximum 240 pixels for horizontal levels and width of exact 256 pixels for vertical levels).
-		* Press `4` or `6` on keypad to shrink or stretch width.
-		* Press `8` or `2` on keypad to shrink or stretch height.
-		* Press `W`, `S`, `A`, `D` keys to change selected tile.
-		* Press arrow keys to move edit cursor.
-		* Press `X` to place tile.
-		* Press `Z` to remove tile.
+		* Press `Y` or `X` buttons to change selected tile.
+		* Use D-Pad buttons to move edit cursor.
+		* Press `A` to place tile.
+		* Press `B` to remove tile.
 	* When in starting position movement tool mode (`MODE-S`):
-		* Press arrow keys to move starting position pixel-by-pixel.
-		* Press `SHIFT` + arrow keys to move starting position by 16 pixels each time.
+		* Use D-pad buttons to move starting position pixel-by-pixel.
 
 # Debug mode
 
-You can enable debug mode by pressing `CTRL+D` in the launcher or on the title screen.
+You can enable debug mode by pressing `SELECT` in the launcher or on the title screen.
 
-When enabled, the usual debugging info (which is usually displayed when you press `F3` key) will be permanently shown unless you disable this mode.
+When enabled, the debugging info (which is usually displayed when you press the left shoulder button) will be permanently shown unless you disable this mode.
 
 You will also gain access to these additional debugging features inside the game:
 
-* Press `Pause Break` to pause the application by not advancing ticks.
-	* Note that enabling this will result in most input not being checked, except for keys that modify graphical settings such as fullscreen/windowed mode or game size, as well as the mute state.
-	* When in paused state press `Space` to advance single timer tick.
-* Press `CTRL+A` to ascend the player character.
-* Press `CTRL+D` for the character to die.
+* Press `Y` to pause the application by not advancing ticks.
+	* Note that enabling this will result in most input not being checked, notably except the button that changes the mute state.
+	* When in paused state press `X` button to advance single timer tick.
+* Press `SELECT` for the character to die.

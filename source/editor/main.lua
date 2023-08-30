@@ -24,11 +24,11 @@ function editor.loadImages()
 	local directory = "resources/images/leveleditor/"
 
 	-- Mandatory, but expected
-	editor.img["16x16_empty"] = resources.loadImage(directory.."16x16.png")
-	editor.img["16x16_cursor"] = resources.loadImage(directory.."16x16_cursor.png")
-	editor.img["sp"] = resources.loadImage(directory.."starting_point.png")
-	editor.img["sp_select"] = resources.loadImage(directory.."starting_point_select.png")
-	--editor.img["border_arrow"] = resources.loadImage(directory.."border_arrow.png")
+	editor.img["16x16_empty"] = resources.loadImage(directory.."16x16.t3x")
+	editor.img["16x16_cursor"] = resources.loadImage(directory.."16x16_cursor.t3x")
+	editor.img["sp"] = resources.loadImage(directory.."starting_point.t3x")
+	editor.img["sp_select"] = resources.loadImage(directory.."starting_point_select.t3x")
+	--editor.img["border_arrow"] = resources.loadImage(directory.."border_arrow.t3x")
 end
 
 function editor.reset()
@@ -78,6 +78,7 @@ end
 function editor.removeArea(area)
 	local level = world.current_level
 
+	--[[
 	if #level == 1 then
 		local msgbox_name = "Removing area "..world.area
 		local msgbox_msg = "You can't remove the last area from the level!"
@@ -96,6 +97,7 @@ function editor.removeArea(area)
 	if button ~= 1 then
 		return
 	end
+	]]--
 
 	print("Removing area "..world.area)
 
@@ -125,6 +127,7 @@ end
 function editor.addArea()
 	local new_area = world.area + 1
 
+	--[[
 	local msgbox_name = "Adding area "..new_area
 
 	local msgbox_msg = "Are you sure you want to add new area with ID "..new_area.."?"..
@@ -137,6 +140,7 @@ function editor.addArea()
 	if button ~= 1 then
 		return
 	end
+	]]--
 
 	local level = world.current_level
 
@@ -312,6 +316,7 @@ function editor.resizeAreaToValidSize()
 	local area = world.current_area
 
 	if not area.valid_size then
+		--[[
 		local msgbox_name = "Resizing area "..world.area.." to valid size"
 
 		local msgbox_msg = "Are you sure you want to resize the area "..world.area.." to valid size?"..
@@ -324,6 +329,7 @@ function editor.resizeAreaToValidSize()
 		if button ~= 1 then
 			return
 		end
+		]]--
 
 		print("Resizing area "..world.area)
 
