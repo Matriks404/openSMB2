@@ -13,7 +13,7 @@ This is also not officially supported, do not post new issues when on this branc
 3. Copy these files to your 3DS microSD card (to directory `/3ds/game/`).
 
 4. Download gamepack(s) from:
-	* [openSMB2-ExampleGamepack](https://github.com/Matriks404/openSMB2-ExampleGamepack) project for an example openSMB2 game;
+	* [openSMB2-ExampleGamepack](https://github.com/Matriks404/openSMB2-ExampleGamepack/tree/3ds) project for an example openSMB2 game;
 
 	* [This Google Drive link](https://drive.google.com/drive/folders/1cz5gJ-IXvqTIJ7fUArD30UN9Qg4sfeGX?usp=sharing) (select them and click `Download` button) and extract the appropriate `<gamepack name>.3ds.pack.zip` contents to the `/3ds/save/openSMB2/games/` directory on microSD card (that goes to your 3DS).
 
