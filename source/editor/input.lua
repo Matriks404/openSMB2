@@ -1,6 +1,8 @@
 local input = {}
 
 function input.checkForMenu(key)
+	local world_no, level_no
+
 	if key >= "1" and key <= "3" then                  world_no = 1
 	elseif key >= "4" and key <= "6" then              world_no = 2
 	elseif key >= "7" and key <= "9" then              world_no = 3

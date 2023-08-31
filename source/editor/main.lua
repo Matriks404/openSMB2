@@ -36,7 +36,7 @@ function editor.reset()
 	editor.tile = 1
 end
 
-function editor.openLevel()
+function editor.openLevel(world_no, level_no)
 	state.name = "level_editor"
 
 	world.enter(world_no, level_no)
