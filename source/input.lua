@@ -57,9 +57,9 @@ function input.checkReleased(key)
 	if state.name == "launcher" then
 		if key == "up" then
 			launcher.goToPrevious()
-		elseif key == "down" or key == "x" then
+		elseif key == "down" or key == "a" then
 			launcher.goToNext()
-		elseif (not love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "s" then
+		elseif key == "x" or key == "s" then
 			launcher.runGame(launcher.selection)
 		end
 
@@ -144,11 +144,11 @@ function input.checkReleased(key)
 
 	elseif state.name == "game_over" then
 		-- Select option
-		if key == "a" and character.continues > 0 then
+		if key == "up" or key == "down" or key == "a" and character.continues > 0 then
 			state.cursor = (state.cursor == 0 and 1) or 0
 		end
 
-		if key == "s" then
+		if key == "x" or key == "s" then
 			if state.cursor == 0 then
 				character.continues = character.continues - 1
 				character.lives = 3

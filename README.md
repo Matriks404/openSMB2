@@ -35,33 +35,30 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* Title screen
 	* Character select and level intro
 	* Pretty much non-existent gameplay
-	* Level editor (see below)
+	* Level editor (see section below)
 
 * Controls:
 	* At any time:
-		* `-` or `=` key - Scale graphics down or up (only integer scaling).
-		* `ALT+ENTER` or `F11` key - Enable or disable fullscreen mode.
-		* `CTRL+F` - Enable FPS counter.
-		* `CTRL+M` - Mute the game.
-		* `F3` - Enable debugging info (that displays game version, FPS counter and other stuff).
-		* `ESC` - Quit the game.
- 	* In launcher:
-		* `Up` or `Down` - Select gamepack.
-		* `ENTER` or `S` - Run the currently selected gamepack.
+		* `-` or `=` - Scale graphics down or up (only integer scaling)
+		* `ALT+ENTER` or `F11` - Enable or disable fullscreen mode
+		* `CTRL+F` - Enable FPS counter
+		* `CTRL+M` - Mute the game
+		* `F3` - Enable debugging info (that displays game version, FPS counter and other debug stuff)
+		* `ESC` - Quit the game
+	* In any menu (launcher or pause screen):
+		* `Up` or `Down` or `A` - Select option
+		* `X` or `S` - Execute selected option
 	* On the title screen:
-		* `S` - Enter character select screen.
-		* `CTRL+L` - Enter level editor (see below)
+		* `S` - Enter character select screen
+		* `CTRL+L` - Enter level editor (see section below)
 	* In character select screen:
-		* `Left` or `Right` key - Select character
-		* `X` key - Choose character
+		* `Left` or `Right` - Select character
+		* `X` - Play the game with selected character
 	* During gameplay:
-		* `Left` or `Right` key - Move left or right
-		* `Z` key - Run
-		* `S` key - Pause
-	* `S` key on pause screen - Unpause
-	* On game over screen:
-		* `A` key - Select option
-		* `S` key - Choose option
+		* `Left` or `Right` - Move the character left or right
+		* `Z` - Activate character running state
+		* `S` - Pause
+	* `S` on pause screen - Unpause
 
 # Level editor
 
