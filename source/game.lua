@@ -92,7 +92,7 @@ function game.update()
 
 		if state.timer > 146 and state.transition_timer == 0 then
 			-- Ascending
-			if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
+			if character.is_ascending then
 				character.pos_y = character.pos_y - 6
 			end
 
