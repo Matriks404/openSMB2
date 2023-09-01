@@ -28,7 +28,11 @@ function love.update(dt)
 end
 
 function love.gamepadpressed(joystick, button)
-	input.check(button)
+	input.checkPressed(button)
+end
+
+function love.gamepadreleased(joystick, button)
+	input.checkReleased(button)
 end
 
 function love.draw(screen)

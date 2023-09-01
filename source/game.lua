@@ -64,51 +64,46 @@ function game.update()
 		end
 
 	elseif state.name == "gameplay" then
-		if state.screen_y == 0 and character.pos_y > 192 then
 		-- When on first screen, switching vertical screen downwards
+		if state.screen_y == 0 and character.pos_y > 192 then
 			state.screen_dir = 1
 			state.verticalScreenTransition()
 
-		elseif state.screen_y > 0 then
 		-- When on subsequent screen
-			if character.pos_y > 192 + state.screen_y * 144 then
+		elseif state.screen_y > 0 then
 			-- Switching vertical screen downwards
-				if character.pos_y <= world.current_area.height - 48 then
+			if character.pos_y > 192 + state.screen_y * 144 then
 				-- If not above lowest screen border switch screen
+				if character.pos_y <= world.current_area.height - 48 then
 					state.screen_dir = 1
 					state.verticalScreenTransition()
-				elseif character.pos_y >= world.current_area.height - 1 then
+
 				-- Die!
+				elseif character.pos_y >= world.current_area.height - 1 then
 					character.dying_timer = character.dying_timer + 1
 				end
 
-			elseif character.pos_y < 16 + state.screen_y * 144 then
 			-- Switching vertical screen upwards
+			elseif character.pos_y < 16 + state.screen_y * 144 then
 				state.screen_dir = -1
 				state.verticalScreenTransition()
 			end
 		end
 
 		if state.timer > 146 and state.transition_timer == 0 then
-			--TODO: Fix this!
-			--[[
-			if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
 			-- Ascending
-				character.pos_y = character.pos_y - 6
-			end
-			]]--
+			--if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
+			--	character.pos_y = character.pos_y - 6
+			--end
 
+			--TODO: All this movement code is a bit hacky and uses old shitty code. Fix this, probably even rewrite everything here.
 			-- Left/Right movement
-			--TODO: Fix this!
-			--[[
-			if love.keyboard.isDown("left") then
-				character.side = -1
-
+			if character.has_controlled_movement then
 				if character.speed == 0 then
-					character.movement_dir = -1
+					character.movement_dir = character.side
 				end
 
-				if character.movement_dir == 1 then
+				if character.movement_dir == -character.side then
 					character.speed = character.speed - 4
 					character.accel = character.accel - 1
 				else
@@ -116,49 +111,26 @@ function game.update()
 						character.accel = character.accel + 1
 					end
 
-					if love.keyboard.isDown("z") then
+					if character.is_running then
 						character.speed = 6 * character.accel
 					else
 						character.speed = 4 * character.accel
 					end
 				end
 
-			elseif love.keyboard.isDown("right") then
-				character.side = 1
-
-				if character.speed == 0 then
-					character.movement_dir = 1
-				end
-
-				if character.movement_dir == -1 then
-					character.speed = character.speed - 4
-					character.accel = character.accel - 1
-				else
-					if character.accel < 6 then
-						character.accel = character.accel + 1
-					end
-
-					if love.keyboard.isDown("z") then
-						character.speed = 6 * character.accel
-					else
-						character.speed = 4 * character.accel
-					end
-				end
-			]]--
-
-			if character.speed > 0 then
 			-- Reduce speed after time
+			elseif character.speed > 0 then
 				character.speed = character.speed - 4
 				character.accel = character.accel - 1
 			end
 
-			if character.accel < 0 then
 			-- Reseting character acceleration to 0
+			if character.accel < 0 then
 				character.accel = 0
 			end
 
+			-- Calculating character position
 			if character.speed > 0 then
-				-- Calculating character position
 				character.subpos_x = character.subpos_x + character.speed * character.movement_dir
 
 				while character.subpos_x >= 16 or character.subpos_x <= -16 do
@@ -174,20 +146,21 @@ function game.update()
 					character.pos_x = world.current_area.width + character.pos_x
 				end
 
-			elseif character.speed < 0 then
 			-- Reseting character speed to 0
+			elseif character.speed < 0 then
 				character.speed = 0
 			end
 
-			-- Character falling (slower for Luigi) --TEMPORARY
+			--TODO: This is temporary, and actually we should not hardcode character that falls slower, but instead use the gamepack configuration variable.
+			-- Character falling (slower for character 2)
 			if character.current == "char2" then
 				character.pos_y = character.pos_y + 2.5
 			else
 				character.pos_y = character.pos_y + 3
 			end
 
-			if character.dying_timer == 6 then
 			-- Deplate energy and play death sound
+			if character.dying_timer == 6 then
 				character.energy = 0
 
 				game_resources.music.stop()
@@ -197,14 +170,14 @@ function game.update()
 				end
 			end
 
-			if character.dying_timer == 84 then
 			-- Die!
+			if character.dying_timer == 84 then
 				character.dying_timer = 0
 
 				character.lives = character.lives - 1 -- Decrement a life
 
-				if character.lives > 0 then
 				-- Going to death screen and playing once more
+				if character.lives > 0 then
 					character.energy = 2 -- Reset energy
 
 					-- Reset character position and side
@@ -214,8 +187,9 @@ function game.update()
 					character.side = 1
 
 					state.set("death")
-				else
+
 				-- No more lifes, go to game over screen
+				else
 					if game_resources.sound.game_over then
 						game_resources.sound.play("game_over")
 					end

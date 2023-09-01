@@ -1,7 +1,24 @@
 local input = {}
+-- TODO: Refactor this? We should probably move game-related code to game.lua, although not sure.
 
--- TODO: Refactor this?
-function input.check(button)
+function input.checkPressed(button)
+	if state.name == "gameplay" then
+		if button == "dpleft" then
+			character.has_controlled_movement = true
+			character.side = -1
+
+		elseif button == "dpright" then
+			character.has_controlled_movement = true
+			character.side = 1
+		end
+
+		if button == "b" then
+			character.is_running = true
+		end
+	end
+end
+
+function input.checkReleased(button)
 	--[[
 	if (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
 		window.updateFullscreen()
@@ -89,17 +106,25 @@ function input.check(button)
 		return
 
 	elseif state.name == "gameplay" then
-		if button == "start" and state.timer > 146 and state.transition_timer == 0 then
-			state.backup_timer = state.timer
-
-			state.set("pause")
-		end
-
 		-- Die!
 		if debugging.enabled and button == "back" then
 			character.dying_timer = 84
 
 			game_resources.music.stop()
+
+		elseif button == "start" and state.timer > 146 and state.transition_timer == 0 then
+			state.backup_timer = state.timer
+
+			state.set("pause")
+
+		else
+			if button == "dpleft" or button == "dpright" then
+				character.has_controlled_movement = false
+			end
+
+			if button == "b" then
+				character.is_running = false
+			end
 		end
 
 		return
