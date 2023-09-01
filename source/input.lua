@@ -1,7 +1,24 @@
 local input = {}
+-- TODO: Refactor this? We should probably move game-related code to game.lua, although not sure.
 
--- TODO: Refactor this?
-function input.check(key)
+function input.checkPressed(key)
+	if state.name == "gameplay" then
+		if key == "left" then
+			character.has_controlled_movement = true
+			character.side = -1
+
+		elseif key == "right" then
+			character.has_controlled_movement = true
+			character.side = 1
+		end
+
+		if key == "z" then
+			character.is_running = true
+		end
+	end
+end
+
+function input.checkReleased(key)
 	if key == "escape" then
 		love.event.quit()
 
@@ -90,17 +107,25 @@ function input.check(key)
 		return
 
 	elseif state.name == "gameplay" then
-		if key == "s" and state.timer > 146 and state.transition_timer == 0 then
-			state.backup_timer = state.timer
-
-			state.set("pause")
-		end
-
 		-- Die!
 		if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
 			character.dying_timer = 84
 
 			game_resources.music.stop()
+
+		elseif key == "s" and state.timer > 146 and state.transition_timer == 0 then
+			state.backup_timer = state.timer
+
+			state.set("pause")
+
+		else
+			if key == "left" or key == "right" then
+				character.has_controlled_movement = false
+			end
+
+			if key == "z" then
+				character.is_running = false
+			end
 		end
 
 		return

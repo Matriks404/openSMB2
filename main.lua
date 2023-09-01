@@ -27,8 +27,12 @@ function love.update(dt)
 	app.update(dt)
 end
 
+function love.keypressed(key)
+	input.checkPressed(key)
+end
+
 function love.keyreleased(key)
-	input.check(key)
+	input.checkReleased(key)
 end
 
 function love.draw()
