@@ -147,7 +147,7 @@ function input.checkReleased(button)
 			state.cursor = (state.cursor == 0 and 1) or 0
 		end
 
-		if button == "start" then
+		if button == "a" or button == "start" then
 			if state.cursor == 0 then
 				character.continues = character.continues - 1
 				character.lives = 3

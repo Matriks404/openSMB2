@@ -38,29 +38,26 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* Title screen
 	* Character select and level intro
 	* Pretty much non-existent gameplay
-	* Level editor (see below)
+	* Level editor (see section below)
 
-* Controls (NOTE: Let me know if something is wrong here):
+* Controls:
 	* At any time:
-		* Right shoulder button - Mute the game.
-		* Left shoulder button - Enable debugging info (that displays game version, FPS counter and other stuff).
- 	* In launcher:
-		* Up or down buttons - Select gamepack.
-		* `START` or `A` button - Run the currently selected gamepack.
+		* Right shoulder button - Mute the game
+		* Left shoulder button - Enable debugging info (that displays game version, FPS counter and other debug stuff)
+	* In any menu (launcher or pause screen):
+		* Up or down button - Select option
+		* `A` or `START` - Execute selected option
 	* On the title screen:
-		* `START` button - Enter character select screen.
-		* `Y` button - Enter level editor (see below)
+		* `START` button - Enter character select screen
+		* `Y` button - Enter level editor (see section below)
 	* In character select screen:
 		* Left or right buttons - Select character
-		* `A` button - Choose character
+		* `A` button - Play the game with selected character
 	* During gameplay:
-		* Left or right buttons - Move left or right
-		* `B` button - Run
+		* Left or right buttons - Move the character left or right
+		* `B` button - Activate character running state
 		* `START` button - Pause
 	* `START` button on pause screen - Unpause
-	* On game over screen:
-		* Up or down keys - Select option
-		* `START` button - Choose option
 
 # Level editor
 
