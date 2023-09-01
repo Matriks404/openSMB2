@@ -92,9 +92,9 @@ function game.update()
 
 		if state.timer > 146 and state.transition_timer == 0 then
 			-- Ascending
-			--if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
-			--	character.pos_y = character.pos_y - 6
-			--end
+			if character.is_ascending then
+				character.pos_y = character.pos_y - 6
+			end
 
 			--TODO: All this movement code is a bit hacky and uses old shitty code. Fix this, probably even rewrite everything here.
 			-- Left/Right movement

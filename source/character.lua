@@ -19,6 +19,7 @@ function character.reset()
 	-- Character orientation and movement
 	character.side = 1 -- On which side character is looking at (-1 - Left, 1 - Right)
 	character.has_controlled_movement = false
+	character.is_ascending = false
 	character.is_running = false
 	character.movement_dir = 1 -- In which direction character is moving (-1 - Left, 1 - Right)
 	character.speed = 0

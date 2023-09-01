@@ -15,6 +15,10 @@ function input.checkPressed(button)
 		if button == "b" then
 			character.is_running = true
 		end
+
+		--if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
+		--	character.is_ascending = true
+		--end
 	end
 end
 
@@ -125,6 +129,10 @@ function input.checkReleased(button)
 			if button == "b" then
 				character.is_running = false
 			end
+
+			--if debugging.enabled and (key == "lctrl" or key == "rctrl" or key == "a") then
+			--	character.is_ascending = false
+			--end
 		end
 
 		return
