@@ -111,7 +111,7 @@ function game.update()
 						character.accel = character.accel + 1
 					end
 
-					if love.keyboard.isDown("z") then
+					if character.is_running then
 						character.speed = 6 * character.accel
 					else
 						character.speed = 4 * character.accel
