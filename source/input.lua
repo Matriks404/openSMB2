@@ -27,23 +27,11 @@ function input.checkReleased(button)
 	if (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
 		window.updateFullscreen()
 
-	elseif key == "-" then
-		if love.keyboard.isDown("lctrl", "rctrl") then
-			if state.name == "level_editor" and editor.mode == "normal" then
-				editor.removeArea()
-			end
-		else
-			graphics.scaleDown()
-		end
+	elseif key == "-" and not love.keyboard.isDown("lctrl", "rctrl") then
+		graphics.scaleDown()
 
-	elseif key == "=" then
-		if love.keyboard.isDown("lctrl", "rctrl") then
-			if state.name == "level_editor" and editor.mode == "normal" then
-				editor.addArea()
-			end
-		else
-			graphics.scaleUp()
-		end
+	elseif key == "=" and not love.keyboard.isDown("lctrl", "rctrl") then
+		graphics.scaleUp()
 	--]]
 
 	if state.name ~= "level_editor" and button == "rightshoulder" then

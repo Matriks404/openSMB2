@@ -91,6 +91,7 @@ function input.checkForEditor(button)
 
 		elseif button == "x" then
 			editor.changeTile(1)
+
 		elseif button == "y" then
 			editor.changeTile(-1)
 		end
