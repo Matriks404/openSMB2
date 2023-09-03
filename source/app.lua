@@ -32,6 +32,13 @@ function app.draw()
 
 	if state.name == "launcher" then
 		launcher.draw()
+
+	elseif state.name == "level_editor_menu" then
+		editor.draw.menu()
+
+	elseif state.name == "level_editor" then
+		editor.draw.editor()
+
 	else
 		game.draw()
 	end
