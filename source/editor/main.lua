@@ -37,8 +37,6 @@ function editor.reset()
 end
 
 function editor.openLevel(world_no, level_no)
-	state.name = "level_editor"
-
 	world.enter(world_no, level_no)
 
 	if world[world_no][level_no] then
