@@ -228,7 +228,7 @@ function editor.quit()
 	state.set("level_editor_menu")
 
 	if world.isLevelModified(world.current, world.level) then
-		world[world_no][level_no] = nil
+		world[world.current][world.level] = nil
 	end
 
 	editor.reset()
