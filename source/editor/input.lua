@@ -163,7 +163,13 @@ function input.checkForEditor(key)
 	end
 
 	if editor.mode == "normal" then
-		if key == "t" then
+		if love.keyboard.isDown("lctrl", "rctrl") and key == "-" then
+			editor.removeArea()
+
+		elseif love.keyboard.isDown("lctrl", "rctrl") and key == "=" then
+			editor.addArea()
+
+		elseif key == "t" then
 			editor.updateType()
 
 		elseif key == "b" then
