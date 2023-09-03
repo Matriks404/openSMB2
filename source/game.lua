@@ -353,12 +353,6 @@ function game.draw()
 
 			love.graphics.draw(game_resources.images.indicator, 81, 89 + state.cursor * 16)
 		end
-
-	elseif state.name == "level_editor_menu" then
-		editor.draw.menu()
-
-	elseif state.name == "level_editor" then
-		editor.draw.editor()
 	end
 end
 
