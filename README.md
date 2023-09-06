@@ -2,7 +2,7 @@
 
 This is a proof of concept branch for the prototype Nintendo 3DS version of the project. Use instructions below to install it.
 
-This is also not officially supported, do not post new issues when on this branch. Pull requests are welcome.
+This is also not officially supported, do not post new issues when on this branch (but you can discuss the port and report bugs [in that specific issue](https://github.com/Matriks404/openSMB2/issues/51)). Pull requests are welcome.
 
 # Running
 
