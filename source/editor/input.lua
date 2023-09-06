@@ -1,6 +1,6 @@
 local input = {}
 
-function input.checkForMenu(button)
+function input.checkForMenu(joystick, button)
 	local world_no, level_no
 
 	--[[
@@ -39,7 +39,7 @@ function input.checkForMenu(button)
 end
 
 --TODO: Most stuff is not implemented due to not having touchscreen controls yet. Also I don't know how to implement button combinations, this may be helpfull as well.
-function input.checkForEditor(button)
+function input.checkForEditor(joystick, button)
 	if button == "leftshoulder" then
 		editor.goToNextArea()
 

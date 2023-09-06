@@ -1,7 +1,13 @@
 local input = {}
 -- TODO: Refactor this? We should probably move game-related code to game.lua, although not sure.
 
-function input.checkPressed(button)
+function input.checkPressed(joystick, button)
+	if joystick:isGamepadDown("x") then
+		debugging.checkInputPressed(joystick, button)
+
+		return
+	end
+
 	if state.name == "gameplay" then
 		if button == "dpleft" then
 			character.has_controlled_movement = true
@@ -15,18 +21,15 @@ function input.checkPressed(button)
 		if button == "b" then
 			character.is_running = true
 		end
-
-		--if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
-		--	character.is_ascending = true
-		--end
 	end
 end
 
-function input.checkReleased(button)
+function input.checkReleased(joystick, button)
 	--[[
 	if (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
 		window.updateFullscreen()
 
+	--TODO: We may want to scale graphics up or down or 3DS but I am not sure how would it work, because vertical space is already taken fully on scale 1:1.
 	elseif key == "-" and not love.keyboard.isDown("lctrl", "rctrl") then
 		graphics.scaleDown()
 
@@ -34,11 +37,22 @@ function input.checkReleased(button)
 		graphics.scaleUp()
 	--]]
 
-	if state.name ~= "level_editor" and button == "rightshoulder" then
-		app.switchMuteState()
+	if joystick:isGamepadDown("y") then
+		if button == "dpleft" then
+			app.switchMuteState()
+
+		elseif button == "dpdown" then
+			love.event.quit()
+		end
+
+		return
 	end
 
-	debugging.checkInput(button)
+	if joystick:isGamepadDown("x") then
+		debugging.checkInputReleased(joystick, button)
+
+		return
+	end
 
 	-- Return prematurely if the application is paused. We don't need to check input anymore.
 	if debugging.pause then
@@ -48,7 +62,7 @@ function input.checkReleased(button)
 	if state.name == "launcher" then
 		if button == "dpup" then
 			launcher.goToPrevious()
-		elseif button == "dpdown" then
+		elseif button == "dpdown" or button == "back" then
 			launcher.goToNext()
 		elseif button == "a" or button == "start" then
 			launcher.runGame(launcher.selection)
@@ -63,7 +77,7 @@ function input.checkReleased(button)
 			state.transitionClear()
 			game.reset()
 
-		elseif button == "y" then
+		elseif button == "____" then
 			state.set("level_editor_menu")
 		end
 
@@ -79,7 +93,7 @@ function input.checkReleased(button)
 			end
 
 		-- Select character on the right
-		elseif button == "dpright" and state.transition_timer == 0 then
+		elseif (button == "dpright" or button == "back") and state.transition_timer == 0 then
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
 			if game_resources.sound.pickup then
@@ -87,7 +101,7 @@ function input.checkReleased(button)
 			end
 
 		-- Choose character and enable transition which will go to levelbook after some time
-		elseif button == "a" and state.transition_timer == 0 then
+		elseif (button == "a" or button == "start") and state.transition_timer == 0 then
 			state.transition = true
 
 			if game_resources.sound.pickup then
@@ -98,13 +112,7 @@ function input.checkReleased(button)
 		return
 
 	elseif state.name == "gameplay" then
-		-- Die!
-		if debugging.enabled and button == "back" then
-			character.dying_timer = 84
-
-			game_resources.music.stop()
-
-		elseif button == "start" and state.timer > 146 and state.transition_timer == 0 then
+		if button == "start" and state.timer > 146 and state.transition_timer == 0 then
 			state.backup_timer = state.timer
 
 			state.set("pause")
@@ -117,10 +125,6 @@ function input.checkReleased(button)
 			if button == "b" then
 				character.is_running = false
 			end
-
-			--if debugging.enabled and (key == "lctrl" or key == "rctrl" or key == "a") then
-			--	character.is_ascending = false
-			--end
 		end
 
 		return
@@ -139,7 +143,7 @@ function input.checkReleased(button)
 
 	elseif state.name == "game_over" then
 		-- Select option
-		if (button == "dpup" or button == "dpdown") and character.continues > 0 then
+		if (button == "dpup" or button == "dpdown" or button == "back") and character.continues > 0 then
 			state.cursor = (state.cursor == 0 and 1) or 0
 		end
 
@@ -159,12 +163,12 @@ function input.checkReleased(button)
 		return
 
 	elseif state.name == "level_editor_menu" then
-		editor.input.checkForMenu(button)
+		editor.input.checkForMenu(joystick, button)
 
 		return
 
 	elseif state.name == "level_editor" then
-		editor.input.checkForEditor(button)
+		editor.input.checkForEditor(joystick, button)
 
 		return
 	end

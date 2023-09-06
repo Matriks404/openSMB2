@@ -40,7 +40,7 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* Pretty much non-existent gameplay
 	* Level editor (see section below)
 
-* Controls:
+* Controls (**NOTE:** THIS IS OUTDATED):
 	* At any time:
 		* Right shoulder button - Mute the game
 		* Left shoulder button - Enable debugging info (that displays game version, FPS counter and other debug stuff)
@@ -60,6 +60,8 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* `START` button on pause screen - Unpause
 
 # Level editor
+
+**NOTE:** THERE IS NO WAY TO ACCESS THE LEVEL EDITOR RIGHT NOW.
 
 * In the level editor main menu:
 	* Press `A` to enter editing of the level 1-1 (this is temporary).

@@ -90,9 +90,17 @@ function debugging.drawInfo()
 	debugging.drawCounters()
 end
 
-function debugging.checkInput(button)
-	if state.name == "launcher" or state.name == "title" then
-		if button == "back" then
+function debugging.checkInputPressed(joystick, button)
+	if debugging.enabled then
+		if state.name == "gameplay" and button == "dpleft" then
+			character.is_ascending = true
+		end
+	end
+end
+
+function debugging.checkInputReleased(joystick, button)
+	if (state.name == "launcher" or state.name == "title") then
+		if button == "dpdown" then
 			debugging.switch()
 
 			return
@@ -100,17 +108,29 @@ function debugging.checkInput(button)
 	end
 
 	if debugging.enabled then
-		if button == "y" then
+		if state.name == "gameplay" then
+			if button == "dpleft" then
+				character.is_ascending = false
+
+			elseif button == "dpright" then
+				character.dying_timer = 84
+
+				game_resources.music.stop()
+
+			end
+		end
+
+		if button == "leftshoulder" then
 			debugging.switchPause()
 		end
 	else
-		if button == "leftshoulder" then
+		if button == "dpup" then
 			debugging.switchInfo()
 		end
 	end
 
 	if debugging.pause then
-		if button == "x" then
+		if button == "rightshoulder" then
 			debugging.advanceTimer()
 		end
 	end
