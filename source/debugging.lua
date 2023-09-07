@@ -72,8 +72,17 @@ function debugging.drawTopLeftInfo()
 	if debugging.enabled then
 		graphics.drawText("DEBUG", 2, 12, debugging.getFont())
 
+		if state.name == "gameplay" then
+			graphics.drawText(" -CHAR-", 2, 28, debugging.getFont())
+			graphics.drawText("X     "..character.pos_x, 2, 36)
+			graphics.drawText("Y     "..character.pos_y, 2, 44)
+			graphics.drawText("SUBX  "..character.subpos_x, 2, 52)
+			graphics.drawText("SPEED "..character.speed, 2, 60)
+			graphics.drawText("ACCEL "..character.accel, 2, 68)
+		end
+
 		if debugging.pause then
-			graphics.drawText("PAUSE", 2, 22, debugging.getFont())
+			graphics.drawText("PAUSE", 2, 231, debugging.getFont())
 		end
 	end
 end
