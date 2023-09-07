@@ -2,6 +2,8 @@ local input = {}
 -- TODO: Refactor this? We should probably move game-related code to game.lua, although not sure.
 
 function input.checkPressed(key)
+	debugging.checkInputPressed(key)
+
 	if state.name == "gameplay" then
 		if key == "left" then
 			character.has_controlled_movement = true
@@ -14,10 +16,6 @@ function input.checkPressed(key)
 
 		if key == "z" then
 			character.is_running = true
-		end
-
-		if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and love.keyboard.isDown("a") then
-			character.is_ascending = true
 		end
 	end
 end
@@ -39,7 +37,7 @@ function input.checkReleased(key)
 		app.switchMuteState()
 	end
 
-	debugging.checkInput(key)
+	debugging.checkInputReleased(key)
 
 	-- Return prematurely if the application is paused. We don't need to check input anymore.
 	if debugging.pause then
@@ -99,13 +97,7 @@ function input.checkReleased(key)
 		return
 
 	elseif state.name == "gameplay" then
-		-- Die!
-		if debugging.enabled and love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
-			character.dying_timer = 84
-
-			game_resources.music.stop()
-
-		elseif key == "s" and state.timer > 146 and state.transition_timer == 0 then
+		if key == "s" and state.timer > 146 and state.transition_timer == 0 then
 			state.backup_timer = state.timer
 
 			state.set("pause")
@@ -117,10 +109,6 @@ function input.checkReleased(key)
 
 			if key == "z" then
 				character.is_running = false
-			end
-
-			if debugging.enabled and (key == "lctrl" or key == "rctrl" or key == "a") then
-				character.is_ascending = false
 			end
 		end
 

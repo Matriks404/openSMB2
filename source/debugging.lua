@@ -90,7 +90,15 @@ function debugging.drawInfo()
 	debugging.drawCounters()
 end
 
-function debugging.checkInput(key)
+function debugging.checkInputPressed(key)
+	if debugging.enabled then
+		if state.name == "gameplay" and love.keyboard.isDown("lctrl", "rctrl") and key == "a" then
+			character.is_ascending = true
+		end
+	end
+end
+
+function debugging.checkInputReleased(key)
 	if state.name == "launcher" or state.name == "title" then
 		if love.keyboard.isDown("lctrl", "rctrl") and key == "d" then
 			debugging.switch()
@@ -100,6 +108,18 @@ function debugging.checkInput(key)
 	end
 
 	if debugging.enabled then
+		if state.name == "gameplay" and love.keyboard.isDown("lctrl", "rctrl") then
+			if key == "a" then
+				character.is_ascending = false
+
+			-- Die!
+			elseif key == "d" then
+				character.dying_timer = 84
+
+				game_resources.music.stop()
+			end
+		end
+
 		if key == "pause" then
 			debugging.switchPause()
 		end
