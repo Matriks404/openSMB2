@@ -1,36 +1,39 @@
 local input = {}
 
+--TODO: This is temporary, later we want to have clickable level buttons on the bottom screen, maybe also selectable with d-pad as well.
 function input.checkForMenu(joystick, button)
 	local world_no, level_no
 
-	--[[
-	if key >= "1" and key <= "3" then                  world_no = 1
-	elseif key >= "4" and key <= "6" then              world_no = 2
-	elseif key >= "7" and key <= "9" then              world_no = 3
-	elseif key == "a" or key == "b" or key == "c" then world_no = 4
-	elseif key == "d" or key == "e" or key == "f" then world_no = 5
-	elseif key == "g" or key == "h" or key == "i" then world_no = 6
-	elseif key == "j" or key == "k" then               world_no = 7
-	end
-
-	if key >= "1" and key <= "9" then
-		level_no = ((key - 1) % 3) + 1
-
-		editor.openLevel(world_no, level_no)
-
-	--TODO: We check if string length of keycode is 1 because we then exclude keys such as "esc" that way. Maybe there is a cleaner way to do this.
-	elseif #key == 1 and key >= "a" and key <= "k" then
-		level_no = ((string.byte(key) - 97) % 3) + 1
+	-- For levels 1-1 to 4-1.
+	if joystick:isGamepadDown("start") then
+		if button == "dpup" then       world_no, level_no = 1, 1
+		elseif button == "dpdown" then world_no, level_no = 1, 2
+		elseif button == "dpleft" then world_no, level_no = 1, 3
+		elseif button == "dpright" then world_no, level_no = 2, 1
+		elseif button == "a" then world_no, level_no = 2, 2
+		elseif button == "b" then world_no, level_no = 2, 3
+		elseif button == "x" then world_no, level_no = 3, 1
+		elseif button == "y" then world_no, level_no = 3, 2
+		elseif button == "leftshoulder" then world_no, level_no = 3, 3
+		elseif button == "rightshoulder" then world_no, level_no = 4, 1
+		end
 
 		editor.openLevel(world_no, level_no)
 
-	]]--
+	-- For levels 4-2 to 7-2.
+	elseif joystick:isGamepadDown("back") then
+		if button == "dpup" then       world_no, level_no = 4, 2
+		elseif button == "dpdown" then world_no, level_no = 4, 3
+		elseif button == "dpleft" then world_no, level_no = 5, 1
+		elseif button == "dpright" then world_no, level_no = 5, 2
+		elseif button == "a" then world_no, level_no = 5, 3
+		elseif button == "b" then world_no, level_no = 6, 1
+		elseif button == "x" then world_no, level_no = 6, 2
+		elseif button == "y" then world_no, level_no = 6, 3
+		elseif button == "leftshoulder" then world_no, level_no = 7, 1
+		elseif button == "rightshoulder" then world_no, level_no = 7, 2
+		end
 
-	--TODO: This is a temporary solution, just use the touchpad later.
-	world_no = 1
-	level_no = 1
-
-	if button == "a" or button == "start" then
 		editor.openLevel(world_no, level_no)
 
 	elseif button == "b" then
@@ -38,7 +41,7 @@ function input.checkForMenu(joystick, button)
 	end
 end
 
---TODO: Most stuff is not implemented due to not having touchscreen controls yet. Also I don't know how to implement button combinations, this may be helpfull as well.
+--TODO: Most stuff is not implemented due to not having touchscreen controls yet.
 function input.checkForEditor(joystick, button)
 	if button == "leftshoulder" then
 		editor.goToNextArea()
@@ -46,12 +49,13 @@ function input.checkForEditor(joystick, button)
 	elseif button == "rightshoulder" then
 		editor.changeMode()
 
-	elseif button == "start" then
-		editor.playLevel()
+	--TODO: Readd these with button combinations because entering proper leve editor with button combination starting with START or SELECT for some reason processes input once again here.
+	--elseif button == "start" then
+	--	editor.playLevel()
 
-	elseif button == "back" then
-		editor.saveLevel()
-		editor.quit()
+	--elseif button == "back" then
+	--	editor.saveLevel()
+	--	editor.quit()
 
 	elseif button == "dpleft" then
 		if editor.mode == "normal" then

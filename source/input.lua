@@ -77,7 +77,7 @@ function input.checkReleased(joystick, button)
 			state.transitionClear()
 			game.reset()
 
-		elseif button == "____" then
+		elseif button == "back" then
 			state.set("level_editor_menu")
 		end
 
