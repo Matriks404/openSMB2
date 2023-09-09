@@ -1,9 +1,9 @@
 local graphics = {}
 
 graphics.bg = {
-	["black"] = { short_name = "BLK", r = 0, g = 0, b = 0 },
-	["light_blue"] = { short_name = "LBL", r = 0.36, g = 0.58, b = 0.99 },
-	["blue"] = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
+	black = { short_name = "BLK", r = 0, g = 0, b = 0 },
+	light_blue = { short_name = "LBL", r = 0.36, g = 0.58, b = 0.99 },
+	blue = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
 }
 
 graphics.width = 256
