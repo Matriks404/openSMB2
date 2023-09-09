@@ -40,8 +40,8 @@ end
 function launcher.loadImages()
 	local directory = "resources/images/launcher/"
 
-	launcher.img["gp_good"] = resources.loadImage(directory.."gamepack_good.t3x")
-	launcher.img["gp_bad"] = resources.loadImage(directory.."gamepack_bad.t3x")
+	launcher.img.gp_good = resources.loadImage(directory.."gamepack_good.t3x")
+	launcher.img.gp_bad = resources.loadImage(directory.."gamepack_bad.t3x")
 end
 
 function launcher.setupStates()
@@ -247,7 +247,7 @@ function launcher.draw()
 		graphics.drawText(game_name, x, y)
 
 		local valid = launcher.gamepacks[key].valid
-		local img = (valid and launcher.img["gp_good"]) or launcher.img["gp_bad"]
+		local img = (valid and launcher.img.gp_good) or launcher.img.gp_bad
 
 		love.graphics.draw(img, x + 208, y)
 
