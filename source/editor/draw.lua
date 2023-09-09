@@ -1,21 +1,50 @@
 local draw = {}
 
+--TODO: Maybe there's a simpler way to do this...
 function draw.menu()
 	graphics.drawText("        LEVEL EDITOR        ", 16, 8)
-
 	graphics.drawText("      PRESS START AND       ", 16, 32)
-	graphics.drawText("UP - 1-1  DN - 1-2  LE - 1-3", 16, 48)
-	graphics.drawText("RI - 2-1   A - 2-2   B - 2-3", 16, 64)
-	graphics.drawText(" X - 3-1   Y - 3-2   L - 3-3", 16, 80)
-	graphics.drawText(" R - 4-1                    ", 16, 96)
+
+	graphics.drawText("   - 1-1     - 1-2     - 1-3", 16, 48)
+	love.graphics.draw(graphics.img.btn_3ds_up, 24, 48)
+	love.graphics.draw(graphics.img.btn_3ds_down, 104, 48)
+	love.graphics.draw(graphics.img.btn_3ds_left, 184, 48)
+
+	graphics.drawText("   - 2-1     - 2-2     - 2-3", 16, 64)
+	love.graphics.draw(graphics.img.btn_3ds_right, 24, 64)
+	love.graphics.draw(graphics.img.btn_3ds_a, 104, 64)
+	love.graphics.draw(graphics.img.btn_3ds_b, 184, 64)
+
+
+	graphics.drawText("   - 3-1     - 3-2     - 3-3", 16, 80)
+	love.graphics.draw(graphics.img.btn_3ds_x, 24, 80)
+	love.graphics.draw(graphics.img.btn_3ds_y, 104, 80)
+	love.graphics.draw(graphics.img.btn_3ds_l, 184, 80)
+
+	graphics.drawText("   - 4-1                    ", 16, 96)
+	love.graphics.draw(graphics.img.btn_3ds_r, 24, 96)
 
 	graphics.drawText("      PRESS SELECT AND      ", 16, 128)
-	graphics.drawText("          UP - 4-2  DN - 4-3", 16, 144)
-	graphics.drawText("LE - 5-1  RI - 5-2   A - 5-3", 16, 160)
-	graphics.drawText(" B - 6-1   X - 6-2   Y - 6-3", 16, 176)
-	graphics.drawText(" L - 7-1   R - 7-2          ", 16, 192)
+	graphics.drawText("             - 4-2     - 4-3", 16, 144)
+	love.graphics.draw(graphics.img.btn_3ds_up, 104, 144)
+	love.graphics.draw(graphics.img.btn_3ds_down, 184, 144)
 
-	graphics.drawText("      PRESS B TO EXIT       ", 16, 224)
+	graphics.drawText("   - 5-1     - 5-2     - 5-3", 16, 160)
+	love.graphics.draw(graphics.img.btn_3ds_left, 24, 160)
+	love.graphics.draw(graphics.img.btn_3ds_right, 104, 160)
+	love.graphics.draw(graphics.img.btn_3ds_a, 184, 160)
+
+	graphics.drawText("   - 6-1     - 6-2     - 6-3", 16, 176)
+	love.graphics.draw(graphics.img.btn_3ds_b, 24, 176)
+	love.graphics.draw(graphics.img.btn_3ds_x, 104, 176)
+	love.graphics.draw(graphics.img.btn_3ds_y, 184, 176)
+
+	graphics.drawText("   - 7-1     - 7-2          ", 16, 192)
+	love.graphics.draw(graphics.img.btn_3ds_l, 24, 192)
+	love.graphics.draw(graphics.img.btn_3ds_r, 104, 192)
+
+	graphics.drawText("      PRESS   TO EXIT       ", 16, 224)
+	love.graphics.draw(graphics.img.btn_3ds_b, 112, 224)
 end
 
 function draw.editor()
