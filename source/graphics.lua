@@ -205,16 +205,16 @@ function graphics.drawCharacter()
 
 	-- Draw character sprite
 	if character.current == "char1" then
-		char = game_resources.images.char1
+		char = game_resources.images.gp_char1
 
 	elseif character.current == "char2" then
-		char = game_resources.images.char2
+		char = game_resources.images.gp_char2
 
 	elseif character.current == "char3" then
-		char = game_resources.images.char3
+		char = game_resources.images.gp_char3
 
 	elseif character.current == "char4" then
-		char = game_resources.images.char4
+		char = game_resources.images.gp_char4
 	end
 
 	--TODO: Should we initially generate quads like we generate symbols for fonts?

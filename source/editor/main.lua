@@ -298,10 +298,10 @@ function editor.updateMusic()
 		world.current_area.music = "overworld"
 	end
 
-	game_resources.music.setCurrent(world.current_area.music)
+	music.setCurrent(world.current_area.music)
 
 	if not app.muted then
-		game_resources.music.play()
+		music.play()
 	end
 
 	world.current_level.modified = true

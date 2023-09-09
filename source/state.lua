@@ -39,10 +39,10 @@ function state.set(name)
 	end
 
 	if s.music ~= "LEVEL_SPECIFIC" then
-		game_resources.music.setCurrent(s.music)
+		music.setCurrent(s.music)
 
 		if not app.muted then
-			game_resources.music.play()
+			music.play()
 		end
 	end
 end

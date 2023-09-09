@@ -163,10 +163,10 @@ function game.update()
 			if character.dying_timer == 6 then
 				character.energy = 0
 
-				game_resources.music.stop()
+				music.stop()
 
 				if game_resources.sound.death then
-					game_resources.sound.play("death")
+					sound.play("death")
 				end
 			end
 
@@ -191,7 +191,7 @@ function game.update()
 				-- No more lifes, go to game over screen
 				else
 					if game_resources.sound.game_over then
-						game_resources.sound.play("game_over")
+						sound.play("game_over")
 					end
 
 					state.cursor = (character.continues > 0 and 0) or 1
@@ -296,7 +296,7 @@ function game.draw()
 		if state.timer > 146 then
 		-- Draw everything else
 			if state.timer == 147 and game_resources.sound.fall then
-				game_resources.sound.play("fall")
+				sound.play("fall")
 			end
 
 			if game_resources.images.gp_empty and game_resources.images.gp_filled then

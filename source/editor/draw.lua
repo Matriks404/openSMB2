@@ -33,7 +33,7 @@ function draw.editor()
 
 	-- Draw background and music indicators
 	graphics.drawText("B-"..graphics.bg[area.background].short_name, 2, 10)
-	graphics.drawText("M-"..game_resources.music.m[area.music].short_name, 2, 18)
+	graphics.drawText("M-"..game_resources.music[area.music].short_name, 2, 18)
 
 	-- Draw width and height values
 	font = (area.valid_width and game.font1) or game.font2

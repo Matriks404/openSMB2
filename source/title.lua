@@ -6,16 +6,16 @@ function title.reset()
 	state.resetTimer()
 
 	state.text_timer = 0
-	game_resources.story.line = 1
-	game_resources.story.page = 1
+	story.line = 1
+	story.page = 1
 
 	state.transitionClear()
 
-	game_resources.music.restart()
+	music.restart()
 end
 
 function title.update()
-	title.show_intro = #game_resources.story > 0
+	title.show_intro = #story > 0
 
 	if not title.show_intro then
 		return
@@ -35,14 +35,14 @@ function title.update()
 end
 
 function title.updateIntro()
-	local max_pages = #game_resources.story
+	local max_pages = #story
 
 	if state.text_timer == 65 then
 		state.text_timer = 0
 
-		game_resources.story.line = game_resources.story.line + 1
+		story.line = story.line + 1
 
-		local story_text = game_resources.story
+		local story_text = story
 		local max_lines = #story_text[story_text.page]
 
 		--TODO: We probably should allow more, maybe even with scrolling text if it's too long?
@@ -50,16 +50,16 @@ function title.updateIntro()
 			max_lines = 8
 		end
 
-		if game_resources.story.line > max_lines then
-			if game_resources.story.page == max_pages then
+		if story.line > max_lines then
+			if story.page == max_pages then
 			-- Enable transition which will go to title screen after some time
-				game_resources.story.line = max_lines
+				story.line = max_lines
 				state.transition = true
 
 			else
 			-- Change to the next story page if all lines are displayed
-				game_resources.story.line = 0
-				game_resources.story.page = game_resources.story.page + 1
+				story.line = 0
+				story.page = story.page + 1
 				state.text_timer = 2
 			end
 		end
@@ -93,10 +93,10 @@ function title.draw()
 	elseif state.timer >= 553 then
 		graphics.drawText("STORY", 112, 40)
 
-		local page = game_resources.story.page
-		local story_text = game_resources.story[page]
+		local page = story.page
+		local story_text = story[page]
 
-		for i = 1, game_resources.story.line do
+		for i = 1, story.line do
 		-- Draw lines of text
 			graphics.drawText(tostring(story_text[i]), 48, 64 + ((i - 1) * 16))
 		end
