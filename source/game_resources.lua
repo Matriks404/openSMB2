@@ -106,7 +106,7 @@ function game_resources.load(directory)
 	local sound_effects_list = game_resources.loadSoundEffectsList(resource_dir)
 	game_resources.loadSoundEffects(sound_effects_list)
 
-	story.load(resource_dir)
+	game_resources.loadStory(resource_dir)
 end
 
 function game_resources.loadImages(list)
@@ -136,6 +136,29 @@ function game_resources.loadSoundEffects(list)
 		local mandatoriness = values[2]
 
 		game_resources.sound[key] = resources.loadSound(filename, "static", mandatoriness)
+	end
+end
+
+function game_resources.loadStory(directory)
+	local path = directory.."story.lua"
+
+	if not love.filesystem.getInfo(path) then
+		print("Info: No 'story.lua' file.")
+
+		return
+	end
+
+	local file = love.filesystem.read(path)
+	local success, contents = pcall(TSerial.unpack, file)
+
+	if not success then
+		print("Warning: The 'story.lua' file is invalid! Title screen won't play intro story.")
+
+		return
+	end
+
+	for i = 1, #contents do
+		title.story[i] = contents[i]
 	end
 end
 
