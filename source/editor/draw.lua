@@ -1,18 +1,21 @@
 local draw = {}
 
 function draw.menu()
-	graphics.drawText("LEVEL EDITOR", 24, 32)
+	graphics.drawText("        LEVEL EDITOR        ", 16, 8)
 
-	graphics.drawText(" 1 - 1-1  4 - 2-1  7 - 3-1", 24, 64)
-	graphics.drawText(" 2 - 1-2  5 - 2-2  8 - 3-2", 24, 80)
-	graphics.drawText(" 3 - 1-3  6 - 2-3  9 - 3-3", 24, 96)
+	graphics.drawText("      PRESS START AND       ", 16, 32)
+	graphics.drawText("UP - 1-1  DN - 1-2  LE - 1-3", 16, 48)
+	graphics.drawText("RI - 2-1   A - 2-2   B - 2-3", 16, 64)
+	graphics.drawText(" X - 3-1   Y - 3-2   L - 3-3", 16, 80)
+	graphics.drawText(" R - 4-1                    ", 16, 96)
 
-	graphics.drawText(" A - 4-1  D - 5-1  G - 6-1", 24, 128)
-	graphics.drawText(" B - 4-2  E - 5-2  H - 6-2", 24, 144)
-	graphics.drawText(" C - 4-3  F - 5-3  I - 6-3", 24, 160)
+	graphics.drawText("      PRESS SELECT AND      ", 16, 128)
+	graphics.drawText("          UP - 4-2  DN - 4-3", 16, 144)
+	graphics.drawText("LE - 5-1  RI - 5-2   A - 5-3", 16, 160)
+	graphics.drawText(" B - 6-1   X - 6-2   Y - 6-3", 16, 176)
+	graphics.drawText(" L - 7-1   R - 7-2          ", 16, 192)
 
-	graphics.drawText(" J - 7-1                  ", 24, 192)
-	graphics.drawText(" K - 7-2          Q - QUIT", 24, 208)
+	graphics.drawText("      PRESS B TO EXIT       ", 16, 224)
 end
 
 function draw.editor()
