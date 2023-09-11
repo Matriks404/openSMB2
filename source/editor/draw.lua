@@ -2,49 +2,61 @@ local draw = {}
 
 --TODO: Maybe there's a simpler way to do this...
 function draw.menu()
+	-- This is ridiculous, but it gets work done.
+	local btn_3ds_up = graphics.images.btn_3ds_up
+	local btn_3ds_down = graphics.images.btn_3ds_down
+	local btn_3ds_left = graphics.images.btn_3ds_left
+	local btn_3ds_right = graphics.images.btn_3ds_right
+	local btn_3ds_a = graphics.images.btn_3ds_a
+	local btn_3ds_b = graphics.images.btn_3ds_b
+	local btn_3ds_x = graphics.images.btn_3ds_x
+	local btn_3ds_y = graphics.images.btn_3ds_y
+	local btn_3ds_l = graphics.images.btn_3ds_l
+	local btn_3ds_r = graphics.images.btn_3ds_r
+
 	graphics.drawText("        LEVEL EDITOR        ", 16, 8)
 	graphics.drawText("      PRESS START AND       ", 16, 32)
 
 	graphics.drawText("   - 1-1     - 1-2     - 1-3", 16, 48)
-	love.graphics.draw(graphics.img.btn_3ds_up, 24, 48)
-	love.graphics.draw(graphics.img.btn_3ds_down, 104, 48)
-	love.graphics.draw(graphics.img.btn_3ds_left, 184, 48)
+	love.graphics.draw(btn_3ds_up, 24, 48)
+	love.graphics.draw(btn_3ds_down, 104, 48)
+	love.graphics.draw(btn_3ds_left, 184, 48)
 
 	graphics.drawText("   - 2-1     - 2-2     - 2-3", 16, 64)
-	love.graphics.draw(graphics.img.btn_3ds_right, 24, 64)
-	love.graphics.draw(graphics.img.btn_3ds_a, 104, 64)
-	love.graphics.draw(graphics.img.btn_3ds_b, 184, 64)
+	love.graphics.draw(btn_3ds_right, 24, 64)
+	love.graphics.draw(btn_3ds_a, 104, 64)
+	love.graphics.draw(btn_3ds_b, 184, 64)
 
 
 	graphics.drawText("   - 3-1     - 3-2     - 3-3", 16, 80)
-	love.graphics.draw(graphics.img.btn_3ds_x, 24, 80)
-	love.graphics.draw(graphics.img.btn_3ds_y, 104, 80)
-	love.graphics.draw(graphics.img.btn_3ds_l, 184, 80)
+	love.graphics.draw(btn_3ds_x, 24, 80)
+	love.graphics.draw(btn_3ds_y, 104, 80)
+	love.graphics.draw(btn_3ds_l, 184, 80)
 
 	graphics.drawText("   - 4-1                    ", 16, 96)
-	love.graphics.draw(graphics.img.btn_3ds_r, 24, 96)
+	love.graphics.draw(btn_3ds_r, 24, 96)
 
 	graphics.drawText("      PRESS SELECT AND      ", 16, 128)
 	graphics.drawText("             - 4-2     - 4-3", 16, 144)
-	love.graphics.draw(graphics.img.btn_3ds_up, 104, 144)
-	love.graphics.draw(graphics.img.btn_3ds_down, 184, 144)
+	love.graphics.draw(btn_3ds_up, 104, 144)
+	love.graphics.draw(btn_3ds_down, 184, 144)
 
 	graphics.drawText("   - 5-1     - 5-2     - 5-3", 16, 160)
-	love.graphics.draw(graphics.img.btn_3ds_left, 24, 160)
-	love.graphics.draw(graphics.img.btn_3ds_right, 104, 160)
-	love.graphics.draw(graphics.img.btn_3ds_a, 184, 160)
+	love.graphics.draw(btn_3ds_left, 24, 160)
+	love.graphics.draw(btn_3ds_right, 104, 160)
+	love.graphics.draw(btn_3ds_a, 184, 160)
 
 	graphics.drawText("   - 6-1     - 6-2     - 6-3", 16, 176)
-	love.graphics.draw(graphics.img.btn_3ds_b, 24, 176)
-	love.graphics.draw(graphics.img.btn_3ds_x, 104, 176)
-	love.graphics.draw(graphics.img.btn_3ds_y, 184, 176)
+	love.graphics.draw(btn_3ds_b, 24, 176)
+	love.graphics.draw(btn_3ds_x, 104, 176)
+	love.graphics.draw(btn_3ds_y, 184, 176)
 
 	graphics.drawText("   - 7-1     - 7-2          ", 16, 192)
-	love.graphics.draw(graphics.img.btn_3ds_l, 24, 192)
-	love.graphics.draw(graphics.img.btn_3ds_r, 104, 192)
+	love.graphics.draw(btn_3ds_l, 24, 192)
+	love.graphics.draw(btn_3ds_r, 104, 192)
 
 	graphics.drawText("      PRESS   TO EXIT       ", 16, 224)
-	love.graphics.draw(graphics.img.btn_3ds_b, 112, 224)
+	love.graphics.draw(btn_3ds_b, 112, 224)
 end
 
 function draw.editor()
@@ -65,7 +77,7 @@ function draw.editor()
 
 	-- Draw background and music indicators
 	graphics.drawText("B-"..graphics.bg[area.background].short_name, 2, 10)
-	graphics.drawText("M-"..game_resources.music.m[area.music].short_name, 2, 18)
+	graphics.drawText("M-"..game_resources.music[area.music].short_name, 2, 18)
 
 	-- Draw width and height values
 	font = (area.valid_width and game.font1) or game.font2
@@ -110,7 +122,7 @@ end
 function draw.boxes()
 	for i = 0, editor.view.height - 16, 16 do
 		for j = 0, editor.view.width - 16, 16 do
-			love.graphics.draw(editor.img["16x16_empty"], j, editor.view.y_offset + i)
+			love.graphics.draw(editor.images["16x16_empty"], j, editor.view.y_offset + i)
 		end
 	end
 end
@@ -180,15 +192,15 @@ function draw.areaBorder()
 end
 
 function draw.cursor()
-	love.graphics.draw(editor.img["16x16_cursor"], editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
+	love.graphics.draw(editor.images["16x16_cursor"], editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
 end
 
 function draw.startingPosition()
 	if editor.mode == "normal" then
-		sp = editor.img["sp"]
+		sp = editor.images["sp"]
 
 	elseif editor.mode == "start" then
-		sp = editor.img["sp_select"]
+		sp = editor.images["sp_select"]
 	end
 
 	local x = world.current_level.start_x - editor.view.x

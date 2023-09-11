@@ -1,12 +1,12 @@
 local graphics = {}
 
 graphics.bg = {
-	["black"] = { short_name = "BLK", r = 0, g = 0, b = 0 },
-	["light_blue"] = { short_name = "LBL", r = 0.36, g = 0.58, b = 0.99 },
-	["blue"] = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
+	black = { short_name = "BLK", r = 0, g = 0, b = 0 },
+	light_blue = { short_name = "LBL", r = 0.36, g = 0.58, b = 0.99 },
+	blue = { short_name = "BLU", r = 0.36, g = 0.58, b = 0.99 }
 }
 
-graphics.img = {}
+graphics.images = {}
 
 graphics.width = 256
 graphics.height = 240
@@ -25,18 +25,24 @@ end
 function graphics.load3DSButtonImages()
 	local directory = "resources/images/platform_specific/3ds/buttons/"
 
-	graphics.img.btn_3ds_up = resources.loadImage(directory.."up.png", true)
-	graphics.img.btn_3ds_down = resources.loadImage(directory.."down.png", true)
-	graphics.img.btn_3ds_left = resources.loadImage(directory.."left.png", true)
-	graphics.img.btn_3ds_right = resources.loadImage(directory.."right.png", true)
+	-- These are mandatory.
+	local list = {
+		["btn_3ds_up"] = { directory.."up.t3x", true },
+		["btn_3ds_down"] = { directory.."down.t3x", true },
+		["btn_3ds_left"] = { directory.."left.t3x", true },
+		["btn_3ds_right"] = { directory.."right.t3x", true },
 
-	graphics.img.btn_3ds_a = resources.loadImage(directory.."a.png", true)
-	graphics.img.btn_3ds_b = resources.loadImage(directory.."b.png", true)
-	graphics.img.btn_3ds_x = resources.loadImage(directory.."x.png", true)
-	graphics.img.btn_3ds_y = resources.loadImage(directory.."y.png", true)
+		["btn_3ds_a"] = { directory.."a.t3x", true },
+		["btn_3ds_b"] = { directory.."b.t3x", true },
+		["btn_3ds_x"] = { directory.."x.t3x", true },
+		["btn_3ds_y"] = { directory.."y.t3x", true },
 
-	graphics.img.btn_3ds_l = resources.loadImage(directory.."l.png", true)
-	graphics.img.btn_3ds_r = resources.loadImage(directory.."r.png", true)
+		["btn_3ds_l"] = { directory.."l.t3x", true },
+		["btn_3ds_r"] = { directory.."r.t3x", true }
+
+	}
+
+	resources.loadImages(graphics.images, list)
 end
 
 function graphics.loadWorldImages()
@@ -226,16 +232,16 @@ function graphics.drawCharacter()
 
 	-- Draw character sprite
 	if character.current == "char1" then
-		char = game_resources.images.char1
+		char = game_resources.images.gp_char1
 
 	elseif character.current == "char2" then
-		char = game_resources.images.char2
+		char = game_resources.images.gp_char2
 
 	elseif character.current == "char3" then
-		char = game_resources.images.char3
+		char = game_resources.images.gp_char3
 
 	elseif character.current == "char4" then
-		char = game_resources.images.char4
+		char = game_resources.images.gp_char4
 	end
 
 	--TODO: Should we initially generate quads like we generate symbols for fonts?

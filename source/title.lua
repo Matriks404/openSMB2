@@ -1,21 +1,25 @@
 local title = {}
 
+title.story = {}
+title.story.line = 1
+title.story.page = 1
+
 title.show_intro = true
 
 function title.reset()
 	state.resetTimer()
 
 	state.text_timer = 0
-	game_resources.story.line = 1
-	game_resources.story.page = 1
+	title.story.line = 1
+	title.story.page = 1
 
 	state.transitionClear()
 
-	game_resources.music.restart()
+	music.restart()
 end
 
 function title.update()
-	title.show_intro = #game_resources.story > 0
+	title.show_intro = #title.story > 0
 
 	if not title.show_intro then
 		return
@@ -35,31 +39,29 @@ function title.update()
 end
 
 function title.updateIntro()
-	local max_pages = #game_resources.story
+	local max_pages = #title.story
 
 	if state.text_timer == 65 then
 		state.text_timer = 0
 
-		game_resources.story.line = game_resources.story.line + 1
-
-		local story_text = game_resources.story
-		local max_lines = #story_text[story_text.page]
+		title.story.line = title.story.line + 1
+		local max_lines = #title.story[title.story.page]
 
 		--TODO: We probably should allow more, maybe even with scrolling text if it's too long?
 		if max_lines > 8 then
 			max_lines = 8
 		end
 
-		if game_resources.story.line > max_lines then
-			if game_resources.story.page == max_pages then
+		if title.story.line > max_lines then
+			if title.story.page == max_pages then
 			-- Enable transition which will go to title screen after some time
-				game_resources.story.line = max_lines
+				title.story.line = max_lines
 				state.transition = true
 
 			else
 			-- Change to the next story page if all lines are displayed
-				game_resources.story.line = 0
-				game_resources.story.page = game_resources.story.page + 1
+				title.story.line = 0
+				title.story.page = title.story.page + 1
 				state.text_timer = 2
 			end
 		end
@@ -93,10 +95,10 @@ function title.draw()
 	elseif state.timer >= 553 then
 		graphics.drawText("STORY", 112, 40)
 
-		local page = game_resources.story.page
-		local story_text = game_resources.story[page]
+		local page = title.story.page
+		local story_text = title.story[page]
 
-		for i = 1, game_resources.story.line do
+		for i = 1, title.story.line do
 		-- Draw lines of text
 			graphics.drawText(tostring(story_text[i]), 48, 64 + ((i - 1) * 16))
 		end

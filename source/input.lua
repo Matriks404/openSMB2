@@ -89,7 +89,7 @@ function input.checkReleased(joystick, button)
 			state.cursor = (state.cursor > 0 and state.cursor - 1) or 3
 
 			if game_resources.sound.pickup then
-				game_resources.sound.play("pickup")
+				sound.play("pickup")
 			end
 
 		-- Select character on the right
@@ -97,7 +97,7 @@ function input.checkReleased(joystick, button)
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
 			if game_resources.sound.pickup then
-				game_resources.sound.play("pickup")
+				sound.play("pickup")
 			end
 
 		-- Choose character and enable transition which will go to levelbook after some time
@@ -105,7 +105,7 @@ function input.checkReleased(joystick, button)
 			state.transition = true
 
 			if game_resources.sound.pickup then
-				game_resources.sound.play("pickup")
+				sound.play("pickup")
 			end
 		end
 

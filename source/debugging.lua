@@ -124,8 +124,7 @@ function debugging.checkInputReleased(joystick, button)
 			elseif button == "dpright" then
 				character.dying_timer = 84
 
-				game_resources.music.stop()
-
+				music.stop()
 			end
 		end
 

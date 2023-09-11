@@ -1,6 +1,6 @@
 local editor = {}
 
-editor.img = {}
+editor.images = {}
 
 editor.check = require "source/editor/check"
 editor.draw = require "source/editor/draw"
@@ -20,15 +20,19 @@ editor.modes = {
 editor.cursor_x = 0
 editor.cursor_y = 0
 
-function editor.loadImages()
+function editor.load()
 	local directory = "resources/images/leveleditor/"
 
-	-- Mandatory, but expected
-	editor.img["16x16_empty"] = resources.loadImage(directory.."16x16.t3x")
-	editor.img["16x16_cursor"] = resources.loadImage(directory.."16x16_cursor.t3x")
-	editor.img["sp"] = resources.loadImage(directory.."starting_point.t3x")
-	editor.img["sp_select"] = resources.loadImage(directory.."starting_point_select.t3x")
-	--editor.img["border_arrow"] = resources.loadImage(directory.."border_arrow.t3x")
+	-- These are mandatory.
+	local list = {
+		["16x16_empty"] = { directory.."16x16.t3x", true },
+		["16x16_cursor"] = { directory.."16x16_cursor.t3x", true },
+		["sp"] = { directory.."starting_point.t3x", true },
+		["sp_select"] = { directory.."starting_point_select.t3x", true },
+		--["border_arrow"] = { directory.."indicator.t3x", true }
+	}
+
+	resources.loadImages(editor.images, list)
 end
 
 function editor.reset()
@@ -302,10 +306,10 @@ function editor.updateMusic()
 		world.current_area.music = "overworld"
 	end
 
-	game_resources.music.setCurrent(world.current_area.music)
+	music.setCurrent(world.current_area.music)
 
 	if not app.muted then
-		game_resources.music.play()
+		music.play()
 	end
 
 	world.current_level.modified = true

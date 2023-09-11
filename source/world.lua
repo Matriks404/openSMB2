@@ -174,7 +174,7 @@ function world.isGoodLevel(directory)
 			return false
 		end
 
-		if not game_resources.music.m[music_track] then
+		if not game_resources.music[music_track] then
 			print("\tError: Music '"..music_track.."' is not valid for area "..i)
 
 			return false
@@ -230,10 +230,10 @@ function world.enter(world_no, level_no, area_no)
 
 	world.update(world_no, level_no, area_no)
 
-	game_resources.music.setCurrent(world[world_no][level_no][area_no].music)
+	music.setCurrent(world[world_no][level_no][area_no].music)
 
 	if not app.muted then
-		game_resources.music.play()
+		music.play()
 	end
 
 	-- Check level background and set it
