@@ -16,7 +16,7 @@ function game.load(id)
 	game_resources.load(game.directory)
 	graphics.loadWorldImages()
 
-	editor.loadImages()
+	editor.load()
 
 	game.setupStates()
 	state.set("title")

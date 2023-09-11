@@ -1,6 +1,6 @@
 local editor = {}
 
-editor.img = {}
+editor.images = {}
 
 editor.check = require "source/editor/check"
 editor.draw = require "source/editor/draw"
@@ -20,15 +20,19 @@ editor.modes = {
 editor.cursor_x = 0
 editor.cursor_y = 0
 
-function editor.loadImages()
+function editor.load()
 	local directory = "resources/images/leveleditor/"
 
-	-- Mandatory, but expected
-	editor.img["16x16_empty"] = resources.loadImage(directory.."16x16.png")
-	editor.img["16x16_cursor"] = resources.loadImage(directory.."16x16_cursor.png")
-	editor.img["sp"] = resources.loadImage(directory.."starting_point.png")
-	editor.img["sp_select"] = resources.loadImage(directory.."starting_point_select.png")
-	--editor.img["border_arrow"] = resources.loadImage(directory.."border_arrow.png")
+	-- These are mandatory.
+	local list = {
+		["16x16_empty"] = { directory.."16x16.png", true },
+		["16x16_cursor"] = { directory.."16x16_cursor.png", true },
+		["sp"] = { directory.."starting_point.png", true },
+		["sp_select"] = { directory.."starting_point_select.png", true },
+		--["border_arrow"] = { directory.."indicator.png", true }
+	}
+
+	resources.loadImages(editor.images, list)
 end
 
 function editor.reset()

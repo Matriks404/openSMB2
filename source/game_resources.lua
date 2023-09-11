@@ -98,45 +98,15 @@ function game_resources.load(directory)
 	font.load(resource_dir)
 
 	local images_list = game_resources.loadImagesList(resource_dir)
-	game_resources.loadImages(images_list)
+	resources.loadImages(game_resources.images, images_list)
 
 	local music_list = game_resources.loadMusicList(resource_dir)
-	game_resources.loadMusic(music_list)
+	resources.loadMusic(game_resources.music, music_list)
 
 	local sound_effects_list = game_resources.loadSoundEffectsList(resource_dir)
-	game_resources.loadSoundEffects(sound_effects_list)
+	resources.loadSoundEffects(game_resources.sound, sound_effects_list)
 
 	game_resources.loadStory(resource_dir)
-end
-
-function game_resources.loadImages(list)
-	for key, values in pairs(list) do
-		local filename = values[1]
-		local mandatoriness = values[2]
-
-		game_resources.images[key] = resources.loadImage(filename, mandatoriness)
-	end
-end
-
-function game_resources.loadMusic(list)
-	for key, values in pairs(list) do
-		local filename = values[1]
-		local short_name = values[2]
-		local mandatoriness = values[3]
-
-		game_resources.music[key] = {}
-		game_resources.music[key].track = resources.loadSound(filename, "stream", mandatoriness)
-		game_resources.music[key].short_name = short_name
-	end
-end
-
-function game_resources.loadSoundEffects(list)
-	for key, values in pairs(list) do
-		local filename = values[1]
-		local mandatoriness = values[2]
-
-		game_resources.sound[key] = resources.loadSound(filename, "static", mandatoriness)
-	end
 end
 
 function game_resources.loadStory(directory)

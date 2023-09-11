@@ -1,6 +1,6 @@
 local launcher = {}
 
-launcher.img = {}
+launcher.images = {}
 
 launcher.mandatory_files = {
 	"images/indicator.png",
@@ -18,7 +18,7 @@ launcher.gamepacks = {}
 
 function launcher.load()
 	launcher.loadFonts()
-	launcher.loadImages()
+	launcher.loadGraphics()
 
 	launcher.loadGamePackList()
 
@@ -37,11 +37,16 @@ function launcher.loadFonts()
 
 end
 
-function launcher.loadImages()
+function launcher.loadGraphics()
 	local directory = "resources/images/launcher/"
 
-	launcher.img.gp_good = resources.loadImage(directory.."gamepack_good.png")
-	launcher.img.gp_bad = resources.loadImage(directory.."gamepack_bad.png")
+	-- These are mandatory.
+	local list = {
+		["gp_good"] = { directory.."gamepack_good.png", true },
+		["gp_bad"] = { directory.."gamepack_bad.png", true }
+	}
+
+	resources.loadImages(launcher.images, list)
 end
 
 function launcher.setupStates()
@@ -246,7 +251,7 @@ function launcher.draw()
 		graphics.drawText(game_name, x, y)
 
 		local valid = launcher.gamepacks[key].valid
-		local img = (valid and launcher.img.gp_good) or launcher.img.gp_bad
+		local img = (valid and launcher.images.gp_good) or launcher.images.gp_bad
 
 		love.graphics.draw(img, x + 208, y)
 
