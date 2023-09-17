@@ -45,15 +45,12 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 		* `CTRL+M` - Mute the game
 		* `F3` - Enable debugging info (that displays game version, FPS counter and other debug stuff)
 		* `ESC` - Quit the game
-	* In any menu (launcher or pause screen):
-		* `Up` or `Down` or `A` - Select option
+	* In any menu (launcher, character select or game over screen):
+		* Arrow keys or `A` - Select option
 		* `X` or `S` - Execute selected option
 	* On the title screen:
 		* `S` - Enter character select screen
 		* `CTRL+L` - Enter level editor (see section below)
-	* In character select screen:
-		* `Left` or `Right` - Select character
-		* `X` - Play the game with selected character
 	* During gameplay:
 		* `Left` or `Right` - Move the character left or right
 		* `Z` - Activate character running state

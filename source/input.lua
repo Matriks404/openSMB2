@@ -78,7 +78,7 @@ function input.checkReleased(key)
 			end
 
 		-- Select character on the right
-		elseif key == "right" and state.transition_timer == 0 then
+		elseif (key == "right" or key == "a") and state.transition_timer == 0 then
 			state.cursor = (state.cursor < 3 and state.cursor + 1) or 0
 
 			if game_resources.sound.pickup then
@@ -86,7 +86,7 @@ function input.checkReleased(key)
 			end
 
 		-- Choose character and enable transition which will go to levelbook after some time
-		elseif key == "x" and state.transition_timer == 0 then
+		elseif (key == "x" or key == "s") and state.transition_timer == 0 then
 			state.transition = true
 
 			if game_resources.sound.pickup then
