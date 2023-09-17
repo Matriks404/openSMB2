@@ -58,11 +58,13 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 
 # Level editor
 
+**NOTE:** This is outdated!
+
 * In the level editor main menu:
 	* Press `A` to enter editing of the level 1-1 (this is temporary).
 	* Press `SELECT` to quit to the title screen.
 
-* In the level editor proper (**NOTE:** This is outdated!):
+* In the level editor proper:
 	* In any mode:
 		* Press `START` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
 		* Press `L` button to switch between level areas.
@@ -77,6 +79,8 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 		* Use D-pad buttons to move starting position pixel-by-pixel.
 
 # Debug mode
+
+**NOTE:** This is outdated!
 
 You can enable debug mode by pressing `SELECT` in the launcher or on the title screen.
 
