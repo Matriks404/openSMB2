@@ -1,7 +1,7 @@
 local window = {}
 
-window.fullscreen = false
-window.resizable = false
+--window.fullscreen = false
+--window.resizable = false
 
 function window.setInitialScale()
 	--local _, _, flags = love.window.getMode()

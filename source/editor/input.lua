@@ -41,63 +41,189 @@ function input.checkForMenu(joystick, button)
 	end
 end
 
---TODO: Most stuff is not implemented due to not having touchscreen controls yet.
+--TODO: This should be simplified with some general controls overhaul (that I will probably do with custom controls support).
+--TODO: Change this controls later with some stuff on the bottom screen along with instructions regarding the rest of buttons.
 function input.checkForEditor(joystick, button)
-	if button == "leftshoulder" then
-		editor.goToNextArea()
+	if button == "dpup" then
+		if joystick:isGamepadDown("a") then
+			if editor.mode == "normal" then
+				editor.changeTile(-16)
 
-	elseif button == "rightshoulder" then
-		editor.changeMode()
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(0, -16)
+			end
 
-	--TODO: Readd these with button combinations because entering proper leve editor with button combination starting with START or SELECT for some reason processes input once again here.
-	--elseif button == "start" then
-	--	editor.playLevel()
+		elseif joystick:isGamepadDown("b") then
+			if editor.mode == "normal" then
+				editor.shrinkAreaHeight()
+			end
 
-	--elseif button == "back" then
-	--	editor.saveLevel()
-	--	editor.quit()
+		elseif joystick:isGamepadDown("leftshoulder") then
+			editor.changeMode()
 
-	elseif button == "dpleft" then
-		if editor.mode == "normal" then
-			editor.moveCursor(-16, 0)
-		elseif editor.mode == "start" then
-			editor.moveStartingPosition(-1, 0)
+		elseif joystick:isGamepadDown("rightshoulder") then
+			editor.view.moveByScreen(0, -1)
+
+		elseif joystick:isGamepadDown("start") then
+			editor.playLevel()
+
+		elseif joystick:isGamepadDown("back") then
+			if editor.mode == "normal" then
+				editor.updateType()
+			end
+
+		else
+			if editor.mode == "normal" then
+				editor.moveCursor(0, -16)
+
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(0, -1)
+			end
 		end
 
-	elseif button == "dpright" then
-		if editor.mode == "normal" then
-			editor.moveCursor(16, 0)
-		elseif editor.mode == "start" then
-			editor.moveStartingPosition(1, 0)
-		end
-
-	elseif button == "dpup" then
-		if editor.mode == "normal" then
-			editor.moveCursor(0, -16)
-		elseif editor.mode == "start" then
-			editor.moveStartingPosition(0, -1)
-		end
+		return
 
 	elseif button == "dpdown" then
-		if editor.mode == "normal" then
-			editor.moveCursor(0, 16)
-		elseif editor.mode == "start" then
-			editor.moveStartingPosition(0, 1)
+		if joystick:isGamepadDown("a") then
+			if editor.mode == "normal" then
+				editor.changeTile(16)
+
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(0, 16)
+			end
+
+		elseif joystick:isGamepadDown("b") then
+			if editor.mode == "normal" then
+				editor.scratchAreaHeight()
+			end
+
+		elseif joystick:isGamepadDown("leftshoulder") then
+			editor.changeView()
+
+		elseif joystick:isGamepadDown("rightshoulder") then
+			editor.view.moveByScreen(0, 1)
+
+		elseif joystick:isGamepadDown("start") then
+			editor.quit()
+
+		elseif joystick:isGamepadDown("back") then
+			if editor.mode == "normal" then
+				editor.resizeAreaToValidSize()
+			end
+
+		else
+			if editor.mode == "normal" then
+				editor.moveCursor(0, 16)
+
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(0, 1)
+			end
 		end
+
+		return
+
+	elseif button == "dpleft" then
+		if joystick:isGamepadDown("a") then
+			if editor.mode == "normal" then
+				editor.changeTile(-1)
+
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(-16, 0)
+			end
+
+		elseif joystick:isGamepadDown("b") then
+			if editor.mode == "normal" then
+				editor.shrinkAreaWidth()
+			end
+
+		elseif joystick:isGamepadDown("leftshoulder") then
+			if editor.mode == "normal" then
+				editor.removeArea()
+			end
+
+		elseif joystick:isGamepadDown("rightshoulder") then
+			editor.view.moveByScreen(-1, 0)
+
+		elseif joystick:isGamepadDown("start") then
+			editor.loadLevel()
+
+		elseif joystick:isGamepadDown("back") then
+			if editor.mode == "normal" then
+				editor.updateBackground()
+			end
+
+		else
+			if editor.mode == "normal" then
+				editor.moveCursor(-16, 0)
+
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(-1, 0)
+			end
+		end
+
+		return
+
+	elseif button == "dpright" then
+		if joystick:isGamepadDown("a") then
+			if editor.mode == "normal" then
+				editor.changeTile(1)
+
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(16, 0)
+			end
+
+		elseif joystick:isGamepadDown("b") then
+			if editor.mode == "normal" then
+				editor.scratchAreaWidth()
+			end
+
+		elseif joystick:isGamepadDown("leftshoulder") then
+			if editor.mode == "normal" then
+				editor.addArea()
+			end
+
+		elseif joystick:isGamepadDown("rightshoulder") then
+			editor.view.moveByScreen(1, 0)
+
+		elseif joystick:isGamepadDown("start") then
+			editor.saveLevel()
+
+		elseif joystick:isGamepadDown("back") then
+			if editor.mode == "normal" then
+				editor.updateMusic()
+			end
+
+		else
+			if editor.mode == "normal" then
+				editor.moveCursor(16, 0)
+
+			elseif editor.mode == "start" then
+				editor.moveStartingPosition(1, 0)
+			end
+		end
+
+		return
 	end
 
+	-- Controls for all editor modes
+	if button == "leftshoulder" then
+		editor.goToPreviousArea()
+
+		return
+
+	elseif button == "rightshoulder" then
+		editor.goToNextArea()
+
+		return
+	end
+
+	-- Controls for specific modes
 	if editor.mode == "normal" then
 		if button == "a" then
 			editor.placeTile(editor.tile)
 
 		elseif button == "b" then
 			editor.removeTile()
-
-		elseif button == "x" then
-			editor.changeTile(1)
-
-		elseif button == "y" then
-			editor.changeTile(-1)
 		end
 	end
 end

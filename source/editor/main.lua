@@ -44,8 +44,8 @@ function editor.openLevel(world_no, level_no)
 	world.enter(world_no, level_no)
 
 	if world[world_no][level_no] then
-		window.resizable = true
-		window.update()
+		--window.resizable = true
+		--window.update()
 
 		state.name = "level_editor"
 
@@ -72,24 +72,26 @@ function editor.playLevel()
 		state.set("character_select")
 		world.area = 1
 
-		window.resizable = false
-		window.update()
+		--window.resizable = false
+		--window.update()
 	end
 end
 
 function editor.removeArea(area)
 	local level = world.current_level
 
-	--[[
 	if #level == 1 then
+		--[[
 		local msgbox_name = "Removing area "..world.area
 		local msgbox_msg = "You can't remove the last area from the level!"
 
 		love.window.showMessageBox(msgbox_name, msgbox_msg, "error")
+		--]]
 
 		return
 	end
 
+	--[[
 	local msgbox_name = "Removing area "..world.area
 	local msgbox_msg = "Are you sure you want to remove the area "..world.area.."?"
 	local msgbox_buttons = { "Proceed", "Cancel" }
@@ -240,8 +242,8 @@ function editor.quit()
 	editor.reset()
 	editor.view.reset()
 
-	window.resizable = false
-	window.update()
+	--window.resizable = false
+	--window.update()
 end
 
 function editor.quitToTitleScreen()
