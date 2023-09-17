@@ -42,8 +42,8 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 
 * Controls (**NOTE:** THIS IS OUTDATED):
 	* At any time:
-		* Right shoulder button - Mute the game
-		* Left shoulder button - Enable debugging info (that displays game version, FPS counter and other debug stuff)
+		* `L` button - Enable debugging info (that displays game version, FPS counter and other debug stuff)
+		* `R` button - Mute the game
 	* In any menu (launcher, character select or game over screen):
 		* D-Pad buttons - Select option
 		* `A` or `START` - Execute selected option
@@ -65,8 +65,8 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 * In the level editor proper (**NOTE:** This is outdated!):
 	* In any mode:
 		* Press `START` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
-		* Press left shoulder button to switch between level areas.
-		* Press right shoulder button to change editor mode (normal one or starting position movement tool)
+		* Press `L` button to switch between level areas.
+		* Press `R` button to change editor mode (normal one or starting position movement tool)
 		* Press `SELECT` to quit to the main level editor menu.
 	* When in normal editing mode (`MODE-N`):
 		* Press `Y` or `X` buttons to change selected tile.
