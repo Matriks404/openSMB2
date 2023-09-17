@@ -32,9 +32,8 @@ function world.isValidAreaWidth(type, width)
 
 	if type.horizontal_min_size then
 		valid = width >= type.horizontal_min_size
-	end
 
-	if type.horizontal_size then
+	elseif type.horizontal_size then
 		valid = width == type.horizontal_size
 	end
 
