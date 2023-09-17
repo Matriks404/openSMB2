@@ -44,15 +44,12 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 	* At any time:
 		* Right shoulder button - Mute the game
 		* Left shoulder button - Enable debugging info (that displays game version, FPS counter and other debug stuff)
-	* In any menu (launcher or pause screen):
-		* Up or down button - Select option
+	* In any menu (launcher, character select or game over screen):
+		* D-Pad buttons - Select option
 		* `A` or `START` - Execute selected option
 	* On the title screen:
 		* `START` button - Enter character select screen
 		* `Y` button - Enter level editor (see section below)
-	* In character select screen:
-		* Left or right buttons - Select character
-		* `A` button - Play the game with selected character
 	* During gameplay:
 		* Left or right buttons - Move the character left or right
 		* `B` button - Activate character running state
@@ -61,13 +58,11 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 
 # Level editor
 
-**NOTE:** THERE IS NO WAY TO ACCESS THE LEVEL EDITOR RIGHT NOW.
-
 * In the level editor main menu:
 	* Press `A` to enter editing of the level 1-1 (this is temporary).
 	* Press `SELECT` to quit to the title screen.
 
-* In the level editor proper:
+* In the level editor proper (**NOTE:** This is outdated!):
 	* In any mode:
 		* Press `START` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
 		* Press left shoulder button to switch between level areas.
