@@ -52,8 +52,8 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 		* `S` - Enter character select screen
 		* `CTRL+L` - Enter level editor (see section below)
 	* During gameplay:
-		* `Left` or `Right` - Move the character left or right
-		* `Z` - Activate character running state
+		* `Left` or `Right` - Move the character
+		* `Z` - Run
 		* `S` - Pause
 	* `S` on pause screen - Unpause
 
@@ -66,11 +66,11 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 * In the level editor proper:
 	* In any mode:
 		* Resize the window to have more screen space for editing purposes.
-		* Press `L` to load the level (useful if you replace the files and need to reload the level in the editor).
+		* Press `L` to reload the level.
 		* Press `V` to save the level.
 		* Press `P` to play the level (Note that it automatically saves the level and game doesn't return to level editor afterwards).
 		* Press `[` or `]` to switch between level areas.
-		* Press `Tab` to change editor mode (normal one or starting position movement tool)
+		* Press `Tab` to change editor mode (normal one or starting position movement tool).
 		* Press `C` to change editor view type (normal or detailed, where the latter is showing hexadecimal values of tiles on top of them).
 		* To move the view:
 			* Press `CTRL` + arrow keys to move the view by one tile.
@@ -84,8 +84,10 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 		* Press `B` to change background color.
 		* Press `M` to change music.
 		* Press `R` to resize the area to valid size (that is height of maximum 240 pixels for horizontal levels and width of exact 256 pixels for vertical levels).
-		* Press `4` or `6` on keypad to shrink or stretch width.
-		* Press `8` or `2` on keypad to shrink or stretch height.
+		* Press `CTRL+-` to remove current area.
+		* Press `CTRL+=` to add new empty area after current one.
+		* Press `4` or `6` on keypad to shrink or stretch area width.
+		* Press `8` or `2` on keypad to shrink or stretch area height.
 		* Press `W`, `S`, `A`, `D` keys to change selected tile.
 		* Press arrow keys to move edit cursor.
 		* Press `X` to place tile.
@@ -105,5 +107,6 @@ You will also gain access to these additional debugging features inside the game
 * Press `Pause Break` to pause the application by not advancing ticks.
 	* Note that enabling this will result in most input not being checked, except for keys that modify graphical settings such as fullscreen/windowed mode or game size, as well as the mute state.
 	* When in paused state press `Space` to advance single timer tick.
-* Press `CTRL+A` to ascend the player character.
-* Press `CTRL+D` for the character to die.
+* During gameplay:
+	* Press `CTRL+A` to ascend the player character.
+	* Press `CTRL+D` for the character to die.
