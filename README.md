@@ -43,11 +43,11 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 * Controls:
 	* At any time:
 		* `X` and
-			* Up button - Enable debugging info (that displays game version, FPS counter and other debug stuff)
-			* Down button - Enable debug mode (see section below)
+			* **Up** button - Enable debugging info (that displays game version, FPS counter and other debug stuff)
+			* **Down** button - Enable debug mode (see section below)
 		* `Y` and
-			* Left button - Mute the game
-			* Down button - Quit the game
+			* **Left** button - Mute the game
+			* **Down** button - Quit the game
 	* In any menu (launcher, character select or game over screen):
 		* D-Pad buttons - Select option
 		* `A` or `START` - Execute selected option
