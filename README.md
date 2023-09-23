@@ -84,8 +84,8 @@ This project uses modified 3rd party **Dogica** fonts by **Roberto Mocci** for t
 		* Press `B` to change background color.
 		* Press `M` to change music.
 		* Press `R` to resize the area to valid size (that is height of maximum 240 pixels for horizontal levels and width of exact 256 pixels for vertical levels).
-		* Press `CTRL+-` to remove current area.
-		* Press `CTRL+=` to add new empty area after current one.
+		* Press `CTRL` + `-` to remove current area.
+		* Press `CTRL` + `=` to add new empty area after current one.
 		* Press `4` or `6` on keypad to shrink or stretch area width.
 		* Press `8` or `2` on keypad to shrink or stretch area height.
 		* Press `W`, `S`, `A`, `D` keys to change selected tile.
