@@ -1,21 +1,8 @@
 local game_resources = {}
 
-game_resources.font = {}
 game_resources.images = {}
 game_resources.music = {}
 game_resources.sound = {}
-
-function game_resources.loadFonts(directory)
-	local directory = directory.."images/font/"
-
-	game_resources.font.primary = love.graphics.newImage(directory..game.font1..".t3x")
-
-	if game.font2 and love.filesystem.getInfo(directory..game.font2..".t3x") then
-		game_resources.font.secondary = love.graphics.newImage(directory..game.font2..".t3x")
-	else
-		game.font2 = game.font1
-	end
-end
 
 function game_resources.loadImagesList(directory)
 	local directory = directory.."images/"
@@ -108,7 +95,7 @@ end
 function game_resources.load(directory)
 	local resource_dir = directory.."/resources/"
 
-	game_resources.loadFonts(resource_dir)
+	font.load(resource_dir)
 
 	local images_list = game_resources.loadImagesList(resource_dir)
 	resources.loadImages(game_resources.images, images_list)
