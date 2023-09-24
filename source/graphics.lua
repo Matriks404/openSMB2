@@ -67,21 +67,12 @@ function graphics.setBackgroundColor(color)
 	end
 end
 
-function graphics.drawText(str, x, y, font_id)
+function graphics.drawText(str, x, y, font)
 	local s = state.s[state.name]
-	local font_id = font_id or s.font
+	local font = font or s.font
 
-	local pos_x = x
-	local pos_y = y
-
-	for i = 0, #str - 1 do
-		local code = string.byte(str, i + 1)
-		local quad = font.symbols[font_id][code]
-
-		love.graphics.draw(font[font_id], quad, pos_x, pos_y, 0, 0.5)
-
-		pos_x = pos_x + (font.symbol_size / 2)
-	end
+	love.graphics.setFont(font)
+	love.graphics.print(str, x, y, 0, 0.5)
 end
 
 function graphics.drawTile(id, x, y)

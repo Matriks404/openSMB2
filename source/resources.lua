@@ -1,4 +1,4 @@
-font = require "source/font"
+--font = require "source/font"
 
 local resources = {}
 

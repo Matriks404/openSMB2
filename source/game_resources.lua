@@ -1,8 +1,23 @@
 local game_resources = {}
 
+game_resources.font = {}
 game_resources.images = {}
 game_resources.music = {}
 game_resources.sound = {}
+
+function game_resources.loadFonts(directory)
+	local directory = directory.."images/font/"
+
+	local symbols = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7F"
+
+	game_resources.font.primary = love.graphics.newImageFont(directory..game.font1..".png", symbols)
+
+	if game.font2 and love.filesystem.getInfo(directory..game.font2..".png") then
+		game_resources.font.secondary = love.graphics.newImageFont(directory..game.font2..".png", symbols)
+	else
+		game_resources.font.secondary = game_resources.font.primary
+	end
+end
 
 function game_resources.loadImagesList(directory)
 	local directory = directory.."images/"
@@ -95,7 +110,7 @@ end
 function game_resources.load(directory)
 	local resource_dir = directory.."/resources/"
 
-	font.load(resource_dir)
+	game_resources.loadFonts(resource_dir)
 
 	local images_list = game_resources.loadImagesList(resource_dir)
 	resources.loadImages(game_resources.images, images_list)
