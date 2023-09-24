@@ -19,16 +19,13 @@ function draw.editor()
 	local level = world.current_level
 	local area = world.current_area
 
-	local font1 = game_resources.font.primary
-	local font2 = game_resources.font.secondary
-
 	local font
 
 	-- Draw world, level and area indicators
 	graphics.drawText(world.current.."-"..world.level.."-"..world.area, 2, 2)
 
 	-- Draw area type indicator
-	font = (area.valid_size and font1) or font2
+	font = (area.valid_size and game.font1) or game.font2
 	graphics.drawText("TYPE-"..world.types[area.type].short_name, 58, 2, font)
 
 	-- Draw editing mode indicator
@@ -39,10 +36,10 @@ function draw.editor()
 	graphics.drawText("M-"..game_resources.music[area.music].short_name, 2, 18)
 
 	-- Draw width and height values
-	font = (area.valid_width and font1) or font2
+	font = (area.valid_width and game.font1) or game.font2
 	graphics.drawText("W-"..area.width, 58, 10, font)
 
-	font = (area.valid_height and font1) or font2
+	font = (area.valid_height and game.font1) or game.font2
 	graphics.drawText("H-"..area.height, 58, 18, font)
 
 	-- Draw coordinates for edit cursor or starting position

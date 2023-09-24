@@ -29,8 +29,12 @@ end
 function launcher.loadFonts()
 	directory = "resources/images/font/"
 
-	launcher.font_normal = love.graphics.newImage(directory.."dogica.png")
-	launcher.font_bold = love.graphics.newImage(directory.."dogica_bold.png")
+	launcher.font_normal = "dogica"
+	launcher.font_bold = "dogica_bold"
+
+	font.loadSymbols(directory, launcher.font_normal)
+	font.loadSymbols(directory, launcher.font_bold)
+
 end
 
 function launcher.loadGraphics()

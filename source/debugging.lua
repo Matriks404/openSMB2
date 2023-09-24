@@ -34,7 +34,7 @@ function debugging.advanceTimer()
 end
 
 function debugging.getFont()
-	return game_resources.font.primary or launcher.font_normal
+	return game.font1 or launcher.font_normal
 end
 
 function debugging.drawMutedText()
