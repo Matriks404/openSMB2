@@ -357,15 +357,18 @@ function game.draw()
 end
 
 function game.setupStates()
-	state.setupState("title", "blue", game.font1, "title")
-	state.setupState("character_select", "black", game.font1, "character_select")
-	state.setupState("level_intro", "black", game.font2, nil)
-	state.setupState("gameplay", "LEVEL_SPECIFIC", game.font1, "LEVEL_SPECIFIC")
-	state.setupState("pause", "black", game.font2, "LEVEL_SPECIFIC")
-	state.setupState("death", "black", game.font2, nil)
-	state.setupState("game_over", "black", game.font1, nil)
-	state.setupState("level_editor_menu", "black", game.font1, nil)
-	state.setupState("level_editor", "LEVEL_SPECIFIC", game.font1, "LEVEL_SPECIFIC")
+	local font1 = game_resources.font.primary
+	local font2 = game_resources.font.secondary
+
+	state.setupState("title", "blue", font1, "title")
+	state.setupState("character_select", "black", font1, "character_select")
+	state.setupState("level_intro", "black", font2, nil)
+	state.setupState("gameplay", "LEVEL_SPECIFIC", font1, "LEVEL_SPECIFIC")
+	state.setupState("pause", "black", font2, "LEVEL_SPECIFIC")
+	state.setupState("death", "black", font2, nil)
+	state.setupState("game_over", "black", font1, nil)
+	state.setupState("level_editor_menu", "black", font1, nil)
+	state.setupState("level_editor", "LEVEL_SPECIFIC", font1, "LEVEL_SPECIFIC")
 end
 
 function game.getRemainingLives(lives)

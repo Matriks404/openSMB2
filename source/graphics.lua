@@ -67,20 +67,28 @@ function graphics.setBackgroundColor(color)
 	end
 end
 
-function graphics.drawText(str, x, y, font_id)
+function graphics.drawText(str, x, y, font)
 	local s = state.s[state.name]
-	local font_id = font_id or s.font
+	local font = font or s.font
+
+	local font_width = font:getWidth()
+	local font_height = font:getHeight()
 
 	local pos_x = x
 	local pos_y = y
 
+	local symbol_size = font_width / 32
+
 	for i = 0, #str - 1 do
 		local code = string.byte(str, i + 1)
-		local quad = font.symbols[font_id][code]
 
-		love.graphics.draw(font[font_id], quad, pos_x, pos_y, 0, 0.5)
+		local ax = (code % 32) * symbol_size
+		local ay = math.floor(code / 32) * symbol_size
+		local glyph = love.graphics.newQuad(ax, ay, symbol_size, symbol_size, font_width, font_height)
 
-		pos_x = pos_x + (font.symbol_size / 2)
+		love.graphics.draw(font, glyph, pos_x, pos_y, 0, 0.5)
+
+		pos_x = pos_x + (symbol_size / 2)
 	end
 end
 
