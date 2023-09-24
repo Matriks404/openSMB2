@@ -1,5 +1,3 @@
-font = require "source/font"
-
 local resources = {}
 
 function resources.tryToLoadOptionalFile(f, file, source_type)
