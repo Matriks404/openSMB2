@@ -97,6 +97,7 @@ end
 function graphics.drawText(str, x, y, font_id)
 	local s = state.s[state.name]
 	local font_id = font_id or s.font
+	local font = resources.font[font_id]
 
 	local pos_x = x
 	local pos_y = y
@@ -105,9 +106,9 @@ function graphics.drawText(str, x, y, font_id)
 
 	for i = 1, #str do
 		local char = string.byte(str, i)
-		local quad = font.glyphs[font_id][char]
+		local quad = font.glyphs[char]
 
-		love.graphics.draw(font[font_id], quad, pos_x, pos_y, 0, 0.5)
+		love.graphics.draw(font.img, quad, pos_x, pos_y, 0, 0.5)
 
 		pos_x = pos_x + x_gap
 	end
