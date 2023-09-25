@@ -6,7 +6,7 @@ app.muted = false
 
 function app.setup()
 	app.title = "openSMB2"
-	app.full_title = app.title.." v"..app.getVersion()
+	app.getVersion()
 
 	window.setup()
 	graphics.init()
@@ -64,7 +64,7 @@ end
 function app.getVersion()
 	local success, version = pcall(love.filesystem.read, "version")
 
-	return (success and version) or "UNKNOWN"
+	app.version = (success and version) or "UNKNOWN"
 end
 
 return app
