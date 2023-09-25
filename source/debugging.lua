@@ -66,7 +66,7 @@ end
 
 function debugging.drawTopLeftInfo()
 	if debugging.info then
-		graphics.drawText("V"..app.getVersion(), 2, 2, debugging.getFont())
+		graphics.drawText("V"..app.version, 2, 2, debugging.getFont())
 	end
 
 	if debugging.enabled then
