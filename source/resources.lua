@@ -1,6 +1,6 @@
-font = require "source/font"
-
 local resources = {}
+resources.font = {}
+resources.font.glyphs = {}
 
 function resources.tryToLoadOptionalFile(f, file, source_type)
 	if love.filesystem.getInfo(file) then
@@ -61,6 +61,27 @@ function resources.loadSoundEffects(source, list)
 		local mandatoriness = values[2]
 
 		source[key] = resources.loadSound(filename, "static", mandatoriness)
+	end
+end
+
+function resources.loadFontGlyphs(directory, name)
+	resources.font[name] = {}
+	local font = resources.font[name]
+	font.img = love.graphics.newImage(directory..name..".png")
+
+	local font_width = font.img:getWidth()
+	local font_height = font.img:getHeight()
+
+	font.symbol_size = font_width / 32
+
+	font.glyphs = {}
+
+	for i = 0, 127 do
+		local x = (i % 32) * font.symbol_size
+		local y = math.floor(i / 32) * font.symbol_size
+
+		local quad = love.graphics.newQuad(x, y, font.symbol_size, font.symbol_size, font_width, font_height)
+		font.glyphs[i] = quad
 	end
 end
 

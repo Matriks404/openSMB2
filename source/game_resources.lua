@@ -4,6 +4,18 @@ game_resources.images = {}
 game_resources.music = {}
 game_resources.sound = {}
 
+function game_resources.loadFonts(directory)
+	local directory = directory.."images/font/"
+
+	resources.loadFontGlyphs(directory, game.font1)
+
+	if game.font2 and love.filesystem.getInfo(directory..game.font2..".png") then
+		resources.loadFontGlyphs(directory, game.font2)
+	else
+		game.font2 = game.font1
+	end
+end
+
 function game_resources.loadImagesList(directory)
 	local directory = directory.."images/"
 
@@ -95,7 +107,7 @@ end
 function game_resources.load(directory)
 	local resource_dir = directory.."/resources/"
 
-	font.load(resource_dir)
+	game_resources.loadFonts(resource_dir)
 
 	local images_list = game_resources.loadImagesList(resource_dir)
 	resources.loadImages(game_resources.images, images_list)

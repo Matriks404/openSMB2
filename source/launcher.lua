@@ -32,8 +32,8 @@ function launcher.loadFonts()
 	launcher.font_normal = "dogica"
 	launcher.font_bold = "dogica_bold"
 
-	font.loadGlyphs(directory, launcher.font_normal)
-	font.loadGlyphs(directory, launcher.font_bold)
+	resources.loadFontGlyphs(directory, launcher.font_normal)
+	resources.loadFontGlyphs(directory, launcher.font_bold)
 
 end
 

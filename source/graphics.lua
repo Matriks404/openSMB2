@@ -74,13 +74,13 @@ function graphics.drawText(str, x, y, font_id)
 	local pos_x = x
 	local pos_y = y
 
-	local x_gap = font.symbol_size / 2
+	local x_gap = resources.font[font_id].symbol_size / 2
 
 	for i = 1, #str do
 		local char = string.byte(str, i)
-		local quad = font.glyphs[font_id][char]
+		local quad = resources.font[font_id].glyphs[char]
 
-		love.graphics.draw(font[font_id], quad, pos_x, pos_y, 0, 0.5)
+		love.graphics.draw(resources.font[font_id].img, quad, pos_x, pos_y, 0, 0.5)
 
 		pos_x = pos_x + x_gap
 	end
