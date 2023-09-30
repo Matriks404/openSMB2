@@ -38,10 +38,13 @@ function debugging.getFont()
 end
 
 function debugging.drawMutedText()
-	graphics.drawText("MUTED", 215, 231, debugging.getFont())
+	local font = debugging.getFont()
+
+	graphics.drawText("MUTED", 215, 231, font)
 end
 
 function debugging.drawCounter(n, y, add)
+	local font = debugging.getFont()
 	local str = tostring(n)
 
 	if add then
@@ -49,7 +52,7 @@ function debugging.drawCounter(n, y, add)
 	end
 
 	local x = graphics.width - 8
-	graphics.drawTextAlignedToRight(string.format("%d%s", n, add or ""), x, y, debugging.getFont())
+	graphics.drawTextAlignedToRight(string.format("%d%s", n, add or ""), x, y, font)
 end
 
 function debugging.drawCounters()
@@ -63,26 +66,47 @@ function debugging.drawCounters()
 end
 
 function debugging.drawTopLeftInfo()
+	local font = debugging.getFont()
+
 	if debugging.info then
-		graphics.drawText("V"..app.version, 2, 2, debugging.getFont())
+		graphics.drawText("V"..app.version, 2, 2, font)
 	end
 
 	if debugging.enabled then
-		graphics.drawText("DEBUG", 2, 12, debugging.getFont())
+		graphics.drawText("DEBUG", 2, 12, font)
 
 		if state.name == "gameplay" then
-			graphics.drawText(" -CHAR-", 2, 28, debugging.getFont())
-			graphics.drawText("X     "..character.pos_x, 2, 36)
-			graphics.drawText("Y     "..character.pos_y, 2, 44)
-			graphics.drawText("SUBX  "..character.subpos_x, 2, 52)
-			graphics.drawText("SPEED "..character.speed, 2, 60)
-			graphics.drawText("ACCEL "..character.accel, 2, 68)
+			graphics.drawText(" -CHAR-", 2, 28, font)
+			graphics.drawText("X     "..character.pos_x, 2, 36, font)
+			graphics.drawText("Y     "..character.pos_y, 2, 44, font)
+			graphics.drawText("SUBX  "..character.subpos_x, 2, 52, font)
+			graphics.drawText("SPEED "..character.speed, 2, 60, font)
+			graphics.drawText("ACCEL "..character.accel, 2, 68, font)
 		end
 
 		if debugging.pause then
-			graphics.drawText("PAUSE", 2, 231, debugging.getFont())
+			graphics.drawText("PAUSE", 2, 231, font)
 		end
 	end
+end
+
+function debugging.drawTopRightGraphicsStats()
+	local font = debugging.getFont()
+
+	if not debugging.enabled then
+		return
+	end
+
+	local stats = love.graphics.getStats()
+	local x = graphics.width - 8
+
+	graphics.drawTextAlignedToRight("-GRAPHICS- ", x, 32, font)
+	graphics.drawTextAlignedToRight("DRAWS "..tostring(stats.drawcalls), x, 42, font)
+	--graphics.drawTextAlignedToRight("CANVASSWITCHES "..tostring(stats.canvasswitches), x, 52, font)
+	graphics.drawTextAlignedToRight("TEXMEM "..tostring(stats.texturememory), x, 52, font)
+	graphics.drawTextAlignedToRight("IMAGES "..tostring(stats.images), x, 62, font)
+	--graphics.drawTextAlignedToRight("CANVASES "..tostring(stats.canvases), x, 82, font)
+	--graphics.drawTextAlignedToRight("FONTS "..tostring(stats.fonts), x, 92, font)
 end
 
 function debugging.drawInfo()
@@ -90,11 +114,13 @@ function debugging.drawInfo()
 		debugging.drawMutedText()
 	end
 
+	debugging.drawCounters()
+
 	if state.name ~= "level_editor" then
 		debugging.drawTopLeftInfo()
 	end
 
-	debugging.drawCounters()
+	debugging.drawTopRightGraphicsStats()
 end
 
 function debugging.checkInputPressed(key)
