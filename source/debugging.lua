@@ -48,10 +48,8 @@ function debugging.drawCounter(n, y, add)
 		str = str..add
 	end
 
-	local str_width = string.len(str) * 8
-	local x = (graphics.width - str_width) - 1
-
-	graphics.drawText(string.format("%d%s", n, add or ""), x, y, debugging.getFont())
+	local x = graphics.width - 8
+	graphics.drawTextAlignedToRight(string.format("%d%s", n, add or ""), x, y, debugging.getFont())
 end
 
 function debugging.drawCounters()
