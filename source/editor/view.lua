@@ -25,8 +25,10 @@ function view.update()
 		view.width = 256
 	end
 
-	if view.height > 208 then
-		view.height = 208
+	local height_diff = graphics.height - view.y_offset
+
+	if view.height > height_diff then
+		view.height = height_diff
 	end
 
 	view.tiles_width = view.width / graphics.tile_size
