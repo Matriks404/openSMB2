@@ -24,10 +24,12 @@ function check.viewBounds()
 		editor.view.x = editor.view.x + 16
 	end
 
+	local height_diff = graphics.height - editor.view.y_offset
+
 	if editor.cursor_y < editor.view.y then
 		editor.view.y = editor.view.y - 16
 
-	elseif editor.cursor_y >= editor.view.y + 208 then
+	elseif editor.cursor_y >= editor.view.y + height_diff then
 		editor.view.y = editor.view.y + 16
 	end
 
