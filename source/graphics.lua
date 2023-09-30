@@ -114,6 +114,13 @@ function graphics.drawText(str, x, y, font_id)
 	end
 end
 
+function graphics.drawTextAlignedToRight(str, x, y, font_id)
+	local str_width = string.len(str) * 8
+	local x = x + 8 - str_width
+
+	graphics.drawText(str, x, y, font_id)
+end
+
 function graphics.drawTile(id, x, y)
 	local tile_x = (id % 16) * 16
 	local tile_y = math.floor(id / 16) * 16
