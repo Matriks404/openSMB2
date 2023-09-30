@@ -120,7 +120,7 @@ function debugging.drawInfo()
 		debugging.drawTopLeftInfo()
 	end
 
-	debugging.drawTopRightGraphicsStats()
+	--debugging.drawTopRightGraphicsStats()
 end
 
 function debugging.checkInputPressed(joystick, button)
