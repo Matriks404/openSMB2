@@ -169,7 +169,11 @@ function draw.areaBorder()
 end
 
 function draw.cursor()
-	love.graphics.draw(editor.images["16x16_cursor"], editor.cursor_x - editor.view.x, editor.cursor_y - editor.view.y + 32)
+	local cursor = editor.images["16x16_cursor"]
+	local x = editor.cursor_x - editor.view.x
+	local y = editor.cursor_y - editor.view.y + editor.view.y_offset
+
+	love.graphics.draw(cursor, x, y)
 end
 
 function draw.startingPosition()
