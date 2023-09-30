@@ -28,7 +28,9 @@ function app.update(dt)
 end
 
 function app.draw()
-	love.graphics.scale(graphics.scale)
+	local scale = graphics.scale
+
+	love.graphics.scale(scale, scale)
 
 	if state.name == "launcher" then
 		launcher.draw()
