@@ -2,9 +2,6 @@ local view = {}
 
 view.name = "normal" -- Editor view option (normal, detailed)
 
-view.height = 0
-view.width = 0
-
 -- Editor view height offset (because topbar takes some space)
 view.y_offset = 32
 
@@ -21,17 +18,22 @@ function view.reset()
 end
 
 function view.update()
-	-- Calculate height and width of edit view
-	view.height = world.current_area.height - view.y
 	view.width = world.current_area.width - view.x
+	view.height = world.current_area.height - view.y
+
+	if view.width > 256 then
+		view.width = 256
+	end
 
 	if view.height > 208 then
 		view.height = 208
 	end
 
-	if view.width > 256 then
-		view.width = 256
-	end
+	view.tiles_width = view.width / graphics.tile_size
+	view.tiles_height = view.height / graphics.tile_size
+
+	view.tile_x = view.x / graphics.tile_size
+	view.tile_y = view.y / graphics.tile_size
 end
 
 function view.alignCursor()

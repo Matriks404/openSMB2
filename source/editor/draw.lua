@@ -108,6 +108,11 @@ function draw.editor()
 
 	draw.boxes()
 	draw.tiles()
+
+	if editor.view.name == "detailed" then
+		draw.tilesHexValues()
+	end
+
 	draw.areaBorder()
 
 	if editor.mode == "normal" then
@@ -128,30 +133,46 @@ function draw.boxes()
 end
 
 function draw.tiles()
-	local view_height_tiles = editor.view.height / graphics.tile_size
-	local view_width_tiles = editor.view.width / graphics.tile_size
+	local view = editor.view
 
-	local view_x_tiles = editor.view.x / graphics.tile_size
-	local view_y_tiles = editor.view.y / graphics.tile_size
-	local view_y_offset = editor.view.y_offset
+	for i = 0, view.tiles_height - 1 do
+		local tile_y = view.tile_y + i
+		local pos_y = view.y_offset + (i * graphics.tile_size)
 
-	for i = 0, view_height_tiles - 1 do
-		local tile_y = view_y_tiles + i
-		local pos_y = view_y_offset + (i * graphics.tile_size)
-
-		for j = 0, view_width_tiles - 1 do
-			local tile_x = view_x_tiles + j
+		for j = 0, view.tiles_width - 1 do
+			local tile_x = view.tile_x + j
 			local pos_x = j * graphics.tile_size
 
 			local tile = world.current_area.tiles[tile_y][tile_x]
 
 			graphics.drawTile(tile, pos_x, pos_y)
-
-			if editor.view.name == "detailed" then
-				tile_value = string.format("%X", tile)
-				graphics.drawText(tile_value, pos_x, pos_y)
-			end
 		end
+	end
+end
+
+function draw.tilesHexValues()
+	local view = editor.view
+
+	for i = 0, view.tiles_height - 1 do
+		local tile_y = view.tile_y + i
+		local pos_y = view.y_offset + (i * graphics.tile_size)
+
+		local line = ""
+
+		for j = 0, view.tiles_width - 1 do
+			local tile_x = view.tile_x + j
+
+			local tile = world.current_area.tiles[tile_y][tile_x]
+			local tile_value = string.format("%X", tile)
+
+			if #tile_value == 1 then
+				tile_value = tile_value.." "
+			end
+
+			line = line..tile_value
+		end
+
+		graphics.drawText(line, 0, pos_y)
 	end
 end
 
