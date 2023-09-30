@@ -225,7 +225,7 @@ function editor.changeMode()
 end
 
 function editor.changeView()
-	--FIXME: We shouldn't change the Y offset at all, but 3DS crashes when there's more than 10 full length lines of tiles on the screen with "detailed" view.
+	--FIXME: We shouldn't change the Y offset at all, but 3DS crashes when there's more than 9 full length lines of tiles on the screen with "detailed" view.
 	--       Additionally, we align cursor so it is not out of bounds but annoyingly it moves the cursor if on bottom rows of the view.
 	if editor.view.name == "normal" then
 		editor.view.name = "detailed"
