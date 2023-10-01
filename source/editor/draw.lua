@@ -117,18 +117,13 @@ function draw.tilesHexValues()
 
 		for j = 0, view.tiles_width - 1 do
 			local tile_x = view.tile_x + j
+			local pos_x = j * graphics.tile_size
 
 			local tile = world.current_area.tiles[tile_y][tile_x]
 			local tile_value = string.format("%X", tile)
 
-			if #tile_value == 1 then
-				tile_value = tile_value.." "
-			end
-
-			line = line..tile_value
+			graphics.drawText(tile_value, pos_x, pos_y)
 		end
-
-		graphics.drawText(line, 0, pos_y)
 	end
 end
 
