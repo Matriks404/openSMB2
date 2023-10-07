@@ -44,9 +44,6 @@ function editor.openLevel(world_no, level_no)
 	world.enter(world_no, level_no)
 
 	if world[world_no][level_no] then
-		--window.resizable = true
-		--window.update()
-
 		state.name = "level_editor"
 
 		editor.view.update()
@@ -71,9 +68,6 @@ function editor.playLevel()
 
 		state.set("character_select")
 		world.area = 1
-
-		--window.resizable = false
-		--window.update()
 	end
 end
 
@@ -250,9 +244,6 @@ function editor.quit()
 
 	editor.reset()
 	editor.view.reset()
-
-	--window.resizable = false
-	--window.update()
 end
 
 function editor.quitToTitleScreen()

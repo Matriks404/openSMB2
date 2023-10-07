@@ -42,10 +42,3 @@ function love.draw(screen)
 		app.draw()
 	end
 end
-
---TODO: Do something on window resize, for level editor purposes.
---[[
-function love.resize()
-	window.resize()
-end
-]]--
