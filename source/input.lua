@@ -26,9 +26,6 @@ end
 
 function input.checkReleased(joystick, button)
 	--[[
-	if (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
-		window.updateFullscreen()
-
 	--TODO: We may want to scale graphics up or down or 3DS but I am not sure how would it work, because vertical space is already taken fully on scale 1:1.
 	elseif key == "-" and not love.keyboard.isDown("lctrl", "rctrl") then
 		graphics.scaleDown()
