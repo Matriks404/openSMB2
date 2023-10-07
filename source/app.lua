@@ -28,9 +28,8 @@ function app.update(dt)
 end
 
 function app.draw()
-	local scale = graphics.scale
-
-	love.graphics.scale(scale, scale)
+	love.graphics.setCanvas(graphics.canvas)
+	love.graphics.clear()
 
 	if state.name == "launcher" then
 		launcher.draw()
@@ -46,6 +45,11 @@ function app.draw()
 	end
 
 	debugging.drawInfo()
+
+	love.graphics.setCanvas()
+
+	local scale = graphics.scale
+	love.graphics.draw(graphics.canvas, graphics.x, graphics.y, 0, scale)
 end
 
 function app.switchMuteState()

@@ -40,3 +40,10 @@ end
 function love.draw()
 	app.draw()
 end
+
+--TODO: Do something on window resize, for level editor purposes.
+--[[
+function love.resize()
+	window.resize()
+end
+]]--

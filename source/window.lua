@@ -2,6 +2,7 @@ local window = {}
 
 window.fullscreen = false
 window.resizable = false
+window.vsync = true
 
 function window.setInitialScale()
 	local _, _, flags = love.window.getMode()
@@ -15,17 +16,43 @@ function window.setInitialScale()
 end
 
 function window.update()
-	local width = graphics.width
-	local height = graphics.height
+	if window.fullscreen then
+		window.fullscreenUpdate()
+	else
+		window.windowedUpdate()
+	end
+end
+
+function window.windowedUpdate()
+	local width = graphics.width * graphics.scale
+	local height = graphics.height * graphics.scale
 
 	if graphics.scale < 1 then
 		graphics.scale = 0
 	end
 
-	love.window.setMode(width * graphics.scale, height * graphics.scale, {fullscreen = window.fullscreen, resizable = window.resizable, vsync = true})
+	love.window.setMode(width, height, {fullscreen = false, resizable = window.resizable, vsync = window.vsync})
+
+	graphics.x = 0
+	graphics.y = 0
 end
 
-function window.updateFullscreen()
+function window.fullscreenUpdate()
+	local _, _, flags = love.window.getMode()
+	local desktop_width, desktop_height = love.window.getDesktopDimensions(flags.display)
+
+	if not flags.fullscreen then
+		love.window.setMode(desktop_width, desktop_height, {fullscreen = true, vsync = window.vsync})
+	end
+
+	local rendered_width = graphics.width * graphics.scale
+	local rendered_height = graphics.height * graphics.scale
+
+	graphics.x = (desktop_width - rendered_width) / 2
+	graphics.y = (desktop_height - rendered_height) / 2
+end
+
+function window.switchFullscreen()
 	window.fullscreen = not window.fullscreen
 
 	window.update()
@@ -37,5 +64,14 @@ function window.setup()
 
 	love.window.setTitle(app.title)
 end
+
+--TODO: Do something on window resize, for level editor purposes.
+--[[
+function window.resize()
+	local width, height, _ = love.window.getMode()
+
+	-- ...
+end
+]]--
 
 return window

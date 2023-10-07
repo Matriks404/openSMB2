@@ -16,6 +16,8 @@ graphics.tile_size = 16
 
 function graphics.init()
 	love.graphics.setDefaultFilter("nearest")
+
+	graphics.canvas = love.graphics.newCanvas(graphics.width, graphics.height)
 end
 
 function graphics.loadWorldImages()
@@ -101,6 +103,7 @@ function graphics.drawTile(id, x, y)
 	local tilemap_width = game_resources.images.tilemap:getWidth()
 	local tilemap_height = game_resources.images.tilemap:getHeight()
 
+	--TODO: Should we initially generate quads like we generate symbols for fonts?
 	local tile = love.graphics.newQuad(tile_x, tile_y, 16, 16, tilemap_width, tilemap_height)
 
 	love.graphics.draw(game_resources.images.tilemap, tile, x, y)

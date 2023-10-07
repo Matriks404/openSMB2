@@ -25,7 +25,7 @@ function input.checkReleased(key)
 		love.event.quit()
 
 	elseif (love.keyboard.isDown("lalt", "ralt") and key == "return") or key == "f11" then
-		window.updateFullscreen()
+		window.switchFullscreen()
 
 	elseif key == "-" and not love.keyboard.isDown("lctrl", "rctrl") then
 		graphics.scaleDown()
