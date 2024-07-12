@@ -1,3 +1,5 @@
+**NOTE:** This project is archived as of 2024-07-12, and will no longer be worked on.
+
 # Running
 
 1. Install LÖVE Engine on your computer.
